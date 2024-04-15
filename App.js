@@ -16,6 +16,7 @@ import PasswordCreatorScreen from "./screens/DrawerScreens/PassworCreatorScreen"
 import PasswordCheckerScreen from "./screens/DrawerScreens/PasswordCheckerScreen";
 import SettingScreen from "./screens/DrawerScreens/SettingScreen";
 import Lock from "./screens/DrawerScreens/Lock";
+import WelcomeScreen from "./screens/WelcomeScreen";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -25,6 +26,8 @@ function MainDrawer() {
 function AuthScreen() {
   return (
     <Stack.Navigator>
+
+      <Stack.Screen name="welcome" component={WelcomeScreen}></Stack.Screen>
       <Stack.Screen name="login" component={LoginScreen}></Stack.Screen>
       <Stack.Screen name="signup" component={SignupScreen}></Stack.Screen>
     </Stack.Navigator>
