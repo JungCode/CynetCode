@@ -28,6 +28,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     textAlign: 'center',
+    fontSize: 16,
+    fontWeight:"bold",
     color: Colors.green500,
   },
 });
