@@ -17,8 +17,14 @@ function AuthScreen() {
         name="welcome"
         component={WelcomeScreen}
         options={{ headerShown: false }}></Stack.Screen>
-      <Stack.Screen name="login" component={LoginScreen}></Stack.Screen>
-      <Stack.Screen name="signup" component={SignupScreen}></Stack.Screen>
+      <Stack.Screen
+        name="login"
+        component={LoginScreen}
+        options={{ headerShown: false }}></Stack.Screen>
+      <Stack.Screen
+        name="signup"
+        component={SignupScreen}
+        options={{ headerShown: false }}></Stack.Screen>
     </Stack.Navigator>
   );
 }

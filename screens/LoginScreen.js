@@ -1,13 +1,9 @@
-import { Text, View } from "react-native";
-import FlatButton from "../components/FlatButton";
+import AuthContent from "../components/Auth/AuthContent";
+
 
 function LoginScreen() {
-  return (
-    <View>
-      <Text>Login Screen</Text>
-      <FlatButton>Sign Up</FlatButton>
-    </View>
-  );
+  return <AuthContent islogin></AuthContent>
 }
 
 export default LoginScreen;
+
