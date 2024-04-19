@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { AnimatedFAB } from "react-native-paper";
 import Colors from "../constants/Colors";
+import { useNavigation } from "@react-navigation/native";
 const MyFab = ({
   animatedValue,
   visible,
@@ -20,11 +21,12 @@ const MyFab = ({
   animateFrom,
   style,
   iconMode,
+  onPress,
 }) => {
   const [isExtended, setIsExtended] = React.useState(true);
 
   const isIOS = Platform.OS === "ios";
-
+  const navigation = useNavigation();
   const onScroll = ({ nativeEvent }) => {
     const currentScrollPosition =
       Math.floor(nativeEvent?.contentOffset?.y) ?? 0;
@@ -39,7 +41,9 @@ const MyFab = ({
       icon={"plus"}
       label={"aaaaaaaaaaaa"}
       extended={isExtended}
-      onPress={() => console.log("Pressed")}
+      onPress={() => {
+        return navigation.navigate("addingScreen");
+      }}
       visible={visible}
       animateFrom={"right"}
       iconMode={"static"}

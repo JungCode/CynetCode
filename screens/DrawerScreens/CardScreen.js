@@ -1,5 +1,7 @@
+import { Text } from "react-native";
+
 function CardScreen() {
-    return <></>;
+    return <><Text>Hello</Text></>;
 }
 
 export default CardScreen;

@@ -13,6 +13,7 @@ import Lock from "./DrawerScreens/Lock";
 import { FontAwesome6 } from "@expo/vector-icons";
 import DrawerContentCustom from "./DrawerContent/DrawerContentCustom";
 import { StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
 const Drawer = createDrawerNavigator();
 
 function DrawerScreen() {

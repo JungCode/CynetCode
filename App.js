@@ -6,6 +6,7 @@ import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 import DrawerScreen from "./screens/DrawerScreen";
 import WelcomeScreen from "./screens/WelcomeScreen";
+import AllItemsModal from "./screens/Modals/AllItemsModal";
 const Stack = createNativeStackNavigator();
 
 function AuthScreen() {
@@ -31,14 +32,29 @@ function Navigation() {
     </NavigationContainer>
   );
 }
-export default function App() {
-  return (<>
-    <NavigationContainer style={{marginTop: StatusBar.currentHeight}}>
-      <DrawerScreen />
-    </NavigationContainer>
-    <StatusBar  />
+function ModalScreen() {
+  return (
+    <>
+      <NavigationContainer style={{ marginTop: StatusBar.currentHeight }}>
+        <Stack.Navigator screenOptions={{ animation: "fade_from_bottom" }}>
+          <Stack.Screen
+            name="drawerScreen"
+            component={DrawerScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="addingScreen"
+            component={AllItemsModal}
+            options={{ headerTitle: "New Item" }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+      <StatusBar />
     </>
   );
+}
+export default function App() {
+  return <ModalScreen />;
 }
 
 const styles = StyleSheet.create({
