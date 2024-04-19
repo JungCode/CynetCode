@@ -42,7 +42,7 @@ const MyFab = ({
       label={"aaaaaaaaaaaa"}
       extended={isExtended}
       onPress={() => {
-        return navigation.navigate("addingScreen");
+        return navigation.navigate("addingOptionsModal");
       }}
       visible={visible}
       animateFrom={"right"}

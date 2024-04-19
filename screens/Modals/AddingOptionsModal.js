@@ -1,7 +1,7 @@
 import { Button, StyleSheet, Text, View } from "react-native";
 import AddingItem from "../../components/AddingItem";
 
-function AllItemsModal({ navigation }) {
+function AddingOptionsModal({ navigation }) {
   return (
     <View style={styles.container}>
       <AddingItem name="Acount" iconName="person-circle-outline" />
@@ -14,7 +14,7 @@ function AllItemsModal({ navigation }) {
     </View>
   );
 }
-export default AllItemsModal;
+export default AddingOptionsModal;
 const styles = StyleSheet.create({
   container: {
     flex: 1,

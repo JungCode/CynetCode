@@ -1,12 +1,14 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 
-import { Platform, StatusBar, StyleSheet, Text, View } from "react-native";
+import { StatusBar, StyleSheet } from "react-native";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 import DrawerScreen from "./screens/DrawerScreen";
 import WelcomeScreen from "./screens/WelcomeScreen";
-import AllItemsModal from "./screens/Modals/AllItemsModal";
+import AddingOptionsModal from "./screens/Modals/AddingOptionsModal";
+import WebsiteAddingScreen from "./screens/AddingScreens/WebsiteAddingScreen";
+import HeaderCloseButton from "./components/HeaderCloseButton";
 const Stack = createNativeStackNavigator();
 
 function AuthScreen() {
@@ -43,9 +45,20 @@ function ModalScreen() {
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="addingScreen"
-            component={AllItemsModal}
+            name="addingOptionsModal"
+            component={AddingOptionsModal}
             options={{ headerTitle: "New Item" }}
+          />
+          <Stack.Screen
+            name="websiteAddingScreen"
+            component={WebsiteAddingScreen}
+            options={{
+              headerTitle: "Website",
+              animation: "slide_from_right",
+              headerLeft: (props) => (
+                <HeaderCloseButton />
+              ),
+            }}
           />
         </Stack.Navigator>
       </NavigationContainer>
