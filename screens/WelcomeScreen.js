@@ -1,9 +1,20 @@
 import { StyleSheet, Text, View } from "react-native";
 import CusButton from "../components/CusButton";
 import Colors from "../constants/Colors";
+import { useNavigation } from "@react-navigation/native";
 import FlatButton from "../components/FlatButton";
 
+
 function WelcomeScreen() {
+  const navigation = useNavigation();
+
+  function switchlogin() {
+    navigation.replace("login");
+  }
+  function switchsignup() {
+    navigation.replace("signup");
+  }
+
   return (
     <View style={styles.container}>
       <View>
@@ -17,8 +28,12 @@ function WelcomeScreen() {
           </Text>
         </View>
         <View>
-          <CusButton>Login</CusButton>
-          <CusButton color={Colors.green500} bgc={"white"} pressedbgc={Colors.gray200}>
+          <CusButton onPress={switchlogin}>Login</CusButton>
+          <CusButton
+            onPress={switchsignup}
+            color={Colors.green500}
+            bgc={"white"}
+            pressedbgc={Colors.gray200}>
             Sign Up
           </CusButton>
         </View>
@@ -35,7 +50,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 20,
     paddingTop: 120,
-    paddingBottom:10,
+    paddingBottom: 10,
   },
   title: {
     textAlign: "center",
@@ -48,5 +63,4 @@ const styles = StyleSheet.create({
     color: Colors.gray300,
     marginBottom: 20,
   },
-
 });

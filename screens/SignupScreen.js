@@ -1,13 +1,10 @@
-import { View } from "react-native";
-import FlatButton from "../components/FlatButton";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import AuthContent from "../components/Auth/AuthContent";
+
 
 function SignupScreen() {
-  return (
-    <View>
-      <Text>Signup Screen</Text>
-      <FlatButton>Login</FlatButton>
-    </View>
-  );
+
+  return <AuthContent  ></AuthContent>;
 }
 
 export default SignupScreen;
