@@ -1,16 +1,22 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import Colors from "../constants/Colors";
 
-function CusButton({ children, onPress, bgc, color,pressedbgc }) {
+function CusButton({ children, onPress, bgc, color, pressedbgc, borcolor }) {
   return (
     <Pressable
       style={({ pressed }) => [
         styles.button,
-        { backgroundColor: bgc ? bgc : Colors.green500 },
-        pressed && {backgroundColor: pressedbgc ? pressedbgc : Colors.green700},
+        {
+          backgroundColor: bgc ? bgc : Colors.green500,
+          
+          borderColor: borcolor ? borcolor : Colors.green500,
+        },
+        pressed && {
+          backgroundColor: pressedbgc ? pressedbgc : Colors.green700,
+        },
       ]}
       onPress={onPress}>
-      <View>
+      <View >
         <Text
           style={[styles.buttonText, { color: color ? color : Colors.white }]}>
           {children}
@@ -27,15 +33,15 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     paddingVertical: 15,
     paddingHorizontal: 12,
-    marginBottom: 8,
+    marginBottom: 10,
+    borderWidth: 1,
   },
   pressed: {
     backgroundColor: Colors.green700,
   },
-
   buttonText: {
     textAlign: "center",
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
   },
 });

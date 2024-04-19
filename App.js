@@ -1,43 +1,97 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 
-import { StatusBar, StyleSheet } from "react-native";
+import { Platform, StatusBar, StyleSheet, Text, View } from "react-native";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
-import DrawerScreen from "./screens/DrawerScreen";
+
 import WelcomeScreen from "./screens/WelcomeScreen";
 import AddingOptionsModal from "./screens/Modals/AddingOptionsModal";
 import WebsiteAddingScreen from "./screens/AddingScreens/WebsiteAddingScreen";
-import HeaderCloseButton from "./components/HeaderCloseButton";
+import AuthEmailScreen from "./components/Auth/AuthEmail/AuthEmailScreen";
+import LoginEmailScreen from "./components/Auth/AuthEmail/LoginEmailScreen";
+import DrawerScreen from "./screens/DrawerScreen";
+import AuthContextProvider, { AuthContext } from "./store/auth-context";
+import { useContext } from "react";
+
 const Stack = createNativeStackNavigator();
+
+function SignupStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={{ contentStyle: { backgroundColor: "white" } }}>
+      <Stack.Screen
+        name="AuthContent"
+        component={SignupScreen}
+        options={{ headerShown: false }}></Stack.Screen>
+      <Stack.Screen
+        name="AuthEmailScreen"
+        component={AuthEmailScreen}
+        options={{}}></Stack.Screen>
+    </Stack.Navigator>
+  );
+}
+
+function LoginStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={{ contentStyle: { backgroundColor: "white" } }}>
+      <Stack.Screen
+        name="AuthContent"
+        component={LoginScreen}
+        options={{ headerShown: false }}></Stack.Screen>
+      <Stack.Screen
+        name="LoginEmailScreen"
+        component={LoginEmailScreen}
+        options={{}}></Stack.Screen>
+    </Stack.Navigator>
+  );
+}
 
 function AuthScreen() {
   return (
     <Stack.Navigator
-      screenOptions={{ contentStyle: { backgroundColor: "white" } }}
-    >
+      screenOptions={{ contentStyle: { backgroundColor: "white" } }}>
       <Stack.Screen
         name="welcome"
         component={WelcomeScreen}
         options={{ headerShown: false }}
       ></Stack.Screen>
-      <Stack.Screen name="login" component={LoginScreen}></Stack.Screen>
-      <Stack.Screen name="signup" component={SignupScreen}></Stack.Screen>
+      <Stack.Screen
+        name="login"
+        component={LoginStack}
+        options={{ headerShown: false }}></Stack.Screen>
+      <Stack.Screen
+        name="signup"
+        component={SignupStack}
+        options={{ headerShown: false }}></Stack.Screen>
     </Stack.Navigator>
   );
 }
 
 function Navigation() {
+  const authCtx = useContext(AuthContext);
+
   return (
     <NavigationContainer>
-      <AuthScreen></AuthScreen>
+      {!authCtx.isAuthenticated &&  <AuthScreen></AuthScreen>}
+      {authCtx.isAuthenticated && <ModalScreen/>}
+
     </NavigationContainer>
+  );
+}
+export default function App() {
+  return (
+    <AuthContextProvider style={styles.container}>
+      <StatusBar style="dark"></StatusBar>
+      <Navigation></Navigation>
+    </AuthContextProvider>
+
   );
 }
 function ModalScreen() {
   return (
     <>
-      <NavigationContainer style={{ marginTop: StatusBar.currentHeight }}>
         <Stack.Navigator screenOptions={{ animation: "fade_from_bottom" }}>
           <Stack.Screen
             name="drawerScreen"
@@ -55,21 +109,16 @@ function ModalScreen() {
             options={{
               headerTitle: "Website",
               animation: "slide_from_right",
-              headerLeft: (props) => (
-                <HeaderCloseButton />
-              ),
+              // headerLeft: (props) => (
+              //   <HeaderCloseButton />
+              // ),
             }}
           />
         </Stack.Navigator>
-      </NavigationContainer>
       <StatusBar />
     </>
   );
 }
-export default function App() {
-  return <ModalScreen />;
-}
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

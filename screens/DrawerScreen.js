@@ -1,4 +1,8 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import { FontAwesome6 } from "@expo/vector-icons";
+import DrawerContentCustom from "./DrawerContent/DrawerContentCustom";
+import { StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
 import AllItemScreen from "./DrawerScreens/AllItemScreen";
 import FavoriteScreen from "./DrawerScreens/FavoriteScreen";
 import AccountScreen from "./DrawerScreens/AccountScreen";
@@ -8,12 +12,9 @@ import AddressScreen from "./DrawerScreens/AddressScreen";
 import NoteScreen from "./DrawerScreens/NoteScreen";
 import PasswordCreatorScreen from "./DrawerScreens/PassworCreatorScreen";
 import PasswordCheckerScreen from "./DrawerScreens/PasswordCheckerScreen";
-import SettingScreen from "./DrawerScreens/SettingScreen";
 import Lock from "./DrawerScreens/Lock";
-import { FontAwesome6 } from "@expo/vector-icons";
-import DrawerContentCustom from "./DrawerContent/DrawerContentCustom";
-import { StyleSheet, Text, View } from "react-native";
-import { useState } from "react";
+import SettingScreen from "./DrawerScreens/SettingScreen";
+
 const Drawer = createDrawerNavigator();
 
 function DrawerScreen() {
