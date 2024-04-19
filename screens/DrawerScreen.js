@@ -1,15 +1,16 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import AllItemScreen from "./screens/DrawerScreens/AllItemScreen";
-import FavoriteScreen from "./screens/DrawerScreens/FavoriteScreen";
-import AccountScreen from "./screens/DrawerScreens/AccountScreen";
-import CardScreen from "./screens/DrawerScreens/CardScreen";
-import FilesScreen from "./screens/DrawerScreens/FilesScreen";
-import AddressScreen from "./screens/DrawerScreens/AddressScreen";
-import NoteScreen from "./screens/DrawerScreens/NoteScreen";
-import PasswordCreatorScreen from "./screens/DrawerScreens/PassworCreatorScreen";
-import PasswordCheckerScreen from "./screens/DrawerScreens/PasswordCheckerScreen";
-import SettingScreen from "./screens/DrawerScreens/SettingScreen";
-import Lock from "./screens/DrawerScreens/Lock";
+import AllItemScreen from "./DrawerScreens/AllItemScreen";
+import FavoriteScreen from "./DrawerScreens/FavoriteScreen";
+import AccountScreen from "./DrawerScreens/AccountScreen";
+import CardScreen from "./DrawerScreens/CardScreen";
+import FilesScreen from "./DrawerScreens/FilesScreen";
+import AddressScreen from "./DrawerScreens/AddressScreen";
+import NoteScreen from "./DrawerScreens/NoteScreen";
+import PasswordCreatorScreen from "./DrawerScreens/PassworCreatorScreen";
+import PasswordCheckerScreen from "./DrawerScreens/PasswordCheckerScreen";
+import Lock from "./DrawerScreens/Lock";
+import SettingScreen from "./DrawerScreens/SettingScreen";
+
 
 const Drawer = createDrawerNavigator();
 
