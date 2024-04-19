@@ -5,6 +5,7 @@ import { createUser } from "../../../util/auth";
 import LoadingOverlay from "../../LoadingOverlay";
 import { Alert } from "react-native";
 import { AuthContext } from "../../../store/auth-context";
+import { useNavigation } from "@react-navigation/native";
 
 function AuthEmailScreen() {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
@@ -28,7 +29,16 @@ function AuthEmailScreen() {
   if (isAuthenticating) {
     return <LoadingOverlay message="Creating user..." />;
   }
-  return <AuthEmailContent onAuthenticate={signupHandler}></AuthEmailContent>;
+
+  if (authCtx.token) {
+    const navigation = useNavigation();
+    navigation.navigate("");
+  }
+
+  return (
+    <AuthEmailContent
+      onAuthenticate={signupHandler}></AuthEmailContent>
+  );
 }
 
 export default AuthEmailScreen;

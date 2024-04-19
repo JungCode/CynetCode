@@ -39,7 +39,7 @@ function AuthEmailContent({ isLogin, onAuthenticate }) {
   return (
     <View style={styles.container}>
       <Text variant="displayLarge" style={styles.title}>
-        Sign in CynetCode
+        {isLogin ? "Login" :"Signup" } in CynetCode
       </Text>
       <AuthForm
         isLogin={isLogin}
