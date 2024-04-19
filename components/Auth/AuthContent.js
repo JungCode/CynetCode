@@ -3,7 +3,7 @@ import Colors from "../../constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import IconButton from "../IconButton";
 import { useNavigation } from "@react-navigation/native";
-
+import LoginEmailScreen from "./AuthEmail/LoginEmailScreen";
 
 function AuthContent({ islogin }) {
   const navigation = useNavigation();
@@ -12,6 +12,9 @@ function AuthContent({ islogin }) {
   }
   function authEmailHandle() {
     navigation.navigate("AuthEmailScreen");
+  }
+  function loginEmailHandle() {
+    navigation.navigate("LoginEmailScreen");
   }
 
   return (
@@ -58,7 +61,16 @@ function AuthContent({ islogin }) {
             borcolor={Colors.gray200}>
             {islogin ? "Login" : "Signup"} with Apple
           </IconButton>
-          <IconButton icon={"mail"} color={"white"} onPress={authEmailHandle}>
+          <IconButton
+            icon={"mail"}
+            color={"white"}
+            onPress={() => {
+              if (islogin) {
+                return loginEmailHandle();
+              } else {
+                return authEmailHandle();
+              }
+            }}>
             {islogin ? "Login" : "Signup"} with Email
           </IconButton>
         </View>

@@ -7,6 +7,10 @@ import SignupScreen from "./screens/SignupScreen";
 
 import WelcomeScreen from "./screens/WelcomeScreen";
 import AuthEmailScreen from "./components/Auth/AuthEmail/AuthEmailScreen";
+import LoginEmailScreen from "./components/Auth/AuthEmail/LoginEmailScreen";
+import DrawerScreen from "./screens/DrawerScreen";
+import AuthContextProvider, { AuthContext } from "./store/auth-context";
+import { useContext } from "react";
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +30,21 @@ function SignupStack() {
   );
 }
 
+function LoginStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={{ contentStyle: { backgroundColor: "white" } }}>
+      <Stack.Screen
+        name="AuthContent"
+        component={LoginScreen}
+        options={{ headerShown: false }}></Stack.Screen>
+      <Stack.Screen
+        name="LoginEmailScreen"
+        component={LoginEmailScreen}
+        options={{}}></Stack.Screen>
+    </Stack.Navigator>
+  );
+}
 
 function AuthScreen() {
   return (
@@ -37,7 +56,7 @@ function AuthScreen() {
         options={{ headerShown: false }}></Stack.Screen>
       <Stack.Screen
         name="login"
-        component={LoginScreen}
+        component={LoginStack}
         options={{ headerShown: false }}></Stack.Screen>
       <Stack.Screen
         name="signup"
@@ -48,18 +67,22 @@ function AuthScreen() {
 }
 
 function Navigation() {
+  const authCtx = useContext(AuthContext);
+
   return (
     <NavigationContainer>
-      <AuthScreen></AuthScreen>
+      {!authCtx.isAuthenticated &&  <AuthScreen></AuthScreen>}
+      {authCtx.isAuthenticated && <DrawerScreen></DrawerScreen>}
+
     </NavigationContainer>
   );
 }
 export default function App() {
   return (
-    <View style={styles.container}>
+    <AuthContextProvider style={styles.container}>
       <StatusBar style="dark"></StatusBar>
       <Navigation></Navigation>
-    </View>
+    </AuthContextProvider>
   );
 }
 

@@ -49,7 +49,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
         mode="outlined"
         activeOutlineColor={Colors.green500}
         onChangeText={(text) => {
-          updateInputValueHandler("email",text);
+          updateInputValueHandler("email", text);
         }}
         error={emailIsInvalid}
       />
@@ -59,19 +59,22 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
         activeOutlineColor={Colors.green500}
         // error={emailIsInvalid}
         onChangeText={(text) => {
-          updateInputValueHandler("password",text);
-          console.log(enteredPassword)
+          updateInputValueHandler("password", text);
         }}
       />
-      <TextInput
-        label="Password again"
-        mode="outlined"
-        error={passwordsDontMatch}
-        activeOutlineColor={Colors.green500}
-        onChangeText={(text) => {
-          updateInputValueHandler("confirmPassword",text);
-        }}
-      />
+      {isLogin ? (
+        null
+      ) : (
+        <TextInput
+          label="Password again"
+          mode="outlined"
+          error={passwordsDontMatch}
+          activeOutlineColor={Colors.green500}
+          onChangeText={(text) => {
+            updateInputValueHandler("confirmPassword", text);
+          }}
+        />
+      )}
 
       <CusButton onPress={submitHandler}>Sumbit</CusButton>
     </View>
