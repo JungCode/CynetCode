@@ -4,6 +4,7 @@ import Colors from "../constants/Colors";
 import { useNavigation } from "@react-navigation/native";
 import FlatButton from "../components/FlatButton";
 
+
 function WelcomeScreen() {
   const navigation = useNavigation();
 
