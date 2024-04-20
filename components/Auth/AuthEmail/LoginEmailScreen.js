@@ -16,6 +16,7 @@ function LoginEmailScreen() {
       const token = await login(email, password);
       console.log({ email, password });
       authCtx.authenticate(token);
+      authCtx.userIdHandler(email);
     } catch (error) {
       Alert.alert(
         "Authentication failed!",

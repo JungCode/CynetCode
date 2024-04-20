@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 
-import { Platform, StatusBar, StyleSheet, Text, View } from "react-native";
+import { StatusBar, StyleSheet } from "react-native";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 
@@ -15,21 +15,24 @@ import LoginEmailScreen from "./components/Auth/AuthEmail/LoginEmailScreen";
 import DrawerScreen from "./screens/DrawerScreen";
 import AuthContextProvider, { AuthContext } from "./store/auth-context";
 import { useContext } from "react";
-
+import HeaderCloseButton from "./components/HeaderCloseButton";
 const Stack = createNativeStackNavigator();
 
 function SignupStack() {
   return (
     <Stack.Navigator
-      screenOptions={{ contentStyle: { backgroundColor: "white" } }}>
+      screenOptions={{ contentStyle: { backgroundColor: "white" } }}
+    >
       <Stack.Screen
         name="AuthContent"
         component={SignupScreen}
-        options={{ headerShown: false }}></Stack.Screen>
+        options={{ headerShown: false }}
+      ></Stack.Screen>
       <Stack.Screen
         name="AuthEmailScreen"
         component={AuthEmailScreen}
-        options={{}}></Stack.Screen>
+        options={{}}
+      ></Stack.Screen>
     </Stack.Navigator>
   );
 }
@@ -37,24 +40,27 @@ function SignupStack() {
 function LoginStack() {
   return (
     <Stack.Navigator
-      screenOptions={{ contentStyle: { backgroundColor: "white" } }}>
+      screenOptions={{ contentStyle: { backgroundColor: "white" } }}
+    >
       <Stack.Screen
         name="AuthContent"
         component={LoginScreen}
-        options={{ headerShown: false }}></Stack.Screen>
+        options={{ headerShown: false }}
+      ></Stack.Screen>
       <Stack.Screen
         name="LoginEmailScreen"
         component={LoginEmailScreen}
-        options={{}}></Stack.Screen>
+        options={{}}
+      ></Stack.Screen>
     </Stack.Navigator>
   );
 }
 
 function AuthScreen() {
-
   return (
     <Stack.Navigator
-      screenOptions={{ contentStyle: { backgroundColor: "white" } }}>
+      screenOptions={{ contentStyle: { backgroundColor: "white" } }}
+    >
       <Stack.Screen
         name="welcome"
         component={WelcomeScreen}
@@ -63,11 +69,13 @@ function AuthScreen() {
       <Stack.Screen
         name="login"
         component={LoginStack}
-        options={{ headerShown: false }}></Stack.Screen>
+        options={{ headerShown: false }}
+      ></Stack.Screen>
       <Stack.Screen
         name="signup"
         component={SignupStack}
-        options={{ headerShown: false }}></Stack.Screen>
+        options={{ headerShown: false }}
+      ></Stack.Screen>
     </Stack.Navigator>
   );
 }
@@ -77,9 +85,8 @@ function Navigation() {
 
   return (
     <NavigationContainer>
-      {!authCtx.isAuthenticated &&  <AuthScreen></AuthScreen>}
-      {authCtx.isAuthenticated && <ModalScreen/>}
-
+      {!authCtx.isAuthenticated && <AuthScreen></AuthScreen>}
+      {authCtx.isAuthenticated && <ModalScreen />}
     </NavigationContainer>
   );
 }
@@ -89,35 +96,35 @@ export default function App() {
       <StatusBar style="dark"></StatusBar>
       <Navigation></Navigation>
     </AuthContextProvider>
-
   );
 }
 function ModalScreen() {
   return (
     <>
-        <Stack.Navigator screenOptions={{ animation: "fade_from_bottom" }}>
-          <Stack.Screen
-            name="drawerScreen"
-            component={DrawerScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="addingOptionsModal"
-            component={AddingOptionsModal}
-            options={{ headerTitle: "New Item" }}
-          />
-          <Stack.Screen
-            name="websiteAddingScreen"
-            component={WebsiteAddingScreen}
-            options={{
-              headerTitle: "Website",
-              animation: "slide_from_right",
-              // headerLeft: (props) => (
-              //   <HeaderCloseButton />
-              // ),
-            }}
-          />
-        </Stack.Navigator>
+      <Stack.Navigator screenOptions={{ animation: "fade_from_bottom" }}>
+        <Stack.Screen
+          name="drawerScreen"
+          component={DrawerScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="addingOptionsModal"
+          component={AddingOptionsModal}
+          options={{ headerTitle: "New Item" }}
+        />
+        <Stack.Screen
+          name="websiteAddingScreen"
+          component={WebsiteAddingScreen}
+          options={{
+            headerTitle: "Website",
+            animation: "slide_from_right",
+            headerStyle: {
+              alignItems: "center",
+            },
+            headerLeft: (props) => <HeaderCloseButton />,
+          }}
+        />
+      </Stack.Navigator>
       <StatusBar />
     </>
   );
