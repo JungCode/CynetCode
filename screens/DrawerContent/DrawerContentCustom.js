@@ -127,6 +127,14 @@ function DrawerContentCustom(props) {
           iconName=""
           onActive={PressHandler}
           ItemIsActive={ItemIsActive}
+          line={true}
+        />
+        <DrawerItemCustom
+          name="Logout"
+          labelName="Log out"
+          iconName=""
+          onActive={PressHandler}
+          ItemIsActive={ItemIsActive}
         />
       </DrawerContentScrollView>
     </SafeAreaView>

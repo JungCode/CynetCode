@@ -1,10 +1,10 @@
 import { useContext, useState } from "react";
 import AuthEmailContent from "./AuthEmailContent";
 import LoadingOverlay from "../../LoadingOverlay";
-import { Alert } from "react-native";
+
 import { AuthContext } from "../../../store/auth-context";
 import { login } from "../../../util/auth";
-
+import { Alert } from "react-native";
 function LoginEmailScreen() {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
@@ -14,7 +14,7 @@ function LoginEmailScreen() {
     setIsAuthenticating(true);
     try {
       const token = await login(email, password);
-      console.log({email,password});
+      console.log({ email, password });
       authCtx.authenticate(token);
     } catch (error) {
       Alert.alert(
