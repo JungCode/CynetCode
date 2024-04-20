@@ -14,6 +14,7 @@ import PasswordCreatorScreen from "./DrawerScreens/PassworCreatorScreen";
 import PasswordCheckerScreen from "./DrawerScreens/PasswordCheckerScreen";
 import Lock from "./DrawerScreens/Lock";
 import SettingScreen from "./DrawerScreens/SettingScreen";
+import Logout from "./DrawerScreens/LogOut";
 
 const Drawer = createDrawerNavigator();
 
@@ -60,6 +61,7 @@ function DrawerScreen() {
       />
       <Drawer.Screen name="Setting" component={SettingScreen} />
       <Drawer.Screen name="Lock" component={Lock} />
+      <Drawer.Screen name="Logout" component={Logout} />
     </Drawer.Navigator>
   );
 }

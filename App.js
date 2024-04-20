@@ -55,6 +55,7 @@ function LoginStack() {
 }
 
 function AuthScreen() {
+
   return (
     <Stack.Navigator
       screenOptions={{ contentStyle: { backgroundColor: "white" } }}
