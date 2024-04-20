@@ -39,7 +39,7 @@ const MyFab = ({
   return (
     <AnimatedFAB
       icon={"plus"}
-      label={"aaaaaaaaaaaa"}
+      label={"Create"}
       extended={isExtended}
       onPress={() => {
         return navigation.navigate("addingOptionsModal");
