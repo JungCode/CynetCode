@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 const url = "https://cynetcode-default-rtdb.firebaseio.com";
 async function storeItem(mode, webItem) {
   const response = await axios.post(url + "/webItems.json", webItem);
@@ -27,4 +27,10 @@ export async function fetchItems(userId) {
 
 export function webStoreItem(webItem) {
   return storeItem("webStoreItem", webItem);
+}
+export async function webUpdateItem(id, webItem) {
+  return await axios.put(url + `/webItems/${id}.json`, webItem);
+}
+export async function webDeleteItem(id) {
+  return await axios.delete(url + `/webItems/${id}.json`);
 }

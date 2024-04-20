@@ -3,18 +3,26 @@ import { TextInput } from "react-native-paper";
 import Colors from "../../constants/Colors";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../store/auth-context";
-import { webStoreItem } from "../../util/http";
-import { useNavigation } from "@react-navigation/native";
+import { webStoreItem, webUpdateItem } from "../../util/http";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import LoadingOverlay from "../../components/LoadingOverlay";
 function WebsiteAddingScreen() {
-  const [webURL, setWebURL] = useState("");
-  const [webName, setWebName] = useState("");
-  const [accountName, setAccountName] = useState("");
-  const [password, setPassword] = useState("");
-  const [description, setDescription] = useState("");
+  const route = useRoute();
+  const [webURL, setWebURL] = useState(route.params ? route.params.webURL : "");
+  const [webName, setWebName] = useState(
+    route.params ? route.params.webName : ""
+  );
+  const [accountName, setAccountName] = useState(
+    route.params ? route.params.accountName : ""
+  );
+  const [password, setPassword] = useState(
+    route.params ? route.params.password : ""
+  );
+  const [description, setDescription] = useState(
+    route.params ? route.params.description : ""
+  );
   const authCtx = useContext(AuthContext);
   const [isStoring, setIsStoring] = useState(false);
-
   const navigation = useNavigation();
   function updateInputValueHandler(inputType, enteredValue) {
     switch (inputType) {
@@ -36,17 +44,27 @@ function WebsiteAddingScreen() {
     }
   }
   function submitHandler() {
-    setIsStoring(true);
-    webStoreItem({
+    const item = {
       webURL: webURL,
       webName: webName,
       accountName: accountName,
       password: password,
       description: description,
       userId: authCtx.userId,
-    });
-    setIsStoring(false);
-    navigation.navigate("drawerScreen");
+    };
+    if (route.params) {
+      setIsStoring(true);
+      webUpdateItem(route.params.id, item);
+      authCtx.userItemsHandler(item);
+      setIsStoring(false);
+      navigation.navigate("drawerScreen");
+    } else {
+      setIsStoring(true);
+      webStoreItem(item);
+      authCtx.userItemsHandler(item);
+      setIsStoring(false);
+      navigation.navigate("drawerScreen");
+    }
   }
   if (isStoring) {
     return <LoadingOverlay message="Adding ..." />;

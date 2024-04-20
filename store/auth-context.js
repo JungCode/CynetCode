@@ -8,17 +8,22 @@ export const AuthContext = createContext({
   logout: () => {},
   userId: "",
   userIdHandler: () => {},
+  userItems: [],
+  userItemsHandler: () => {},
 });
 
 function AuthContextProvider({ children }) {
   const [authToken, setAuthToken] = useState();
   const [userId, setUserId] = useState();
+  const [userItems, setUserItems] = useState([]);
 
   useEffect(() => {
     async function fetchToken() {
       const storedToken = await AsyncStorage.getItem("token");
+      const userId = await AsyncStorage.getItem("userId");
       if (storedToken) {
         setAuthToken(storedToken);
+        setUserId(userId);
       }
     }
     fetchToken();
@@ -35,8 +40,11 @@ function AuthContextProvider({ children }) {
 
   function userIdHandler(userId) {
     setUserId(userId);
+    AsyncStorage.setItem("userId", userId);
   }
-
+  function userItemsHandler(item) {
+    setUserItems(item);
+  }
   const value = {
     token: authToken,
     isAuthenticated: !!authToken,
@@ -44,6 +52,8 @@ function AuthContextProvider({ children }) {
     logout: logout,
     userId: userId,
     userIdHandler: userIdHandler,
+    userItems: userItems,
+    userItemsHandler: userItemsHandler,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 
-import { Platform, StatusBar, StyleSheet, Text, View } from "react-native";
+import { StatusBar, StyleSheet } from "react-native";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 
@@ -55,7 +55,6 @@ function LoginStack() {
 }
 
 function AuthScreen() {
-
   return (
     <Stack.Navigator
       screenOptions={{ contentStyle: { backgroundColor: "white" } }}
