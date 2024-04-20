@@ -12,7 +12,7 @@ function CusButton({ children, onPress, bgc, color, pressedbgc, borcolor }) {
           borderColor: borcolor ? borcolor : Colors.green500,
         },
         pressed && {
-          backgroundColor: pressedbgc ? pressedbgc : Colors.green700,
+          backgroundColor: pressedbgc ? pressedbgc : Colors.green600,
         },
       ]}
       onPress={onPress}>
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   pressed: {
-    backgroundColor: Colors.green700,
+    backgroundColor: Colors.green600,
   },
   buttonText: {
     textAlign: "center",

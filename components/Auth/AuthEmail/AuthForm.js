@@ -1,7 +1,8 @@
-import { View } from "react-native";
-import { TextInput } from "react-native-paper";
+import { StyleSheet, View } from "react-native";
+import { Icon, TextInput } from "react-native-paper";
 import CusButton from "../../CusButton";
 import { useState } from "react";
+import FlatButton from "../../FlatButton";
 
 function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
   const [enteredEmail, setEnteredEmail] = useState("");
@@ -45,6 +46,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
   return (
     <View>
       <TextInput
+        style={styles.button}
         label="Email"
         mode="outlined"
         activeOutlineColor={Colors.green500}
@@ -54,21 +56,25 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
         error={emailIsInvalid}
       />
       <TextInput
+        style={styles.button}
         label="Password"
         mode="outlined"
         activeOutlineColor={Colors.green500}
-        // error={emailIsInvalid}
+        secureTextEntry
         onChangeText={(text) => {
           updateInputValueHandler("password", text);
         }}
       />
+
       {isLogin ? (
-        null
+        <FlatButton style={styles.flat}>Forgot your password?</FlatButton>
       ) : (
         <TextInput
           label="Password again"
+          style={styles.button}
           mode="outlined"
           error={passwordsDontMatch}
+          secureTextEntry
           activeOutlineColor={Colors.green500}
           onChangeText={(text) => {
             updateInputValueHandler("confirmPassword", text);
@@ -82,3 +88,12 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
 }
 
 export default AuthForm;
+
+const styles = StyleSheet.create({
+  button: {
+    marginBottom: 10,
+  },
+  flat: {
+    marginBottom: 20,
+  },
+});

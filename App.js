@@ -5,6 +5,8 @@ import { Platform, StatusBar, StyleSheet, Text, View } from "react-native";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 
+
+
 import WelcomeScreen from "./screens/WelcomeScreen";
 import AddingOptionsModal from "./screens/Modals/AddingOptionsModal";
 import WebsiteAddingScreen from "./screens/AddingScreens/WebsiteAddingScreen";
@@ -124,5 +126,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    fontFamily:"SchibstedGrotesk-Black",
   },
 });

@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import FlatButton from "../components/FlatButton";
 
 
+
 function WelcomeScreen() {
   const navigation = useNavigation();
 
@@ -20,20 +21,27 @@ function WelcomeScreen() {
       <View>
         <Text style={styles.title}>Do you have a CynetCode account yet?</Text>
         <View>
+          <Text style={[styles.des,{marginBottom:10,}]}>
+            One account for all services of CynetCode
+          </Text>
+          <Text style={styles.des}>With this account, you can:</Text>
           <Text style={styles.des}>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nihil
-            reiciendis voluptate cum adipisci ducimus voluptas, atque possimus
-            necessitatibus ea? Hic incidunt accusantium molestiae suscipit
-            consequuntur voluptate maxime dolores ut accusamus!
+            · Recover your password if something goes wrong with Your mobile
+            device
+          </Text>
+          <Text style={styles.des}>· Access your data in the browser from</Text>
+          <Text style={styles.des}>
+            · Automatically backup and synchronize data on all your devices
           </Text>
         </View>
-        <View>
+        <View style={styles.buttonContainer}>
           <CusButton onPress={switchlogin}>Login</CusButton>
           <CusButton
             onPress={switchsignup}
             color={Colors.green500}
+            borcolor={"transparent"}
             bgc={"white"}
-            pressedbgc={Colors.gray200}>
+            pressedbgc={Colors.gray100}>
             Sign Up
           </CusButton>
         </View>
@@ -54,13 +62,18 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: "center",
-    fontSize: 30,
+    fontSize: 35,
     fontWeight: "bold",
-    paddingHorizontal: 20,
+    lineHeight:50,
+    paddingHorizontal: 10,
   },
   des: {
+    fontSize:15,
     lineHeight: 25,
     color: Colors.gray300,
-    marginBottom: 20,
+    textAlign: "justify",
   },
+  buttonContainer:{
+    marginTop:30,
+  }
 });

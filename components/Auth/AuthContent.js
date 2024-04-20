@@ -32,37 +32,35 @@ function AuthContent({ islogin }) {
             {islogin ? "Login in CynetCode" : "Signup in CynetCode"}
           </Text>
           <Text style={styles.des}>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nihil
-            reiciendis voluptate cum adipisci ducimus voluptas, atque possimus
-            necessitatibus ea? Hic incidunt accusantium molestiae suscipit
-            consequuntur voluptate maxime dolores ut accusamus!
+            Sign in to My Kaspersky One account to manage all Kaspersky apps and
+            features
           </Text>
         </View>
         <View style={styles.buttonContainer}>
           <IconButton
             bgc="white"
-            icon={"logo-google"}
+            icon={require("../../image/icons/search.png")}
             color="black"
             borcolor={Colors.gray200}
             onPress={() => {}}>
             {islogin ? "Login" : "Signup"} with Googel
           </IconButton>
           <IconButton
-            icon={"logo-facebook"}
+            icon={require("../../image/icons/facebook.png")}
             bgc="white"
             color="black"
             borcolor={Colors.gray200}>
             {islogin ? "Login" : "Signup"} with Facebook
           </IconButton>
           <IconButton
-            icon={"logo-apple"}
+            icon={require("../../image/icons/apple-logo.png")}
             bgc="white"
             color="black"
             borcolor={Colors.gray200}>
             {islogin ? "Login" : "Signup"} with Apple
           </IconButton>
           <IconButton
-            icon={"mail"}
+            icon={require("../../image/icons/gmail.png")}
             color={"white"}
             onPress={() => {
               if (islogin) {
@@ -107,10 +105,13 @@ const styles = StyleSheet.create({
   des: {
     lineHeight: 25,
     color: Colors.gray300,
+    marginTop:20,
     marginBottom: 20,
+    textAlign:"center",
   },
   buttonContainer: {
     minWidth: "100%",
+    paddingBottom:30,
   },
   backbutton: {
     margin: 10,

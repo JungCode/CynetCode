@@ -1,6 +1,5 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import Colors from "../constants/Colors";
-import { Ionicons } from "@expo/vector-icons";
 
 function IconButton({
   children,
@@ -21,12 +20,12 @@ function IconButton({
           borderColor: borcolor ? borcolor : Colors.green500,
         },
         pressed && {
-          backgroundColor: pressedbgc ? pressedbgc : Colors.green700,
+          backgroundColor: pressedbgc ? pressedbgc : Colors.green600,
         },
       ]}
       onPress={onPress}>
       <View style={styles.innercontainer}>
-        <Ionicons style={styles.icon} name={icon} size={24} color={color} />
+        <Image style={styles.icon} source={icon} />
         <Text
           style={[styles.buttonText, { color: color ? color : Colors.white }]}>
           {children}
@@ -40,22 +39,23 @@ export default IconButton;
 
 const styles = StyleSheet.create({
   button: {
+    width: "100%",
     borderRadius: 6,
     paddingVertical: 15,
     paddingHorizontal: 12,
     marginBottom: 10,
-    borderWidth: 1,
+    borderWidth: 2,
   },
-  pressed: {
-    backgroundColor: Colors.green700,
+  icon: {
+    height: 30,
+    width: 30,
+    position:"absolute",
+    left:10,
   },
-  icon:{
-    right:90,
-  },
-  innercontainer:{
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent: 'center',
+  innercontainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
   buttonText: {
     textAlign: "center",

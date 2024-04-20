@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Alert, StyleSheet,View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import AuthForm from "./AuthForm";
-import { Text } from "react-native-paper";
 
 function AuthEmailContent({ isLogin, onAuthenticate }) {
   const [credentialsInvalid, setCredentialsInvalid] = useState({
@@ -11,7 +10,7 @@ function AuthEmailContent({ isLogin, onAuthenticate }) {
   });
 
   function submitHandler(credentials) {
-    let { email,password, confirmPassword } = credentials;
+    let { email, password, confirmPassword } = credentials;
 
     email = email.trim();
     password = password.trim();
@@ -21,11 +20,7 @@ function AuthEmailContent({ isLogin, onAuthenticate }) {
     // const emailsAreEqual = email === confirmEmail;
     const passwordsAreEqual = password === confirmPassword;
 
-    if (
-      !emailIsValid ||
-      !passwordIsValid ||
-      (!isLogin && !passwordsAreEqual)
-    ) {
+    if (!emailIsValid || !passwordIsValid || (!isLogin && !passwordsAreEqual)) {
       Alert.alert("Invalid input", "Please check your entered credentials.");
       setCredentialsInvalid({
         email: !emailIsValid,
@@ -38,8 +33,11 @@ function AuthEmailContent({ isLogin, onAuthenticate }) {
   }
   return (
     <View style={styles.container}>
-      <Text variant="displayLarge" style={styles.title}>
-        {isLogin ? "Login" :"Signup" } in CynetCode
+      <Text style={styles.title}>
+        {isLogin ? "Sign in to" : "Sign up to"} CynetCode
+      </Text>
+      <Text style={styles.des}>
+        Use a CynetCode account to manage protection on all your devices.
       </Text>
       <AuthForm
         isLogin={isLogin}
@@ -51,14 +49,26 @@ function AuthEmailContent({ isLogin, onAuthenticate }) {
 
 export default AuthEmailContent;
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      paddingHorizontal: 20,
-      paddingBottom: 10,
-    },
-    title: {
-      marginTop: 20,
-      fontWeight: "bold",
-    },
-  });
-  
+  container: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingBottom: 10,
+    paddingTop: 20,
+  },
+  title: {
+    fontSize: 35,
+    paddingRight: 40,
+    fontWeight: "bold",
+    lineHeight: 50,
+    paddingHorizontal: 10,
+    marginBottom:10,
+  },
+  des: {
+    fontSize:15,
+    paddingHorizontal: 10,
+    lineHeight: 25,
+    color: Colors.gray300,
+    textAlign: "justify",
+    marginBottom:20,
+  },
+});
