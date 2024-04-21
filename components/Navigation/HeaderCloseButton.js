@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Colors from "../constants/Colors";
+import Colors from "../../constants/Colors";
 import { useNavigation } from "@react-navigation/native";
 function HeaderCloseButton() {
   const navigation = useNavigation();

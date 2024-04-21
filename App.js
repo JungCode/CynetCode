@@ -13,7 +13,7 @@ import LoginEmailScreen from "./components/Auth/AuthEmail/LoginEmailScreen";
 import DrawerScreen from "./screens/DrawerScreen";
 import AuthContextProvider, { AuthContext } from "./store/auth-context";
 import { useContext } from "react";
-import HeaderCloseButton from "./components/HeaderCloseButton";
+import HeaderCloseButton from "./components/Navigation/HeaderCloseButton";
 const Stack = createNativeStackNavigator();
 
 function SignupStack() {
@@ -77,7 +77,7 @@ function AuthScreen() {
     </Stack.Navigator>
   );
 }
-
+// auth navigation between Main screen vs Login screen
 function Navigation() {
   const authCtx = useContext(AuthContext);
 
@@ -88,6 +88,7 @@ function Navigation() {
     </NavigationContainer>
   );
 }
+// main App
 export default function App() {
   return (
     <AuthContextProvider style={styles.container}>
@@ -96,6 +97,7 @@ export default function App() {
     </AuthContextProvider>
   );
 }
+// modal navigation
 function ModalScreen() {
   return (
     <>
@@ -127,6 +129,7 @@ function ModalScreen() {
     </>
   );
 }
+// styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
