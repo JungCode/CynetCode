@@ -28,7 +28,7 @@ function AllItemScreen({ onPress }) {
     <View style={styles.container}>
       <FlatList
         data={fetchedItems}
-        renderItem={({ item }) => <Item item={item}>{item.webName}</Item>}
+        renderItem={({ item }) => <Item item={item} >{item.webName}</Item>}
         keyExtractor={(item) => item.id}
       />
       <MyFab onPress={onPress} />
@@ -40,9 +40,11 @@ export default AllItemScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor:"white",
   },
   title: {
     fontSize: 23,
     fontWeight: "500",
   },
+
 });

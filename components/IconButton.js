@@ -39,7 +39,7 @@ export default IconButton;
 
 const styles = StyleSheet.create({
   button: {
-    width: "100%",
+    // width: "100%",
     borderRadius: 6,
     paddingVertical: 15,
     paddingHorizontal: 12,

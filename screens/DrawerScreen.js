@@ -25,6 +25,7 @@ function DrawerScreen() {
         headerStyle: {
           shadowColor: "black",
         },
+        contentStyle: { backgroundColor: "white" },
         headerRight: () => (
           <FontAwesome6
             style={styles.glassIcon}
@@ -36,12 +37,14 @@ function DrawerScreen() {
         drawerActiveBackgroundColor: "green",
         drawerActiveTintColor: "black",
       }}
-      drawerContent={(props) => <DrawerContentCustom {...props} />}
-    >
+      drawerContent={(props) => <DrawerContentCustom {...props} />}>
       <Drawer.Screen
         name="AllItem"
         component={AllItemScreen}
-        options={{ headerTitle: "All Items" }}
+        options={{
+          headerTitle: "All Items",
+          contentStyle: { backgroundColor: "white" },
+        }}
       />
       <Drawer.Screen name="Favorite" component={FavoriteScreen} />
       <Drawer.Screen name="Account" component={AccountScreen} />

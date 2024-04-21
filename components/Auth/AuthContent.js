@@ -32,7 +32,7 @@ function AuthContent({ islogin }) {
             {islogin ? "Login in CynetCode" : "Signup in CynetCode"}
           </Text>
           <Text style={styles.des}>
-            Sign in to My Kaspersky One account to manage all Kaspersky apps and
+            Sign in to CynetCode One account to manage all apps and
             features
           </Text>
         </View>
