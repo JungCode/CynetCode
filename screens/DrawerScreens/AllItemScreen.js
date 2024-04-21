@@ -4,18 +4,24 @@ import { useContext, useEffect, useState } from "react";
 import { fetchItems } from "../../util/http";
 import { AuthContext } from "../../store/auth-context";
 import Item from "../../components/Item";
+import LoadingOverlay from "../../components/LoadingOverlay";
 function AllItemScreen({ onPress }) {
   const [fetchedItems, setFetchedItems] = useState([]);
-
+  const [isFetchedItems, setIsFetchedItems] = useState(false);
   const authCtx = useContext(AuthContext);
   useEffect(() => {
+    setIsFetchedItems(true);
     async function getItems() {
       const items = await fetchItems(authCtx.userId);
       setFetchedItems(items);
+      setIsFetchedItems(false);
     }
     getItems();
   }, [authCtx]);
-  if (!fetchItems) {
+  if (isFetchedItems) {
+    return <LoadingOverlay message="Loading..." />;
+  }
+  if (!fetchedItems) {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Your security store is empty</Text>
