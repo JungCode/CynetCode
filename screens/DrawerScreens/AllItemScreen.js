@@ -5,6 +5,7 @@ import { fetchItems } from "../../util/http";
 import { AuthContext } from "../../store/auth-context";
 import Item from "../../components/Item";
 import LoadingOverlay from "../../components/LoadingOverlay";
+import ItemAcordition from "../../components/Accordions/ItemAcordition";
 function AllItemScreen({ onPress }) {
   const [fetchedItems, setFetchedItems] = useState([]);
   const [isFetchedItems, setIsFetchedItems] = useState(false);
@@ -34,7 +35,7 @@ function AllItemScreen({ onPress }) {
     <View style={styles.container}>
       <FlatList
         data={fetchedItems}
-        renderItem={({ item }) => <Item item={item} >{item.webName}</Item>}
+        renderItem={({ item }) => <ItemAcordition value={item} >{item.webName}</ItemAcordition>}
         keyExtractor={(item) => item.id}
       />
       <MyFab onPress={onPress} />
