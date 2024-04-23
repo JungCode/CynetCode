@@ -10,7 +10,7 @@ import {
   SafeAreaView,
   I18nManager,
 } from "react-native";
-import { AnimatedFAB } from "react-native-paper";
+import { AnimatedFAB, FAB } from "react-native-paper";
 import Colors from "../constants/Colors";
 import { useNavigation } from "@react-navigation/native";
 const MyFab = ({
@@ -37,9 +37,8 @@ const MyFab = ({
   const fabStyle = { [animateFrom]: 16 };
 
   return (
-    <AnimatedFAB
+    <FAB
       icon={"plus"}
-      label={"Create"}
       extended={isExtended}
       onPress={() => {
         return navigation.navigate("addingOptionsModal");
@@ -60,9 +59,10 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   fabStyle: {
-    bottom: 16,
-    right: 16,
-    position: "absolute",
-    backgroundColor: Colors.green800,
+    position: 'absolute',
+    margin: 16,
+    right: 0,
+    bottom: 0,
+    backgroundColor: Colors.green600,
   },
 });

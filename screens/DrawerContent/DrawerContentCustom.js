@@ -1,17 +1,10 @@
-import {
-  DrawerContentScrollView,
-  DrawerItem,
-  DrawerItemList,
-} from "@react-navigation/drawer";
-import { SafeAreaView, StatusBar, StyleSheet, Text, View } from "react-native";
-import DrawerLabel from "./DrawerLabel";
+import { DrawerContentScrollView } from "@react-navigation/drawer";
+import { SafeAreaView, StyleSheet } from "react-native";
 import DrawerTitle from "./DrawerTitle";
 import DrawerItemCustom from "./DrawerItemCustom";
-import { useContext, useState } from "react";
-import { AuthContext } from "../../store/auth-context";
+import { useState } from "react";
 function DrawerContentCustom(props) {
   const [ItemIsActive, setItemIsActive] = useState("AllItem");
-  const authCtx = useContext(AuthContext);
   function PressHandler(name) {
     setItemIsActive(name);
   }
@@ -26,7 +19,7 @@ function DrawerContentCustom(props) {
           iconName="home-outline"
           onActive={PressHandler}
           ItemIsActive={ItemIsActive}
-          quantity={0}
+          quantity={props.itemsQuantity.AllItems}
         />
         <DrawerItemCustom
           name="Favorite"
@@ -34,7 +27,7 @@ function DrawerContentCustom(props) {
           onActive={PressHandler}
           iconName="star-outline"
           ItemIsActive={ItemIsActive}
-          quantity={0}
+          quantity={props.itemsQuantity.Favorites}
         />
         <DrawerItemCustom
           name="Account"

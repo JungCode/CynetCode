@@ -1,23 +1,24 @@
 import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
 import MyFab from "../../components/MyFab";
 import { useContext, useEffect, useState } from "react";
-import { fetchItems } from "../../util/http";
 import { AuthContext } from "../../store/auth-context";
-import Item from "../../components/Item";
 import LoadingOverlay from "../../components/LoadingOverlay";
+import ItemAcordition from "../../components/Accordions/ItemAcordition";
+import { ItemsContext } from "../../store/items-context";
 function AllItemScreen({ onPress }) {
   const [fetchedItems, setFetchedItems] = useState([]);
   const [isFetchedItems, setIsFetchedItems] = useState(false);
   const authCtx = useContext(AuthContext);
+  const itemsCtx = useContext(ItemsContext);
   useEffect(() => {
     setIsFetchedItems(true);
     async function getItems() {
-      const data = await fetchItems(authCtx.userId);
+      const data = await itemsCtx.fetchItemsCtx(authCtx.userId);
       setFetchedItems(data);
       setIsFetchedItems(false);
     }
     getItems();
-  }, [authCtx]);
+  }, [itemsCtx.refresh]);
   if (isFetchedItems) {
     return <LoadingOverlay message="Loading..." />;
   }
@@ -34,7 +35,9 @@ function AllItemScreen({ onPress }) {
     <View style={styles.container}>
       <FlatList
         data={fetchedItems}
-        renderItem={({ item }) => <Item item={item}>{item.webName}</Item>}
+        renderItem={({ item }) => (
+          <ItemAcordition value={item}>{item.webName}</ItemAcordition>
+        )}
         keyExtractor={(item) => item.id}
       />
       <MyFab onPress={onPress} />
@@ -46,6 +49,7 @@ export default AllItemScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "white",
   },
   title: {
     fontSize: 23,

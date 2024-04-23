@@ -14,6 +14,7 @@ import DrawerScreen from "./screens/DrawerScreen";
 import AuthContextProvider, { AuthContext } from "./store/auth-context";
 import { useContext } from "react";
 import HeaderCloseButton from "./components/Navigation/HeaderCloseButton";
+import ItemsContextProvider from "./store/items-context";
 const Stack = createNativeStackNavigator();
 
 function SignupStack() {
@@ -100,7 +101,7 @@ export default function App() {
 // modal navigation
 function ModalScreen() {
   return (
-    <>
+    <ItemsContextProvider>
       <Stack.Navigator screenOptions={{ animation: "fade_from_bottom" }}>
         <Stack.Screen
           name="drawerScreen"
@@ -126,7 +127,7 @@ function ModalScreen() {
         />
       </Stack.Navigator>
       <StatusBar />
-    </>
+    </ItemsContextProvider>
   );
 }
 // styles
@@ -134,5 +135,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    fontFamily: "SchibstedGrotesk-Black",
   },
 });

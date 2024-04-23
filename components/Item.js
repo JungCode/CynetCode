@@ -1,8 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { webDeleteItem } from "../util/http";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../store/auth-context";
+import { List } from "react-native-paper";
+import Colors from "../constants/Colors";
+import { login } from "../util/auth";
 
 function Item({ children, item }) {
   const navigation = useNavigation();
@@ -11,20 +14,44 @@ function Item({ children, item }) {
     webDeleteItem(item.id);
     authCtx.userItemsHandler(item);
   }
+
+  // const [expanded, setExpanded] = useState(true);
+
+  // const handlePress = () => setExpanded(!expanded);
   return (
-    <View style={styles.container}>
-      <Text>{children}</Text>
-      <Button
-        title="Modify"
-        onPress={() => navigation.navigate("websiteAddingScreen", item)}
-      />
-      <Button title="Delete" onPress={deleteHandler} />
-    </View>
+    <List.Section>
+      <List.Accordion
+        title={children}
+        rippleColor={Colors.gray200}
+        titleStyle={styles.title}
+        left={(props) => (
+          <List.Icon {...props} color={Colors.green500} icon="pen" />
+        )}>
+        <List.Item
+          title="Edit"
+          onPress={() => navigation.navigate("websiteAddingScreen", item)}
+        />
+        <List.Item title="Delete" onPress={deleteHandler} />
+        <List.Item title={item.accountName} />
+        <List.Item title={item.password} />
+      </List.Accordion>
+    </List.Section>
+    // <View style={styles.container}>
+    //   <Text>{children}</Text>
+    //   <Button
+    //     title="Modify"
+    //     onPress={() => navigation.navigate("websiteAddingScreen", item)}
+    //   />
+    //   <Button title="Delete" onPress={deleteHandler} />
+    // </View>
   );
 }
 export default Item;
 const styles = StyleSheet.create({
   container: {
     height: 300,
+  },
+  title: {
+    color: Colors.green500,
   },
 });

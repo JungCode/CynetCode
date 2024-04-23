@@ -6,6 +6,7 @@ import { AuthContext } from "../../store/auth-context";
 import { webStoreItem, webUpdateItem } from "../../util/http";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import LoadingOverlay from "../../components/LoadingOverlay";
+import { ItemsContext } from "../../store/items-context";
 function WebsiteAddingScreen() {
   const route = useRoute();
   const [webURL, setWebURL] = useState(route.params ? route.params.webURL : "");
@@ -22,6 +23,7 @@ function WebsiteAddingScreen() {
     route.params ? route.params.description : ""
   );
   const authCtx = useContext(AuthContext);
+  const itemsCtx = useContext(ItemsContext);
   const [isStoring, setIsStoring] = useState(false);
   const navigation = useNavigation();
   function updateInputValueHandler(inputType, enteredValue) {
@@ -51,17 +53,16 @@ function WebsiteAddingScreen() {
       password: password,
       description: description,
       userId: authCtx.userId,
+      favorite: false,
     };
     if (route.params) {
       setIsStoring(true);
-      webUpdateItem(route.params.id, item);
-      authCtx.userItemsHandler(item);
+      itemsCtx.updateItem(route.params.id,item);
       setIsStoring(false);
       navigation.navigate("drawerScreen");
     } else {
       setIsStoring(true);
-      webStoreItem(item);
-      authCtx.userItemsHandler(item);
+      itemsCtx.storeItem(item);
       setIsStoring(false);
       navigation.navigate("drawerScreen");
     }
@@ -143,7 +144,6 @@ const styles = StyleSheet.create({
     padding: 25,
   },
   inputStyle: {
-    // backgroundColor: "transparent",
     backgroundColor: "white",
     marginBottom: 13,
   },
