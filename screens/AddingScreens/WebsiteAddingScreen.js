@@ -12,8 +12,8 @@ function WebsiteAddingScreen() {
   const [webName, setWebName] = useState(
     route.params ? route.params.webName : ""
   );
-  const [accountName, setAccountName] = useState(
-    route.params ? route.params.accountName : ""
+  const [userName, setUserName] = useState(
+    route.params ? route.params.userName : ""
   );
   const [password, setPassword] = useState(
     route.params ? route.params.password : ""
@@ -32,8 +32,8 @@ function WebsiteAddingScreen() {
       case "webName":
         setWebName(enteredValue);
         break;
-      case "accountName":
-        setAccountName(enteredValue);
+      case "userName":
+        setUserName(enteredValue);
         break;
       case "password":
         setPassword(enteredValue);
@@ -47,7 +47,7 @@ function WebsiteAddingScreen() {
     const item = {
       webURL: webURL,
       webName: webName,
-      accountName: accountName,
+      userName: userName,
       password: password,
       description: description,
       userId: authCtx.userId,
@@ -102,12 +102,12 @@ function WebsiteAddingScreen() {
         <TextInput
           mode="outlined"
           activeOutlineColor={Colors.green500}
-          label="Account name"
+          label="User Name"
           style={styles.inputStyle}
-          value={accountName}
+          value={userName}
           onFocus={() => {}}
           onChangeText={(text) => {
-            updateInputValueHandler("accountName", text);
+            updateInputValueHandler("userName", text);
           }}
         />
         <TextInput

@@ -12,8 +12,8 @@ function AllItemScreen({ onPress }) {
   useEffect(() => {
     setIsFetchedItems(true);
     async function getItems() {
-      const items = await fetchItems(authCtx.userId);
-      setFetchedItems(items);
+      const data = await fetchItems(authCtx.userId);
+      setFetchedItems(data);
       setIsFetchedItems(false);
     }
     getItems();

@@ -1,9 +1,10 @@
 import { DrawerItem } from "@react-navigation/drawer";
 import DrawerLabel from "./DrawerLabel";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { StyleSheet } from "react-native";
 import { TouchableRipple } from "react-native-paper";
+import { AuthContext } from "../../store/auth-context";
 
 function DrawerItemCustom({
   name,
@@ -12,19 +13,26 @@ function DrawerItemCustom({
   onActive,
   ItemIsActive,
   line,
-  quantity
+  quantity,
 }) {
   const navigation = useNavigation();
   const style = ItemIsActive == name ? styles.OnActive : null;
   const lineStyle = line ? styles.line : null;
+  let onPressHandler = () => {
+    onActive(name);
+    return navigation.navigate(name);
+  };
+  const autCtx = useContext(AuthContext);
+  if (name == "Logout") {
+    onPressHandler = () => {
+      autCtx.logout();
+    };
+  }
   return (
     <TouchableRipple
       style={[style, styles.drawerItem, lineStyle]}
       rippleColor="#c6f4e1"
-      onPress={() => {
-        onActive(name);
-        return navigation.navigate(name);
-      }}
+      onPress={onPressHandler}
     >
       <DrawerLabel title={labelName} iconName={iconName} quantity={quantity} />
     </TouchableRipple>
@@ -41,7 +49,7 @@ const styles = StyleSheet.create({
     borderRadius: 0,
     paddingRight: 20,
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
   },
   line: {
     borderBottomColor: "#dedede",

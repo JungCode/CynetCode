@@ -7,9 +7,11 @@ import { SafeAreaView, StatusBar, StyleSheet, Text, View } from "react-native";
 import DrawerLabel from "./DrawerLabel";
 import DrawerTitle from "./DrawerTitle";
 import DrawerItemCustom from "./DrawerItemCustom";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../store/auth-context";
 function DrawerContentCustom(props) {
   const [ItemIsActive, setItemIsActive] = useState("AllItem");
+  const authCtx = useContext(AuthContext);
   function PressHandler(name) {
     setItemIsActive(name);
   }
@@ -44,7 +46,7 @@ function DrawerContentCustom(props) {
         />
         <DrawerItemCustom
           name="Card"
-          labelName="Credit card"
+          labelName="Credit cards"
           iconName="card-outline"
           onActive={PressHandler}
           ItemIsActive={ItemIsActive}
@@ -60,7 +62,7 @@ function DrawerContentCustom(props) {
         />
         <DrawerItemCustom
           name="Address"
-          labelName="Address"
+          labelName="Addresses"
           iconName="home-outline"
           onActive={PressHandler}
           ItemIsActive={ItemIsActive}

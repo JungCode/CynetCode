@@ -8,10 +8,19 @@ export async function fetchItems(userId) {
   const response = await axios.get(url + "/webItems.json");
 
   const items = [];
+  const quantityOfItems = {
+    allItems: 0,
+    Favorites: 0,
+    Account: 0,
+    CreaditCard: 0,
+    Documents: 0,
+    Addresses: 0,
+    Notes: 0,
+  };
   for (const key in response.data) {
     const itemsObj = {
       id: key,
-      accountName: response.data[key].accountName,
+      userName: response.data[key].userName,
       description: response.data[key].description,
       password: response.data[key].password,
       userId: response.data[key].userId,
@@ -20,8 +29,10 @@ export async function fetchItems(userId) {
     };
     if (itemsObj.userId == userId) {
       items.push(itemsObj);
+      quantityOfItems.allItems++;
     }
   }
+
   return items;
 }
 
