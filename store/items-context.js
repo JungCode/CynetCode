@@ -3,6 +3,7 @@ import {
   fetchFavoriteItems,
   fetchItems,
   fetchQuantity,
+  webDeleteItem,
   webStoreItem,
   webUpdateItem,
 } from "../util/http";
@@ -16,6 +17,7 @@ export const ItemsContext = createContext({
   refresh: "",
   storeItem: () => {},
   updateItem: () => {},
+  deleteItem: () => {},
 });
 function ItemsContextProvider({ children }) {
   const [quantityItems, setQuantityItems] = useState([]);
@@ -45,6 +47,10 @@ function ItemsContextProvider({ children }) {
     await webUpdateItem(itemId, updatedItem);
     setRefresh(itemId);
   }
+  async function deleteItem(itemId) {
+    await webDeleteItem(itemId);
+    setRefresh(itemId);
+  }
   useEffect(() => {
     setRefresh("userId");
   }, []);
@@ -57,6 +63,7 @@ function ItemsContextProvider({ children }) {
     updateItem: updateItem,
     refresh: refresh,
     fetchFavoriteItemsCtx: fetchFavoriteItemsCtx,
+    deleteItem: deleteItem,
   };
   return (
     <ItemsContext.Provider value={value}>{children}</ItemsContext.Provider>

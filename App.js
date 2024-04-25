@@ -15,23 +15,21 @@ import AuthContextProvider, { AuthContext } from "./store/auth-context";
 import { useContext } from "react";
 import HeaderCloseButton from "./components/Navigation/HeaderCloseButton";
 import ItemsContextProvider from "./store/items-context";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 const Stack = createNativeStackNavigator();
 
 function SignupStack() {
   return (
     <Stack.Navigator
-      screenOptions={{ contentStyle: { backgroundColor: "white" } }}
-    >
+      screenOptions={{ contentStyle: { backgroundColor: "white" } }}>
       <Stack.Screen
         name="AuthContent"
         component={SignupScreen}
-        options={{ headerShown: false }}
-      ></Stack.Screen>
+        options={{ headerShown: false }}></Stack.Screen>
       <Stack.Screen
         name="AuthEmailScreen"
         component={AuthEmailScreen}
-        options={{}}
-      ></Stack.Screen>
+        options={{}}></Stack.Screen>
     </Stack.Navigator>
   );
 }
@@ -39,18 +37,15 @@ function SignupStack() {
 function LoginStack() {
   return (
     <Stack.Navigator
-      screenOptions={{ contentStyle: { backgroundColor: "white" } }}
-    >
+      screenOptions={{ contentStyle: { backgroundColor: "white" } }}>
       <Stack.Screen
         name="AuthContent"
         component={LoginScreen}
-        options={{ headerShown: false }}
-      ></Stack.Screen>
+        options={{ headerShown: false }}></Stack.Screen>
       <Stack.Screen
         name="LoginEmailScreen"
         component={LoginEmailScreen}
-        options={{}}
-      ></Stack.Screen>
+        options={{}}></Stack.Screen>
     </Stack.Navigator>
   );
 }
@@ -58,23 +53,19 @@ function LoginStack() {
 function AuthScreen() {
   return (
     <Stack.Navigator
-      screenOptions={{ contentStyle: { backgroundColor: "white" } }}
-    >
+      screenOptions={{ contentStyle: { backgroundColor: "white" } }}>
       <Stack.Screen
         name="welcome"
         component={WelcomeScreen}
-        options={{ headerShown: false }}
-      ></Stack.Screen>
+        options={{ headerShown: false }}></Stack.Screen>
       <Stack.Screen
         name="login"
         component={LoginStack}
-        options={{ headerShown: false }}
-      ></Stack.Screen>
+        options={{ headerShown: false }}></Stack.Screen>
       <Stack.Screen
         name="signup"
         component={SignupStack}
-        options={{ headerShown: false }}
-      ></Stack.Screen>
+        options={{ headerShown: false }}></Stack.Screen>
     </Stack.Navigator>
   );
 }
@@ -92,10 +83,12 @@ function Navigation() {
 // main App
 export default function App() {
   return (
-    <AuthContextProvider style={styles.container}>
-      <StatusBar style="dark"></StatusBar>
-      <Navigation></Navigation>
-    </AuthContextProvider>
+    // <GestureHandlerRootView>
+      <AuthContextProvider style={styles.container}>
+        <StatusBar style="dark"></StatusBar>
+        <Navigation></Navigation>
+      </AuthContextProvider>
+    // </GestureHandlerRootView>
   );
 }
 // modal navigation

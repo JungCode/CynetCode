@@ -23,9 +23,15 @@ import Colors from "../../constants/Colors";
 import CusButton from "../CusButton";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
-
-function ItemAcordition({ value }) {
+function ItemAcordition({
+  value,
+  edititem,
+  deleteitem,
+  handlePresentModal,
+  handleDismissModal,
+}) {
   const navigation = useNavigation();
+  //dropdown js
   const listRef = useAnimatedRef();
   const heightValue = useSharedValue(0);
   const open = useSharedValue(false);
@@ -42,7 +48,6 @@ function ItemAcordition({ value }) {
     ),
   }));
 
-  function copyText(text) {}
   const checkFaviconExistence = async (url) => {
     try {
       const response = await fetch("http://" + url + "/favicon.ico");
@@ -52,7 +57,8 @@ function ItemAcordition({ value }) {
     }
   };
   checkFaviconExistence(value.webURL);
-  if (!fecthedImg) setFetchedImg("https://cdn-icons-png.flaticon.com/512/72/72626.png"); 
+  if (!fecthedImg)
+    setFetchedImg("https://cdn-icons-png.flaticon.com/512/72/72626.png");
   return (
     <View style={styles.container}>
       <Pressable
@@ -79,7 +85,7 @@ function ItemAcordition({ value }) {
           </View>
         </View>
         <Pressable
-          onPress={() => navigation.navigate("websiteAddingScreen", value)}
+          onPress={handlePresentModal.bind(this, { ...value, imgURL: fecthedImg })}
         >
           <Icon source="dots-vertical" size={25}></Icon>
         </Pressable>
@@ -121,7 +127,8 @@ function ItemAcordition({ value }) {
                 </Pressable>
               </View>
             </View>
-            <CusButton>Open in browser</CusButton>
+            <CusButton onPress={edititem}> Edit </CusButton>
+            <CusButton onPress={deleteitem}> Delete </CusButton>
           </View>
         </Animated.View>
       </Animated.View>
