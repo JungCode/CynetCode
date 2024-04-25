@@ -14,8 +14,8 @@ import Animated, {
 import { Icon } from "react-native-paper";
 import Colors from "../../constants/Colors";
 import CusButton from "../CusButton";
-
-function ItemAcordition({ value }) {
+function ItemAcordition({ value, edititem, deleteitem,handlePresentModal,handleDismissModal }) {
+  //dropdown js
   const listRef = useAnimatedRef();
   const heightValue = useSharedValue(0);
   const open = useSharedValue(false);
@@ -31,73 +31,74 @@ function ItemAcordition({ value }) {
     ),
   }));
 
-  function copyText(text) {}
   return (
-    <View style={styles.container}>
-      <Pressable
-        android_ripple={{ backgroundColor: Colors.graye0 }}
-        style={styles.titleContainer}
-        onPress={() => {
-          if (heightValue.value === 0) {
-            runOnUI(() => {
-              "worklet";
-              heightValue.value = withTiming(measure(listRef).height);
-            })();
-          } else {
-            heightValue.value = withTiming(0);
-          }
-          open.value = !open.value;
-        }}>
-        <View style={styles.maintitle}>
-          <Chevron progress={progress}></Chevron>
-          <View style={styles.textTitleContainer}>
-            <Text style={styles.textTitle}>{value.webName}</Text>
-            <Text style={styles.suburl}>{value.webURL}</Text>
+
+      <View style={styles.container}>
+        <Pressable
+          android_ripple={{ backgroundColor: Colors.graye0 }}
+          style={styles.titleContainer}
+          onPress={() => {
+            if (heightValue.value === 0) {
+              runOnUI(() => {
+                "worklet";
+                heightValue.value = withTiming(measure(listRef).height);
+              })();
+            } else {
+              heightValue.value = withTiming(0);
+            }
+            open.value = !open.value;
+          }}>
+          <View style={styles.maintitle}>
+            <Chevron progress={progress}></Chevron>
+            <View style={styles.textTitleContainer}>
+              <Text style={styles.textTitle}>{value.webName}</Text>
+              <Text style={styles.suburl}>{value.webURL}</Text>
+            </View>
           </View>
-        </View>
-        <Pressable>
-          <Icon source="dots-vertical" size={25}></Icon>
+          <Pressable onPress={handlePresentModal}>
+            <Icon source="dots-vertical" size={25}></Icon>
+          </Pressable>
         </Pressable>
-      </Pressable>
-      <Animated.View style={heightAnimationStyle}>
-        <Animated.View ref={listRef} style={styles.contentContainer}>
-          <View style={styles.content}>
-            <View style={styles.itemcontainer}>
-              <View>
-                <Text style={styles.subtitle}>Username</Text>
+        <Animated.View style={heightAnimationStyle}>
+          <Animated.View ref={listRef} style={styles.contentContainer}>
+            <View style={styles.content}>
+              <View style={styles.itemcontainer}>
+                <View>
+                  <Text style={styles.subtitle}>Username</Text>
+                </View>
+                <View style={styles.copywrap}>
+                  <Text style={styles.subtext}>{value.accountName}</Text>
+                  <Pressable>
+                    <Icon
+                      style={styles.iconstyle}
+                      source="content-copy"
+                      size={25}></Icon>
+                  </Pressable>
+                </View>
               </View>
-              <View style={styles.copywrap}>
-                <Text style={styles.subtext}>{value.accountName}</Text>
-                <Pressable>
-                  <Icon
-                    style={styles.iconstyle}
-                    source="content-copy"
-                    size={25}></Icon>
-                </Pressable>
+              <View style={styles.itemcontainer}>
+                <View>
+                  <Text style={styles.subtitle}>Password</Text>
+                </View>
+                <View style={styles.copywrap}>
+                  <TextInput
+                    value={value.password}
+                    secureTextEntry
+                    style={styles.subtext}></TextInput>
+                  <Pressable>
+                    <Icon
+                      style={styles.iconstyle}
+                      source="content-copy"
+                      size={25}></Icon>
+                  </Pressable>
+                </View>
               </View>
+              <CusButton onPress={edititem}> Edit </CusButton>
+              <CusButton onPress={deleteitem}> Delete </CusButton>
             </View>
-            <View style={styles.itemcontainer}>
-              <View>
-                <Text style={styles.subtitle}>Password</Text>
-              </View>
-              <View style={styles.copywrap}>
-                <TextInput
-                  value={value.password}
-                  secureTextEntry
-                  style={styles.subtext}></TextInput>
-                <Pressable>
-                  <Icon
-                    style={styles.iconstyle}
-                    source="content-copy"
-                    size={25}></Icon>
-                </Pressable>
-              </View>
-            </View>
-            <CusButton>Open in browser</CusButton>
-          </View>
+          </Animated.View>
         </Animated.View>
-      </Animated.View>
-    </View>
+      </View>
   );
 }
 
