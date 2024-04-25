@@ -3,7 +3,6 @@ import { TextInput } from "react-native-paper";
 import Colors from "../../constants/Colors";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../store/auth-context";
-import { webStoreItem, webUpdateItem } from "../../util/http";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import LoadingOverlay from "../../components/LoadingOverlay";
 import { ItemsContext } from "../../store/items-context";
@@ -46,6 +45,7 @@ function WebsiteAddingScreen() {
     }
   }
   function submitHandler() {
+    setIsStoring(true);
     const item = {
       webURL: webURL,
       webName: webName,
@@ -56,12 +56,10 @@ function WebsiteAddingScreen() {
       favorite: false,
     };
     if (route.params) {
-      setIsStoring(true);
       itemsCtx.updateItem(route.params.id,item);
       setIsStoring(false);
       navigation.navigate("drawerScreen");
     } else {
-      setIsStoring(true);
       itemsCtx.storeItem(item);
       setIsStoring(false);
       navigation.navigate("drawerScreen");

@@ -1,4 +1,11 @@
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import Chevron from "./Chevron";
 import Animated, {
   Extrapolate,
@@ -15,6 +22,7 @@ import { Icon } from "react-native-paper";
 import Colors from "../../constants/Colors";
 import CusButton from "../CusButton";
 import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
 
 function ItemAcordition({ value }) {
   const navigation = useNavigation();
@@ -24,6 +32,7 @@ function ItemAcordition({ value }) {
   const progress = useDerivedValue(() =>
     open.value ? withTiming(1) : withTiming(0)
   );
+  const [fecthedImg, setFetchedImg] = useState("");
   const heightAnimationStyle = useAnimatedStyle(() => ({
     height: interpolate(
       progress.value,
@@ -34,6 +43,16 @@ function ItemAcordition({ value }) {
   }));
 
   function copyText(text) {}
+  const checkFaviconExistence = async (url) => {
+    try {
+      const response = await fetch("http://" + url + "/favicon.ico");
+      setFetchedImg("http://" + url + "/favicon.ico");
+    } catch (error) {
+      setFetchedImg("https://cdn-icons-png.flaticon.com/512/72/72626.png");
+    }
+  };
+  checkFaviconExistence(value.webURL);
+  if (!fecthedImg) setFetchedImg("https://cdn-icons-png.flaticon.com/512/72/72626.png"); 
   return (
     <View style={styles.container}>
       <Pressable
@@ -53,6 +72,7 @@ function ItemAcordition({ value }) {
       >
         <View style={styles.maintitle}>
           <Chevron progress={progress}></Chevron>
+          <Image source={{ uri: fecthedImg }} style={styles.imgStyle} />
           <View style={styles.textTitleContainer}>
             <Text style={styles.textTitle}>{value.webName}</Text>
             <Text style={styles.suburl}>{value.webURL}</Text>
@@ -179,5 +199,10 @@ const styles = StyleSheet.create({
   iconcontainer: {
     flexDirection: "row",
     width: "auto",
+  },
+  imgStyle: {
+    marginHorizontal: 10,
+    width: 28,
+    height: 28,
   },
 });

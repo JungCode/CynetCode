@@ -6,7 +6,6 @@ import {
   webStoreItem,
   webUpdateItem,
 } from "../util/http";
-import { AuthContext } from "./auth-context";
 
 export const ItemsContext = createContext({
   quantityItems: [],
@@ -23,8 +22,6 @@ function ItemsContextProvider({ children }) {
   const [refresh, setRefresh] = useState();
   async function countingQuantity(userId) {
     const data = await fetchQuantity(userId);
-
-    setRefresh(userId);
     return data;
   }
 
