@@ -68,7 +68,7 @@ function DrawerContentCustom(props) {
           onActive={PressHandler}
           ItemIsActive={ItemIsActive}
           line={true}
-          quantity={0}
+          quantity={props.itemsQuantity.Notes}
         />
         <DrawerItemCustom
           name="PasswordChecker"

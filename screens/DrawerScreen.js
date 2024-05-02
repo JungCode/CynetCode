@@ -23,7 +23,7 @@ const Drawer = createDrawerNavigator();
 function DrawerScreen() {
   const itemsCtx = useContext(ItemsContext);
   const authCtx = useContext(AuthContext);
-  
+
   const [fetchedQuantity, setFetchedQuantity] = useState([]);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ function DrawerScreen() {
       setFetchedQuantity(data);
     }
     getItems();
-  }, [itemsCtx.refresh]);
+  }, [itemsCtx.refreshFavorite, itemsCtx.refresh]);
   return (
     <Drawer.Navigator
       screenOptions={{
@@ -50,7 +50,9 @@ function DrawerScreen() {
         drawerActiveBackgroundColor: "green",
         drawerActiveTintColor: "black",
       }}
-      drawerContent={(props) => <DrawerContentCustom {...props} itemsQuantity={fetchedQuantity} />}
+      drawerContent={(props) => (
+        <DrawerContentCustom {...props} itemsQuantity={fetchedQuantity} />
+      )}
     >
       <Drawer.Screen
         name="AllItem"

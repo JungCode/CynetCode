@@ -16,6 +16,7 @@ import { useContext } from "react";
 import HeaderCloseButton from "./components/Navigation/HeaderCloseButton";
 import ItemsContextProvider from "./store/items-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import NoteAddingScreen from "./screens/AddingScreens/NoteAddingScreen";
 const Stack = createNativeStackNavigator();
 
 function SignupStack() {
@@ -111,6 +112,18 @@ function ModalScreen() {
           component={WebsiteAddingScreen}
           options={{
             headerTitle: "Website",
+            animation: "slide_from_right",
+            headerStyle: {
+              alignItems: "center",
+            },
+            headerLeft: (props) => <HeaderCloseButton />,
+          }}
+        />
+        <Stack.Screen
+          name="noteAddingScreen"
+          component={NoteAddingScreen}
+          options={{
+            headerTitle: "Note",
             animation: "slide_from_right",
             headerStyle: {
               alignItems: "center",
