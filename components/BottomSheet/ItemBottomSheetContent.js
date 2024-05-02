@@ -5,8 +5,13 @@ import { useNavigation } from "@react-navigation/native";
 import { useContext, useEffect, useState } from "react";
 import { ItemsContext } from "../../store/items-context";
 
-function ItemBottomSheetContent({ item, setIsFetchedItems }) {
+function ItemBottomSheetContent({
+  item,
+  setIsFetchedItems,
+  handleDismissModal,
+}) {
   const navigation = useNavigation();
+  const itemDB = {...item};
   const itemsCtx = useContext(ItemsContext);
   const [toggleButton, setToggleButton] = useState(item.favorite);
   function deleteHandler() {
@@ -26,24 +31,25 @@ function ItemBottomSheetContent({ item, setIsFetchedItems }) {
     }
   }
   function favoriteHandler() {
-    delete item.imgURL;
-    item.favorite = !item.favorite;
-    if (item.noteTitle !== undefined) {
-      itemsCtx.updateFavoriteItem(item.id, item, "NoteItems");
+    delete itemDB.imgURL;
+    itemDB.favorite = !itemDB.favorite;
+    if (itemDB.noteTitle !== undefined) {
+      itemsCtx.updateFavoriteItem(itemDB.id, itemDB, "NoteItems");
     }
-    if (item.webURL !== undefined) {
-      itemsCtx.updateFavoriteItem(item.id, item, "webItems");
+    if (itemDB.webURL !== undefined) {
+      itemsCtx.updateFavoriteItem(itemDB.id, itemDB, "webItems");
     }
     setToggleButton(!toggleButton);
   }
   return (
     <View>
-      <View>
-        <View></View>
+      <View style={styles.titleView}>
         <View>
-          <Text>{item.webName}</Text>
-          <Text>{item.webURL}</Text>
           <Image source={{ uri: item.imgURL }} style={styles.imgStyle} />
+        </View>
+        <View style={styles.textTitleContainer}>
+          <Text style={styles.textTitle}>{item.webName}</Text>
+          <Text style={styles.suburl}>{item.webURL}</Text>
         </View>
       </View>
       <Divider></Divider>
@@ -72,7 +78,11 @@ function ItemBottomSheetContent({ item, setIsFetchedItems }) {
         source={"delete-outline"}
         text={"Delete"}
       ></ItemBS>
-      <ItemBS source={"block-helper"} text={"Cancel"}></ItemBS>
+      <ItemBS
+        onPress={handleDismissModal}
+        source={"block-helper"}
+        text={"Cancel"}
+      ></ItemBS>
     </View>
   );
 }
@@ -81,7 +91,24 @@ export default ItemBottomSheetContent;
 
 const styles = StyleSheet.create({
   imgStyle: {
-    width: 15,
-    height: 15,
+    width: 35,
+    height: 35,
+    margin: 20,
+  },
+  titleView: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  textTitleContainer: {
+    flexDirection: "column",
+    marginLeft: 10,
+  },
+  textTitle: {
+    fontSize: 20,
+    color: "black",
+  },
+  suburl: {
+    fontSize: 18,
+    color: Colors.gray300,
   },
 });

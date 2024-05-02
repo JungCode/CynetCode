@@ -23,6 +23,7 @@ import NoteAcordition from "../../components/Accordions/NoteAcordition";
 function AllItemScreen() {
   const [fetchedItems, setFetchedItems] = useState([]);
   const [isFetchedItems, setIsFetchedItems] = useState(false);
+  const [isBottomDisplay, setBottomDisplay] = useState(false);
   const authCtx = useContext(AuthContext);
   const itemsCtx = useContext(ItemsContext);
   const [itemButtonSheetContent, setItemButtonSheetContent] = useState("");
@@ -44,12 +45,14 @@ function AllItemScreen() {
   }, [itemsCtx.refreshFavorite]);
   // bottomsheet js
   const bottomSheetModalRef = useRef(null);
-  const spanPoints = ["48%"];
+  const spanPoints = ["50%"];
   function handlePresentModal(item) {
     setItemButtonSheetContent(item);
+    setBottomDisplay(true);
     bottomSheetModalRef.current?.present();
   }
   function handleDismissModal() {
+    setBottomDisplay(false);
     bottomSheetModalRef.current?.dismiss();
   }
   function openInBrowserHandler(webURL) {
@@ -72,6 +75,8 @@ function AllItemScreen() {
   return (
     <BottomSheetModalProvider>
       <Pressable onPress={handleDismissModal} style={styles.container}>
+        {/* Overlay */}
+        {isBottomDisplay && <View style={styles.overlay} />}
         <FlatList
           data={fetchedItems}
           renderItem={({ item }) =>
@@ -105,6 +110,8 @@ function AllItemScreen() {
         // onChange={handleSheetChanges}
       >
         <ItemBottomSheetContent
+         
+          handleDismissModal={handleDismissModal}
           item={itemButtonSheetContent}
         ></ItemBottomSheetContent>
       </BottomSheetModal>
@@ -122,5 +129,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 23,
     fontWeight: "500",
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Màu sắc và độ mờ của overlay
+    zIndex: 1, // Đảm bảo overlay ở trên cùng
   },
 });
