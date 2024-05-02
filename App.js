@@ -15,7 +15,8 @@ import AuthContextProvider, { AuthContext } from "./store/auth-context";
 import { useContext } from "react";
 import HeaderCloseButton from "./components/Navigation/HeaderCloseButton";
 import ItemsContextProvider from "./store/items-context";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { useFonts, Inter_900Black } from '@expo-google-fonts/inter';
+import AppLoading from "expo-app-loading";
 const Stack = createNativeStackNavigator();
 
 function SignupStack() {
@@ -82,6 +83,8 @@ function Navigation() {
 }
 // main App
 export default function App() {
+
+
   return (
     // <GestureHandlerRootView>
       <AuthContextProvider style={styles.container}>
@@ -128,6 +131,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    fontFamily: "SchibstedGrotesk-Black",
   },
 });

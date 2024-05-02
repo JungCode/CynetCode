@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useContext } from "react";
 import { ItemsContext } from "../../store/items-context";
 
-function ItemBottomSheetContent({ item }) {
+function ItemBottomSheetContent({ item,handleDismissModal }) {
   const navigation = useNavigation();
   const itemsCtx = useContext(ItemsContext);
   function deleteHandler() {
@@ -13,12 +13,13 @@ function ItemBottomSheetContent({ item }) {
   }
   return (
     <View>
-      <View>
-        <View></View>
+      <View style={styles.titleView}>
         <View>
-          <Text>{item.webName}</Text>
-          <Text>{item.webURL}</Text>
           <Image source={{ uri: item.imgURL }} style={styles.imgStyle} />
+        </View>
+        <View style={styles.textTitleContainer}>
+          <Text style={styles.textTitle}>{item.webName}</Text>
+          <Text style={styles.suburl}>{item.webURL}</Text>
         </View>
       </View>
       <Divider></Divider>
@@ -26,12 +27,14 @@ function ItemBottomSheetContent({ item }) {
       <ItemBS
         onPress={() => navigation.navigate("websiteAddingScreen", item)}
         source={"file-edit-outline"}
-        text={"Edit"}
-      ></ItemBS>
+        text={"Edit"}></ItemBS>
       <ItemBS source={"share-variant-outline"} text={"Share"}></ItemBS>
       <ItemBS source={"content-copy"} text={"Copy all"}></ItemBS>
-      <ItemBS onPress={deleteHandler} source={"delete-outline"} text={"Delete"}></ItemBS>
-      <ItemBS source={"block-helper"} text={"Cancel"}></ItemBS>
+      <ItemBS
+        onPress={deleteHandler}
+        source={"delete-outline"}
+        text={"Delete"}></ItemBS>
+      <ItemBS onPress={handleDismissModal} source={"block-helper"} text={"Cancel"}></ItemBS>
     </View>
   );
 }
@@ -40,7 +43,24 @@ export default ItemBottomSheetContent;
 
 const styles = StyleSheet.create({
   imgStyle: {
-    width: 15,
-    height: 15,
+    width: 35,
+    height: 35,
+    margin:20,
+  },
+  titleView: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  textTitleContainer: {
+    flexDirection: "column",
+    marginLeft: 10,
+  },
+  textTitle: {
+    fontSize: 20,
+    color: "black",
+  },
+  suburl: {
+    fontSize: 18,
+    color: Colors.gray300,
   },
 });

@@ -21,6 +21,7 @@ import { ItemsContext } from "../../store/items-context";
 function AllItemScreen({ onPress }) {
   const [fetchedItems, setFetchedItems] = useState([]);
   const [isFetchedItems, setIsFetchedItems] = useState(false);
+  const [isBottomDisplay, setBottomDisplay] = useState(false);
   const authCtx = useContext(AuthContext);
   const itemsCtx = useContext(ItemsContext);
   const [itemButtonSheetContent, setItemButtonSheetContent] = useState("");
@@ -35,12 +36,14 @@ function AllItemScreen({ onPress }) {
   }, [itemsCtx.refresh]);
   // bottomsheet js
   const bottomSheetModalRef = useRef(null);
-  const spanPoints = ["48%"];
+  const spanPoints = ["50%"];
   function handlePresentModal(item) {
     setItemButtonSheetContent(item);
+    setBottomDisplay(true);
     bottomSheetModalRef.current?.present();
   }
   function handleDismissModal() {
+    setBottomDisplay(false);
     bottomSheetModalRef.current?.dismiss();
   }
 
@@ -61,14 +64,15 @@ function AllItemScreen({ onPress }) {
   return (
     <BottomSheetModalProvider>
       <Pressable onPress={handleDismissModal} style={styles.container}>
+        {/* Overlay */}
+        {isBottomDisplay && <View style={styles.overlay} />}
         <FlatList
           data={fetchedItems}
           renderItem={({ item }) => (
             <ItemAcordition
               handlePresentModal={handlePresentModal}
-              // handleDismissModal={handleDismissModal}
-              value={item}
-            >
+              handleDismissModal={handleDismissModal}
+              value={item}>
               {item.webName}
             </ItemAcordition>
           )}
@@ -83,7 +87,9 @@ function AllItemScreen({ onPress }) {
         onDismiss={handleDismissModal}
         // onChange={handleSheetChanges}
       >
-        <ItemBottomSheetContent item={itemButtonSheetContent}></ItemBottomSheetContent>
+        <ItemBottomSheetContent
+          handleDismissModal={handleDismissModal}
+          item={itemButtonSheetContent}></ItemBottomSheetContent>
       </BottomSheetModal>
     </BottomSheetModalProvider>
   );
@@ -99,5 +105,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 23,
     fontWeight: "500",
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Màu sắc và độ mờ của overlay
+    zIndex: 1, // Đảm bảo overlay ở trên cùng
   },
 });

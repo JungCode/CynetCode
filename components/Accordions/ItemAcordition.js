@@ -127,8 +127,7 @@ function ItemAcordition({
                 </Pressable>
               </View>
             </View>
-            <CusButton onPress={edititem}> Edit </CusButton>
-            <CusButton onPress={deleteitem}> Delete </CusButton>
+            <CusButton > Open in browser </CusButton>
           </View>
         </Animated.View>
       </Animated.View>
