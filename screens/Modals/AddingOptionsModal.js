@@ -4,12 +4,20 @@ import AddingItem from "../../components/AddingItem";
 function AddingOptionsModal({ navigation }) {
   return (
     <View style={styles.container}>
-      <AddingItem name="Acount" iconName="person-circle-outline" />
+      <AddingItem
+        name="Acount"
+        iconName="person-circle-outline"
+        navigationName="websiteAddingScreen"
+      />
       <AddingItem name="Bank Account" iconName="card-outline" />
       <AddingItem name="Picture" iconName="person-circle-outline" />
       <AddingItem name="Documents" iconName="document-outline" />
       <AddingItem name="Address" iconName="home-outline" />
-      <AddingItem name="Notes" iconName="reader-outline" />
+      <AddingItem
+        name="Notes"
+        iconName="reader-outline"
+        navigationName="noteAddingScreen"
+      />
       <AddingItem name="Folder" iconName="person-circle-outline" />
     </View>
   );

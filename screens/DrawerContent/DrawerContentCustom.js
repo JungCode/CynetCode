@@ -35,7 +35,7 @@ function DrawerContentCustom(props) {
           iconName="person-circle-outline"
           onActive={PressHandler}
           ItemIsActive={ItemIsActive}
-          quantity={0}
+          quantity={props.itemsQuantity.Account}
         />
         <DrawerItemCustom
           name="Card"
@@ -46,12 +46,12 @@ function DrawerContentCustom(props) {
           quantity={0}
         />
         <DrawerItemCustom
-          name="File"
-          labelName="Documents"
+          name="Files"
+          labelName="Files"
           iconName="document-outline"
           onActive={PressHandler}
           ItemIsActive={ItemIsActive}
-          quantity={0}
+          quantity={props.itemsQuantity.Files}
         />
         <DrawerItemCustom
           name="Address"
@@ -68,7 +68,7 @@ function DrawerContentCustom(props) {
           onActive={PressHandler}
           ItemIsActive={ItemIsActive}
           line={true}
-          quantity={0}
+          quantity={props.itemsQuantity.Notes}
         />
         <DrawerItemCustom
           name="PasswordChecker"

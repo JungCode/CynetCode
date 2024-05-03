@@ -56,14 +56,13 @@ function WebsiteAddingScreen() {
       favorite: false,
     };
     if (route.params) {
-      itemsCtx.updateItem(route.params.id,item);
-      setIsStoring(false);
+      itemsCtx.updateItem(route.params.id, item, "AccountItems");
       navigation.navigate("drawerScreen");
     } else {
-      itemsCtx.storeItem(item);
-      setIsStoring(false);
+      itemsCtx.storeItem(item,"web");
       navigation.navigate("drawerScreen");
     }
+    setIsStoring(false);
   }
   if (isStoring) {
     return <LoadingOverlay message="Adding ..." />;
