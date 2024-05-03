@@ -18,6 +18,7 @@ import ItemsContextProvider from "./store/items-context";
 import { useFonts, Inter_900Black } from '@expo-google-fonts/inter';
 import AppLoading from "expo-app-loading";
 import NoteAddingScreen from "./screens/AddingScreens/NoteAddingScreen";
+import FileAddingScreen from "./screens/AddingScreens/FileAddingScreen";
 const Stack = createNativeStackNavigator();
 
 function SignupStack() {
@@ -127,6 +128,18 @@ function ModalScreen() {
           component={NoteAddingScreen}
           options={{
             headerTitle: "Note",
+            animation: "slide_from_right",
+            headerStyle: {
+              alignItems: "center",
+            },
+            headerLeft: (props) => <HeaderCloseButton />,
+          }}
+        />
+        <Stack.Screen
+          name="fileAddingScreen"
+          component={FileAddingScreen}
+          options={{
+            headerTitle: "File",
             animation: "slide_from_right",
             headerStyle: {
               alignItems: "center",

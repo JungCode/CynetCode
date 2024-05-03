@@ -62,7 +62,7 @@ function DrawerScreen() {
       <Drawer.Screen name="Favorite" component={FavoriteScreen} />
       <Drawer.Screen name="Account" component={AccountScreen} />
       <Drawer.Screen name="Card" component={CardScreen} />
-      <Drawer.Screen name="File" component={FilesScreen} />
+      <Drawer.Screen name="Files" component={FilesScreen} />
       <Drawer.Screen name="Address" component={AddressScreen} />
       <Drawer.Screen name="Note" component={NoteScreen} />
       <Drawer.Screen

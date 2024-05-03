@@ -19,7 +19,7 @@ function ItemBottomSheetContent({
       itemsCtx.deleteItem(item.id, "NoteItems");
     }
     if (item.webURL !== undefined) {
-      itemsCtx.deleteItem(item.id, "webItems");
+      itemsCtx.deleteItem(item.id, "AccountItems");
     }
   }
   function addHandler() {
@@ -37,7 +37,7 @@ function ItemBottomSheetContent({
       itemsCtx.updateFavoriteItem(itemDB.id, itemDB, "NoteItems");
     }
     if (itemDB.webURL !== undefined) {
-      itemsCtx.updateFavoriteItem(itemDB.id, itemDB, "webItems");
+      itemsCtx.updateFavoriteItem(itemDB.id, itemDB, "AccountItems");
     }
     setToggleButton(!toggleButton);
   }

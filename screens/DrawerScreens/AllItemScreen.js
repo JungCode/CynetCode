@@ -20,6 +20,7 @@ import ItemBottomSheetContent from "../../components/BottomSheet/ItemBottomSheet
 
 import { ItemsContext } from "../../store/items-context";
 import NoteAcordition from "../../components/Accordions/NoteAcordition";
+import FileAcordition from "../../components/Accordions/FileAcordition";
 function AllItemScreen() {
   const [fetchedItems, setFetchedItems] = useState([]);
   const [isFetchedItems, setIsFetchedItems] = useState(false);
@@ -30,7 +31,7 @@ function AllItemScreen() {
   useEffect(() => {
     async function getItems() {
       setIsFetchedItems(true);
-      const data = await itemsCtx.fetchItemsCtx(authCtx.userId);
+      const data = await itemsCtx.fetchItemsCtx(authCtx.userId, "allItems");
       setFetchedItems(data);
       setIsFetchedItems(false);
     }
@@ -38,12 +39,11 @@ function AllItemScreen() {
   }, [itemsCtx.refresh]);
   useEffect(() => {
     async function getItems() {
-      const data = await itemsCtx.fetchItemsCtx(authCtx.userId);
+      const data = await itemsCtx.fetchItemsCtx(authCtx.userId, "allItems");
       setFetchedItems(data);
     }
     getItems();
   }, [itemsCtx.refreshFavorite]);
-  // bottomsheet js
   const bottomSheetModalRef = useRef(null);
   const spanPoints = ["50%"];
   function handlePresentModal(item) {
@@ -96,12 +96,17 @@ function AllItemScreen() {
               >
                 {item.webName}
               </NoteAcordition>
+            ) : item.imgURI !== undefined ? (
+              <FileAcordition
+                handlePresentModal={handlePresentModal}
+                value={item}
+              ></FileAcordition>
             ) : null
           }
           keyExtractor={(item) => item.id}
         />
-        <MyFab name={"addingOptionsModal"} />
       </Pressable>
+      <MyFab name={"addingOptionsModal"} />
       <BottomSheetModal
         ref={bottomSheetModalRef}
         index={0}
@@ -110,7 +115,6 @@ function AllItemScreen() {
         // onChange={handleSheetChanges}
       >
         <ItemBottomSheetContent
-         
           handleDismissModal={handleDismissModal}
           item={itemButtonSheetContent}
         ></ItemBottomSheetContent>

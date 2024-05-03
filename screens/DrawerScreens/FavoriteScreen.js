@@ -27,7 +27,7 @@ function FavoriteScreen() {
   useEffect(() => {
     setIsFetchedItems(true);
     async function getItems() {
-      const data = await itemsCtx.fetchFavoriteItemsCtx(authCtx.userId);
+      const data = await itemsCtx.fetchItemsCtx(authCtx.userId, "favorites");
       setFetchedFavoritesItems(data);
       setIsFetchedItems(false);
     }
@@ -35,7 +35,7 @@ function FavoriteScreen() {
   }, []);
   useEffect(() => {
     async function getItems() {
-      const data = await itemsCtx.fetchFavoriteItemsCtx(authCtx.userId);
+      const data = await itemsCtx.fetchItemsCtx(authCtx.userId, "favorites");
       setFetchedFavoritesItems(data);
     }
     getItems();

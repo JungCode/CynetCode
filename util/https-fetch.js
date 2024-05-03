@@ -7,10 +7,12 @@ export async function fetchAllItems(userId) {
   items = items.concat(accounts);
   const notes = await fetchNotes(userId);
   items = items.concat(notes);
+  const files = await fetchFiles(userId);
+  items = items.concat(files);
   return items;
 }
-async function fetchAccounts(userId) {
-  const response = await axios.get(url + "/webItems.json");
+export async function fetchAccounts(userId) {
+  const response = await axios.get(url + "/AccountItems.json");
 
   const items = [];
 
@@ -31,6 +33,26 @@ async function fetchAccounts(userId) {
   }
   return items;
 }
+export async function fetchFiles(userId) {
+  const response = await axios.get(url + "/FileItems.json");
+
+  const items = [];
+
+  for (const key in response.data) {
+    const itemsObj = {
+      id: key,
+      fileTitle: response.data[key].fileTitle,
+      fileDescription: response.data[key].fileDescription,
+      userId: response.data[key].userId,
+      imgURI: response.data[key].imgURI,
+      favorite: response.data[key].favorite,
+    };
+    if (itemsObj.userId == userId) {
+      items.push(itemsObj);
+    }
+  }
+  return items;
+}
 
 export async function fetchFavoriteAllItems(userId) {
   let items = [];
@@ -41,7 +63,7 @@ export async function fetchFavoriteAllItems(userId) {
   return items;
 }
 export async function fetchFavoriteAccounts(userId) {
-  const response = await axios.get(url + "/webItems.json");
+  const response = await axios.get(url + "/AccountItems.json");
 
   const items = [];
 
@@ -106,17 +128,20 @@ export async function fetchQuantity(userId) {
     Favorites: 0,
     Account: 0,
     CreaditCard: 0,
-    Documents: 0,
+    Files: 0,
     Addresses: 0,
     Notes: 0,
   };
-  const QuantityWebItems = await QuantityOfTypeItem("webItems", userId);
+  const QuantityAccountItems = await QuantityOfTypeItem("AccountItems", userId);
   const QuantityOfNotes = await QuantityOfTypeItem("NoteItems", userId);
+  const QuantityOfFiles = await QuantityOfTypeItem("FileItems", userId);
   quantityOfItems.AllItems =
-    QuantityOfNotes.Quantity + QuantityWebItems.Quantity;
+    QuantityOfNotes.Quantity + QuantityAccountItems.Quantity;
   quantityOfItems.Favorites =
-    QuantityOfNotes.Favorites + QuantityWebItems.Favorites;
+    QuantityOfNotes.Favorites + QuantityAccountItems.Favorites;
   quantityOfItems.Notes = +QuantityOfNotes.Quantity;
+  quantityOfItems.Account = +QuantityAccountItems.Quantity;
+  quantityOfItems.Files = +QuantityOfFiles.Quantity;
   return quantityOfItems;
 }
 

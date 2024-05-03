@@ -56,7 +56,7 @@ function WebsiteAddingScreen() {
       favorite: false,
     };
     if (route.params) {
-      itemsCtx.updateItem(route.params.id, item, "webItems");
+      itemsCtx.updateItem(route.params.id, item, "AccountItems");
       navigation.navigate("drawerScreen");
     } else {
       itemsCtx.storeItem(item,"web");

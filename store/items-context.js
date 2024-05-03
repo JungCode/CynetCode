@@ -4,8 +4,14 @@ import {
   fetchAllItems,
   fetchNotes,
   fetchQuantity,
+  fetchAccounts,
+  fetchFiles,
 } from "../util/https-fetch";
-import { noteStoreItem, webStoreItem } from "../util/https-store";
+import {
+  fileStoreItem,
+  noteStoreItem,
+  webStoreItem,
+} from "../util/https-store";
 import { updateItemDB } from "../util/https-update";
 import { deleteItemDB } from "../util/https-delete";
 
@@ -34,12 +40,25 @@ function ItemsContextProvider({ children }) {
     return data;
   }
 
-  async function fetchItemsCtx(userId) {
-    const data = await fetchAllItems(userId);
-    return data;
-  }
-  async function fetchNotesCtx(userId) {
-    const data = await fetchNotes(userId);
+  async function fetchItemsCtx(userId, type) {
+    let data = [];
+    switch (type) {
+      case "accounts":
+        data = await fetchAccounts(userId);
+        break;
+      case "allItems":
+        data = await fetchAllItems(userId);
+        break;
+      case "favorites":
+        data = await fetchFavoriteAllItems(userId);
+        break;
+      case "notes":
+        data = await fetchNotes(userId);
+        break;
+      case "files":
+        data = await fetchFiles(userId);
+        break;
+    }
     return data;
   }
 
@@ -56,6 +75,8 @@ function ItemsContextProvider({ children }) {
       case "web":
         await webStoreItem(newItem);
         break;
+      case "file":
+        await fileStoreItem(newItem);
     }
     setRefresh(Math.random());
   }
@@ -91,7 +112,6 @@ function ItemsContextProvider({ children }) {
     fetchFavoriteItemsCtx: fetchFavoriteItemsCtx,
     deleteItem: deleteItem,
     updateFavoriteItem: updateFavoriteItem,
-    fetchNotesCtx: fetchNotesCtx,
     refreshQuantity: refreshQuantity,
   };
   return (

@@ -27,7 +27,7 @@ function NoteScreen() {
   useEffect(() => {
     setIsFetchedItems(true);
     async function getItems() {
-      const data = await itemsCtx.fetchNotesCtx(authCtx.userId);
+      const data = await itemsCtx.fetchItemsCtx(authCtx.userId,"notes");
       setFetchedNotes(data);
       setIsFetchedItems(false);
     }
@@ -35,7 +35,7 @@ function NoteScreen() {
   }, [itemsCtx.refresh]);
   useEffect(() => {
     async function getItems() {
-      const data = await itemsCtx.fetchNotesCtx(authCtx.userId);
+      const data = await itemsCtx.fetchItemsCtx(authCtx.userId,"notes");
       setFetchedNotes(data);
     }
     getItems();
@@ -78,8 +78,8 @@ function NoteScreen() {
           )}
           keyExtractor={(item) => item.id}
         />
-        <MyFab name={"noteAddingScreen"} />
       </Pressable>
+      <MyFab name={"noteAddingScreen"} />
       <BottomSheetModal
         ref={bottomSheetModalRef}
         index={0}
