@@ -19,6 +19,8 @@ import { useFonts, Inter_900Black } from '@expo-google-fonts/inter';
 import AppLoading from "expo-app-loading";
 import NoteAddingScreen from "./screens/AddingScreens/NoteAddingScreen";
 import FileAddingScreen from "./screens/AddingScreens/FileAddingScreen";
+import CheckerListScreen from "./screens/PasswordChecker/CheckerListScreen";
+import CheckerItemDetail from "./screens/PasswordChecker/CheckerItemDetail";
 const Stack = createNativeStackNavigator();
 
 function SignupStack() {
@@ -145,6 +147,28 @@ function ModalScreen() {
               alignItems: "center",
             },
             headerLeft: (props) => <HeaderCloseButton />,
+          }}
+        />
+        <Stack.Screen
+          name="CheckerileListScreen"
+          component={CheckerListScreen}
+          options={{
+            headerTitle: "Password Checker",
+            animation: "slide_from_right",
+            headerStyle: {
+              alignItems: "center",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="CheckerItemDetail"
+          component={CheckerItemDetail}
+          options={{
+            headerTitle: "Detail",
+            animation: "slide_from_right",
+            headerStyle: {
+              alignItems: "center",
+            },
           }}
         />
       </Stack.Navigator>

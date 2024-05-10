@@ -15,7 +15,6 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import CusButton from "../../components/CusButton";
-import { Icon } from "react-native-paper";
 import Colors from "../../constants/Colors";
 import { passwordStrength } from "check-password-strength";
 const PasswordSchema = Yup.object().shape({
@@ -32,8 +31,6 @@ export default function App() {
   const [upperCase, setupperCase] = useState(false);
   const [numbers, setNumbers] = useState(false);
   const [symbols, setSymbols] = useState(false);
-
-  const [passwordStrengh, setPasswordStrengh] = useState("");
 
   useEffect(() => {
     generatePasswordString(8);
@@ -94,7 +91,9 @@ export default function App() {
                   {password}
                 </Text>
               </View>
-              <Text style={styles.passwordStrengh}>{passwordStrength(password).value}</Text>
+              <Text style={styles.passwordStrengh}>
+                {passwordStrength(password).value}
+              </Text>
               <View style={styles.buttonContainer}>
                 <CusButton>Coppy</CusButton>
               </View>
@@ -147,7 +146,9 @@ export default function App() {
                   />
                 </View>
                 <View style={styles.inputWrapper}>
-                  <Text style={styles.heading}>Include Uppercase letters (A-Z)</Text>
+                  <Text style={styles.heading}>
+                    Include Uppercase letters (A-Z)
+                  </Text>
                   <BouncyCheckbox
                     disableBuiltInState
                     isChecked={upperCase}
@@ -313,3 +314,4 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {},
 });
+

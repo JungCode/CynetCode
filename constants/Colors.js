@@ -1,3 +1,5 @@
+
+
 export default Colors = {
   white:'#fff',
   green500: "#1e856f",
@@ -10,5 +12,8 @@ export default Colors = {
   gray300:'#666666',
   graycontent:'#f6f6f6',
   graye0:'#e0e0e0',
-  gray62:'#626262'
+  gray62:'#626262',
+  red100:'#ed2939',
+  black100:'#333333',
+  yellow100:"#ffaa00",
 };
