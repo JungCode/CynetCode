@@ -2,11 +2,11 @@ import { Pressable, StyleSheet, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "../constants/Colors";
 import { useNavigation } from "@react-navigation/native";
-function AddingItem({ name, iconName }) {
+function AddingItem({ name, iconName, navigationName }) {
   const navigation = useNavigation();
   function PressHandler() {
     if (name == "Acount") {
-      return navigation.navigate("websiteAddingScreen");
+      return navigation.navigate(navigationName);
     } else if (name == "Notes") {
       return navigation.navigate("noteAddingScreen");
     }

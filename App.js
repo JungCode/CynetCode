@@ -15,7 +15,8 @@ import AuthContextProvider, { AuthContext } from "./store/auth-context";
 import { useContext } from "react";
 import HeaderCloseButton from "./components/Navigation/HeaderCloseButton";
 import ItemsContextProvider from "./store/items-context";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { useFonts, Inter_900Black } from '@expo-google-fonts/inter';
+import AppLoading from "expo-app-loading";
 import NoteAddingScreen from "./screens/AddingScreens/NoteAddingScreen";
 import FileAddingScreen from "./screens/AddingScreens/FileAddingScreen";
 const Stack = createNativeStackNavigator();
@@ -94,6 +95,8 @@ function Navigation() {
 }
 // main App
 export default function App() {
+
+
   return (
     // <GestureHandlerRootView>
     <AuthContextProvider style={styles.container}>
@@ -134,7 +137,7 @@ function ModalScreen() {
           name="noteAddingScreen"
           component={NoteAddingScreen}
           options={{
-            headerTitle: "Website",
+            headerTitle: "Note",
             animation: "slide_from_right",
             headerStyle: {
               alignItems: "center",
@@ -146,7 +149,7 @@ function ModalScreen() {
           name="fileAddingScreen"
           component={FileAddingScreen}
           options={{
-            headerTitle: "Website",
+            headerTitle: "File",
             animation: "slide_from_right",
             headerStyle: {
               alignItems: "center",
@@ -164,6 +167,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    fontFamily: "SchibstedGrotesk-Black",
   },
 });
