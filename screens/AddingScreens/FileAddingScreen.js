@@ -1,4 +1,11 @@
-import { Button, Image, StyleSheet, Text, View } from "react-native";
+import {
+  Button,
+  Image,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  View,
+} from "react-native";
 import { TextInput } from "react-native-paper";
 import Colors from "../../constants/Colors";
 import { useContext, useState } from "react";
@@ -6,6 +13,8 @@ import { AuthContext } from "../../store/auth-context";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import LoadingOverlay from "../../components/LoadingOverlay";
 import { ItemsContext } from "../../store/items-context";
+import { storeFileDB } from "../../util/https-store";
+
 function FileAddingScreen() {
   const route = useRoute();
   const [fileTitle, setFileTitle] = useState(
@@ -14,7 +23,7 @@ function FileAddingScreen() {
   const [fileDescription, setFileDescription] = useState(
     route.params ? route.params.fileDescription : ""
   );
-  const [imgURI, setImgURI] = useState(route.params.imgURI);
+  const [fileUri, setfileUri] = useState(route.params.assets[0].uri);
   const authCtx = useContext(AuthContext);
   const itemsCtx = useContext(ItemsContext);
   const [isStoring, setIsStoring] = useState(false);
@@ -27,26 +36,28 @@ function FileAddingScreen() {
       case "fileDescription":
         setFileDescription(enteredValue);
         break;
-      case "imgURI":
-        setImgURI(enteredValue);
+      case "fileUri":
+        setfileUri(enteredValue);
         break;
     }
   }
   function submitHandler() {
-    setIsStoring(true);
     const item = {
-      fileTitle: fileTitle,
-      fileDescription: fileDescription,
-      imgURI: imgURI,
-      userId: authCtx.userId,
       favorite: false,
+      fileDescription: fileDescription,
+      fileTitle: fileTitle,
+      fileName: "",
+      userId: authCtx.userId,
     };
+    setIsStoring(true);
     if (route.params.fileTitle !== undefined) {
       // itemsCtx.updateItem(route.params.id, item, "NoteItems");
       // navigation.navigate("drawerScreen");
+      ToastAndroid.show("Edited item successfull!", ToastAndroid.SHORT);
     } else {
-      itemsCtx.storeItem(item, "file");
+      storeFileDB(route.params, item);
       navigation.navigate("drawerScreen");
+      ToastAndroid.show("Added item successfull!", ToastAndroid.SHORT);
     }
     setIsStoring(false);
   }
@@ -75,7 +86,7 @@ function FileAddingScreen() {
         label="Description"
         style={[styles.inputStyle, styles.paragraphStyle]}
       />
-      <Image source={{ uri: imgURI }} style={styles.image} />
+      <Image source={{ uri: fileUri }} style={styles.image} />
       <Button onPress={submitHandler} title="Save" />
     </View>
   );

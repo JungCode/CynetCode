@@ -22,10 +22,20 @@ import { Icon } from "react-native-paper";
 import Colors from "../../constants/Colors";
 import FlatButton from "../../components/FlatButton";
 import CusButton from "../CusButton";
-import { useState } from "react";
-function FileAcordition({ value, handlePresentModal, setIsFetchedItems }) {
+import { useEffect, useState } from "react";
+import firebase from "firebase/compat/app";
+import "firebase/compat/storage";
+import { firebaseConfig } from "../../util/https-fetch";
+
+function FileAcordition({
+  value,
+  handlePresentModal,
+  setIsFetchedItems,
+  imageName,
+}) {
   //dropdown js
   const listRef = useAnimatedRef();
+  const [imageURL,setImageURL] = useState("https://img.freepik.com/free-vector/loading-circles-blue-gradient_78370-2646.jpg?size=338&ext=jpg&ga=GA1.1.553209589.1715472000&semt=sph");
   const heightValue = useSharedValue(0);
   const open = useSharedValue(false);
   const progress = useDerivedValue(() =>
@@ -39,7 +49,25 @@ function FileAcordition({ value, handlePresentModal, setIsFetchedItems }) {
       Extrapolate.CLAMP
     ),
   }));
-
+  useEffect(() => {
+    async function getFile() {
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+      }
+      const storageRef = firebase.storage().ref();
+  
+      try {
+        // Lấy đường dẫn của ảnh trong Firebase Storage
+        const imageUrl = await storageRef
+          .child("files/" + imageName)
+          .getDownloadURL();
+        setImageURL(imageUrl);
+      } catch (error) {
+        console.error("Error displaying image:", error);
+      }
+    }
+    getFile();
+  }, []);
   const fecthedImg =
     "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Picture_icon_BLACK.svg/1200px-Picture_icon_BLACK.svg.png";
   return (
@@ -89,7 +117,7 @@ function FileAcordition({ value, handlePresentModal, setIsFetchedItems }) {
               <View style={styles.copywrap}></View>
             </View>
           </View>
-          <Image source={{ uri: value.imgURI }} style={styles.image} />
+          <Image source={{ uri: imageURL}} style={styles.image} />
           <FlatButton onPress={() => {}}>Open</FlatButton>
         </Animated.View>
       </Animated.View>

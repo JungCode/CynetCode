@@ -21,29 +21,86 @@ import ItemBottomSheetContent from "../../components/BottomSheet/ItemBottomSheet
 import { ItemsContext } from "../../store/items-context";
 import NoteAcordition from "../../components/Accordions/NoteAcordition";
 import FileAcordition from "../../components/Accordions/FileAcordition";
+import { off, onValue, ref } from "firebase/database";
+import { db } from "../../util/https-fetch";
 function AllItemScreen() {
-  const [fetchedItems, setFetchedItems] = useState([]);
+  const [fetchedAccounts, setFetchedAccounts] = useState([]);
+  const [fetchedNotes, setFetchedNotes] = useState([]);
+  const [fetchedFiles, setFetchedFiles] = useState([]);
   const [isFetchedItems, setIsFetchedItems] = useState(false);
   const [isBottomDisplay, setBottomDisplay] = useState(false);
   const authCtx = useContext(AuthContext);
   const itemsCtx = useContext(ItemsContext);
   const [itemButtonSheetContent, setItemButtonSheetContent] = useState("");
   useEffect(() => {
-    async function getItems() {
-      setIsFetchedItems(true);
-      const data = await itemsCtx.fetchItemsCtx(authCtx.userId, "allItems");
-      setFetchedItems(data);
-      setIsFetchedItems(false);
-    }
-    getItems();
-  }, [itemsCtx.refresh]);
+    setIsFetchedItems(true);
+    const accountsRef = ref(db, "webItems");
+    // Lắng nghe sự thay đổi trong Realtime Database
+    const onValueChangeAccounts = (snapshot) => {
+      const dataArray = [];
+      snapshot.forEach((childSnapshot) => {
+        dataArray.push({ id: childSnapshot.key, ...childSnapshot.val() });
+      });
+      const filteredItems = dataArray.filter(
+        (item) => item.userId === authCtx.userId
+      );
+      setFetchedAccounts(filteredItems);
+    };
+    onValue(accountsRef, onValueChangeAccounts);
+
+    // Ngắt kết nối listener khi component unmount
+    return () => {
+      off(accountsRef, onValueChangeAccounts);
+    };
+  }, []);
   useEffect(() => {
-    async function getItems() {
-      const data = await itemsCtx.fetchItemsCtx(authCtx.userId, "allItems");
-      setFetchedItems(data);
-    }
-    getItems();
-  }, [itemsCtx.refreshFavorite]);
+    const notesRef = ref(db, "NoteItems");
+
+    const onValueChangeNotes = (snapshot) => {
+      const dataArray = [];
+      snapshot.forEach((childSnapshot) => {
+        dataArray.push({ id: childSnapshot.key, ...childSnapshot.val() });
+      });
+      const filteredItems = dataArray.filter(
+        (item) => item.userId === authCtx.userId
+      );
+      setFetchedNotes(filteredItems);
+    };
+
+    onValue(notesRef, onValueChangeNotes);
+    // Ngắt kết nối listener khi component unmount
+    return () => {
+      off(notesRef, onValueChangeNotes);
+    };
+  }, []);
+  useEffect(() => {
+    const filesRef = ref(db, "FileItems");
+
+    const onValueChangeNotes = (snapshot) => {
+      const dataArray = [];
+      snapshot.forEach((childSnapshot) => {
+        dataArray.push({ id: childSnapshot.key, ...childSnapshot.val() });
+      });
+      const filteredItems = dataArray.filter(
+        (item) => item.userId === authCtx.userId
+      );
+      setFetchedFiles(filteredItems);
+      setIsFetchedItems(false);
+    };
+
+    onValue(filesRef, onValueChangeNotes);
+    // Ngắt kết nối listener khi component unmount
+    return () => {
+      off(filesRef, onValueChangeNotes);
+    };
+  }, []);
+  // useEffect(() => {
+  //   async function getItems() {
+  //     const data = await itemsCtx.fetchItemsCtx(authCtx.userId, "allItems");
+  //     setFetchedItems(data);
+  //   }
+  //   getItems();
+  // }, [itemsCtx.refreshFavorite]);
   const bottomSheetModalRef = useRef(null);
   const spanPoints = ["50%"];
   function handlePresentModal(item) {
@@ -62,7 +119,12 @@ function AllItemScreen() {
     return <LoadingOverlay message="Loading..." />;
   }
 
-  if (fetchedItems.length == 0) {
+  if (
+    fetchedFiles.length == 0 &&
+    fetchedAccounts.length == 0 &&
+    fetchedNotes.length == 0 &&
+    isFetchedItems == false
+  ) {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Your security store is empty</Text>
@@ -71,14 +133,13 @@ function AllItemScreen() {
       </View>
     );
   }
-
   return (
     <BottomSheetModalProvider>
       <Pressable onPress={handleDismissModal} style={styles.container}>
         {/* Overlay */}
         {isBottomDisplay && <View style={styles.overlay} />}
         <FlatList
-          data={fetchedItems}
+          data={[...fetchedAccounts, ...fetchedNotes, ...fetchedFiles]}
           renderItem={({ item }) =>
             item.webURL !== undefined ? (
               <AccountAcordition
@@ -96,10 +157,11 @@ function AllItemScreen() {
               >
                 {item.webName}
               </NoteAcordition>
-            ) : item.imgURI !== undefined ? (
+            ) : item.fileName !== undefined ? (
               <FileAcordition
                 handlePresentModal={handlePresentModal}
                 value={item}
+                imageName={item.fileName}
               ></FileAcordition>
             ) : null
           }

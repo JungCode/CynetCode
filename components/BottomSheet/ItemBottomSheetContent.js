@@ -4,6 +4,7 @@ import ItemBS from "./ItemBS";
 import { useNavigation } from "@react-navigation/native";
 import { useContext, useEffect, useState } from "react";
 import { ItemsContext } from "../../store/items-context";
+import { ToastAndroid } from "react-native";
 
 function ItemBottomSheetContent({
   item,
@@ -11,7 +12,7 @@ function ItemBottomSheetContent({
   handleDismissModal,
 }) {
   const navigation = useNavigation();
-  const itemDB = {...item};
+  const itemDB = { ...item };
   const itemsCtx = useContext(ItemsContext);
   const [toggleButton, setToggleButton] = useState(item.favorite);
   function deleteHandler() {
@@ -19,8 +20,10 @@ function ItemBottomSheetContent({
       itemsCtx.deleteItem(item.id, "NoteItems");
     }
     if (item.webURL !== undefined) {
-      itemsCtx.deleteItem(item.id, "AccountItems");
+      itemsCtx.deleteItem(item.id, "webItems");
     }
+    ToastAndroid.show("Deleted item!", ToastAndroid.SHORT);
+    handleDismissModal();
   }
   function addHandler() {
     if (item.noteTitle !== undefined) {
@@ -29,6 +32,7 @@ function ItemBottomSheetContent({
     if (item.webURL !== undefined) {
       navigation.navigate("websiteAddingScreen", item);
     }
+    handleDismissModal();
   }
   function favoriteHandler() {
     delete itemDB.imgURL;
@@ -37,7 +41,17 @@ function ItemBottomSheetContent({
       itemsCtx.updateFavoriteItem(itemDB.id, itemDB, "NoteItems");
     }
     if (itemDB.webURL !== undefined) {
-      itemsCtx.updateFavoriteItem(itemDB.id, itemDB, "AccountItems");
+      itemsCtx.updateFavoriteItem(itemDB.id, itemDB, "webItems");
+    }
+    if (itemDB.imgURL !== undefined) {
+      itemsCtx.updateFavoriteItem(itemDB.id, itemDB, "FileItems");
+    }
+
+    handleDismissModal();
+    if (!toggleButton) {
+      ToastAndroid.show("Added to favorites!", ToastAndroid.SHORT);
+    } else {
+      ToastAndroid.show("Removed from favorites!", ToastAndroid.SHORT);
     }
     setToggleButton(!toggleButton);
   }

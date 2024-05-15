@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, Text, ToastAndroid, View } from "react-native";
 import { TextInput } from "react-native-paper";
 import Colors from "../../constants/Colors";
 import { useContext, useState } from "react";
@@ -39,9 +39,11 @@ function NoteAddingScreen() {
     if (route.params) {
       itemsCtx.updateItem(route.params.id, item, "NoteItems");
       navigation.navigate("drawerScreen");
+      ToastAndroid.show("Edited item successfull!", ToastAndroid.SHORT);
     } else {
-      itemsCtx.storeItem(item,"note");
+      itemsCtx.storeItem(item, "note");
       navigation.navigate("drawerScreen");
+      ToastAndroid.show("Added item successfull!", ToastAndroid.SHORT);
     }
     setIsStoring(false);
   }

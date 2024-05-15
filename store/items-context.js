@@ -32,9 +32,6 @@ export const ItemsContext = createContext({
 });
 function ItemsContextProvider({ children }) {
   const [quantityItems, setQuantityItems] = useState([]);
-  const [refresh, setRefresh] = useState();
-  const [refreshQuantity, setRefreshQuantity] = useState();
-  const [refreshFavorite, setRefreshFavorite] = useState();
   async function countingQuantity(userId) {
     const data = await fetchQuantity(userId);
     return data;
@@ -78,15 +75,12 @@ function ItemsContextProvider({ children }) {
       case "file":
         await fileStoreItem(newItem);
     }
-    setRefresh(Math.random());
   }
   async function updateItem(itemId, updatedItem, type) {
     await updateItemDB(itemId, updatedItem, type);
-    setRefresh(Math.random());
   }
   async function deleteItem(itemId, type) {
     await deleteItemDB(itemId, type);
-    setRefresh(Math.random());
   }
   async function updateFavoriteItem(itemId, updatedItem, type) {
     if (updatedItem.noteTitle !== undefined) {
@@ -95,11 +89,7 @@ function ItemsContextProvider({ children }) {
     if (updatedItem.webURL !== undefined) {
       await updateItemDB(itemId, updatedItem, type);
     }
-    setRefreshFavorite(Math.random());
   }
-  useEffect(() => {
-    setRefresh("userId");
-  }, []);
   const value = {
     quantityItems: quantityItems,
     items: [],
@@ -107,12 +97,9 @@ function ItemsContextProvider({ children }) {
     fetchItemsCtx: fetchItemsCtx,
     storeItem: storeItem,
     updateItem: updateItem,
-    refresh: refresh,
-    refreshFavorite: refreshFavorite,
     fetchFavoriteItemsCtx: fetchFavoriteItemsCtx,
     deleteItem: deleteItem,
     updateFavoriteItem: updateFavoriteItem,
-    refreshQuantity: refreshQuantity,
   };
   return (
     <ItemsContext.Provider value={value}>{children}</ItemsContext.Provider>

@@ -1,5 +1,21 @@
 import axios from "axios";
+import database from "@react-native-firebase/database";
 const url = "https://cynetcode-default-rtdb.firebaseio.com";
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, onValue, off } from "firebase/database";
+
+export const firebaseConfig = {
+  apiKey: "AIzaSyDBctAW7Bga97aKkuwMc8oDWKlqbwyKygo",
+  authDomain: "cynetcode.firebaseapp.com",
+  databaseURL: "https://cynetcode-default-rtdb.firebaseio.com",
+  projectId: "cynetcode",
+  storageBucket: "cynetcode.appspot.com",
+  messagingSenderId: "664701731052",
+  appId: "1:664701731052:web:c6e249433fa5ea3cefe5c9",
+};
+
+export const app = initializeApp(firebaseConfig);
+export const db = getDatabase(app);
 
 export async function fetchAllItems(userId) {
   let items = [];

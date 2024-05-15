@@ -18,28 +18,81 @@ import ItemBottomSheetContent from "../../components/BottomSheet/ItemBottomSheet
 import { ItemsContext } from "../../store/items-context";
 import NoteAcordition from "../../components/Accordions/NoteAcordition";
 import AccountAcordition from "../../components/Accordions/AccountAcordition";
+import { off, onValue, ref } from "firebase/database";
+import { db } from "../../util/https-fetch";
+import FileAcordition from "../../components/Accordions/FileAcordition";
+
 function FavoriteScreen() {
-  const [fetchedFavoritesItems, setFetchedFavoritesItems] = useState([]);
+  const [fetchedAccounts, setFetchedAccounts] = useState([]);
+  const [fetchedNotes, setFetchedNotes] = useState([]);
+  const [fetchedFiles, setFetchedFiles] = useState([]);
+  const [isBottomDisplay, setBottomDisplay] = useState(false);
   const [isFetchedItems, setIsFetchedItems] = useState(false);
   const authCtx = useContext(AuthContext);
   const itemsCtx = useContext(ItemsContext);
   const [itemButtonSheetContent, setItemButtonSheetContent] = useState("");
   useEffect(() => {
     setIsFetchedItems(true);
-    async function getItems() {
-      const data = await itemsCtx.fetchItemsCtx(authCtx.userId, "favorites");
-      setFetchedFavoritesItems(data);
-      setIsFetchedItems(false);
-    }
-    getItems();
+    const accountsRef = ref(db, "webItems");
+    // Lắng nghe sự thay đổi trong Realtime Database
+    const onValueChangeAccounts = (snapshot) => {
+      const dataArray = [];
+      snapshot.forEach((childSnapshot) => {
+        dataArray.push({ id: childSnapshot.key, ...childSnapshot.val() });
+      });
+      const filteredItems = dataArray.filter(
+        (item) => item.userId === authCtx.userId && item.favorite
+      );
+      setFetchedAccounts(filteredItems);
+    };
+    onValue(accountsRef, onValueChangeAccounts);
+
+    // Ngắt kết nối listener khi component unmount
+    return () => {
+      off(accountsRef, onValueChangeAccounts);
+    };
   }, []);
   useEffect(() => {
-    async function getItems() {
-      const data = await itemsCtx.fetchItemsCtx(authCtx.userId, "favorites");
-      setFetchedFavoritesItems(data);
-    }
-    getItems();
-  }, [itemsCtx.refreshFavorite]);
+    const notesRef = ref(db, "NoteItems");
+
+    const onValueChangeNotes = (snapshot) => {
+      const dataArray = [];
+      snapshot.forEach((childSnapshot) => {
+        dataArray.push({ id: childSnapshot.key, ...childSnapshot.val() });
+      });
+      const filteredItems = dataArray.filter(
+        (item) => item.userId === authCtx.userId && item.favorite
+      );
+      setFetchedNotes(filteredItems);
+    };
+
+    onValue(notesRef, onValueChangeNotes);
+    // Ngắt kết nối listener khi component unmount
+    return () => {
+      off(notesRef, onValueChangeNotes);
+    };
+  }, []);
+  useEffect(() => {
+    const filesRef = ref(db, "FileItems");
+
+    const onValueChangeNotes = (snapshot) => {
+      const dataArray = [];
+      snapshot.forEach((childSnapshot) => {
+        dataArray.push({ id: childSnapshot.key, ...childSnapshot.val() });
+      });
+      const filteredItems = dataArray.filter(
+        (item) => item.userId === authCtx.userId && item.favorite
+      );
+      setFetchedFiles(filteredItems);
+      setIsFetchedItems(false);
+    };
+
+    onValue(filesRef, onValueChangeNotes);
+    // Ngắt kết nối listener khi component unmount
+    return () => {
+      off(filesRef, onValueChangeNotes);
+    };
+  }, []);
   // bottomsheet js
   const bottomSheetModalRef = useRef(null);
   const spanPoints = ["48%"];
@@ -56,7 +109,12 @@ function FavoriteScreen() {
   if (isFetchedItems) {
     return <LoadingOverlay message="Loading..." />;
   }
-  if (fetchedFavoritesItems.length == 0) {
+  if (
+    fetchedFiles.length == 0 &&
+    fetchedAccounts.length == 0 &&
+    fetchedNotes.length == 0 &&
+    isFetchedItems == false
+  ) {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Your security store is empty</Text>
@@ -68,8 +126,10 @@ function FavoriteScreen() {
   return (
     <BottomSheetModalProvider>
       <Pressable onPress={handleDismissModal} style={styles.container}>
+        {/* Overlay */}
+        {isBottomDisplay && <View style={styles.overlay} />}
         <FlatList
-          data={fetchedFavoritesItems}
+          data={[...fetchedAccounts, ...fetchedNotes, ...fetchedFiles]}
           renderItem={({ item }) =>
             item.webURL !== undefined ? (
               <AccountAcordition
@@ -87,6 +147,12 @@ function FavoriteScreen() {
               >
                 {item.webName}
               </NoteAcordition>
+            ) : item.fileName !== undefined ? (
+              <FileAcordition
+                handlePresentModal={handlePresentModal}
+                imageName={item.fileName}
+                value={item}
+              ></FileAcordition>
             ) : null
           }
           keyExtractor={(item) => item.id}
@@ -100,6 +166,7 @@ function FavoriteScreen() {
         // onChange={handleSheetChanges}
       >
         <ItemBottomSheetContent
+          handleDismissModal={handleDismissModal}
           item={itemButtonSheetContent}
         ></ItemBottomSheetContent>
       </BottomSheetModal>
