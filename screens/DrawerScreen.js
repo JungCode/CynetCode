@@ -37,7 +37,11 @@ function DrawerScreen() {
     <Drawer.Navigator
       screenOptions={{
         headerStyle: {
-          shadowColor: "black",
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 3 },
+          shadowOpacity: 0.3,
+          shadowRadius: 2,
+          elevation: 7,
         },
         headerRight: () => (
           <FontAwesome6
@@ -52,8 +56,7 @@ function DrawerScreen() {
       }}
       drawerContent={(props) => (
         <DrawerContentCustom {...props} itemsQuantity={fetchedQuantity} />
-      )}
-    >
+      )}>
       <Drawer.Screen
         name="AllItem"
         component={AllItemScreen}

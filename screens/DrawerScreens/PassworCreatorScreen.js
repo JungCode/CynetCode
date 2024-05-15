@@ -15,8 +15,8 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import CusButton from "../../components/CusButton";
-import { Icon } from "react-native-paper";
 import Colors from "../../constants/Colors";
+import { passwordStrength } from "check-password-strength";
 const PasswordSchema = Yup.object().shape({
   passwordLength: Yup.number()
     .min(4, "Should be min of 4 characters")
@@ -56,7 +56,6 @@ export default function App() {
     if (symbols) {
       characterList += specialChars;
     }
-
     const passwordResult = createPassword(characterList, passwordLength);
 
     setPassword(passwordResult);
@@ -70,7 +69,6 @@ export default function App() {
       result += characters.charAt(characterIndex);
     }
     return result;
-    console.log("hitesh");
   };
 
   const resetPasswordState = () => {
@@ -93,7 +91,9 @@ export default function App() {
                   {password}
                 </Text>
               </View>
-              <Text style={styles.passwordStrengh}>Strong Password</Text>
+              <Text style={styles.passwordStrengh}>
+                {passwordStrength(password).value}
+              </Text>
               <View style={styles.buttonContainer}>
                 <CusButton>Coppy</CusButton>
               </View>
@@ -133,12 +133,11 @@ export default function App() {
                     value={values.passwordLength}
                     onChangeText={handleChange("passwordLength")}
                     placeholder="Min:4, Max:16"
-                    defaultValue="8"
                     keyboardType="numeric"
                   />
                 </View>
                 <View style={styles.inputWrapper}>
-                  <Text style={styles.heading}>Include lowercase</Text>
+                  <Text style={styles.heading}>Include lowercase (a-z)</Text>
                   <BouncyCheckbox
                     disableBuiltInState
                     isChecked={lowerCase}
@@ -147,7 +146,9 @@ export default function App() {
                   />
                 </View>
                 <View style={styles.inputWrapper}>
-                  <Text style={styles.heading}>Include Uppercase letters</Text>
+                  <Text style={styles.heading}>
+                    Include Uppercase letters (A-Z)
+                  </Text>
                   <BouncyCheckbox
                     disableBuiltInState
                     isChecked={upperCase}
@@ -156,7 +157,7 @@ export default function App() {
                   />
                 </View>
                 <View style={styles.inputWrapper}>
-                  <Text style={styles.heading}>Include Numbers</Text>
+                  <Text style={styles.heading}>Include Numbers (0-9)</Text>
                   <BouncyCheckbox
                     disableBuiltInState
                     isChecked={numbers}
@@ -195,8 +196,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   formContainer: {
-    margin: 8,
     padding: 8,
+    backgroundColor: Colors.white,
+    height: 600,
+    borderTopColor: Colors.gray200,
+    borderTopWidth: 1,
   },
   title: {
     fontSize: 32,
@@ -257,7 +261,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginHorizontal: 8,
     backgroundColor: "#CAD5E2",
-    alignItems: "center"
+    alignItems: "center",
   },
   secondaryBtnTxt: {
     textAlign: "center",
@@ -310,3 +314,4 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {},
 });
+
