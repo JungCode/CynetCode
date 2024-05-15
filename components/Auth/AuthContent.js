@@ -24,16 +24,17 @@ function AuthContent({ islogin }) {
       </Pressable>
       <View style={styles.container}>
         <View style={styles.innerContainer}>
-          <Image
-            style={styles.image}
-            source={require("../../image/AppIcon.png")}
-          />
+          <View style={styles.imageContainer}>
+            <Image
+              style={styles.image}
+              source={require("../../image/AppIcon.png")}
+            />
+          </View>
           <Text style={styles.title}>
             {islogin ? "Login in CynetCode" : "Signup in CynetCode"}
           </Text>
           <Text style={styles.des}>
-            Sign in to CynetCode One account to manage all apps and
-            features
+            Sign in to CynetCode One account to manage all apps and features
           </Text>
         </View>
         <View style={styles.buttonContainer}>
@@ -92,9 +93,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   image: {
-    maxWidth: 150,
-    maxHeight: 150,
+    width: 300,
+    height: 200,
+    objectFit:"cover",
     marginBottom: 20,
+  },
+  imageContainer:{
   },
   title: {
     textAlign: "center",
@@ -105,13 +109,13 @@ const styles = StyleSheet.create({
   des: {
     lineHeight: 25,
     color: Colors.gray300,
-    marginTop:20,
+    marginTop: 20,
     marginBottom: 20,
-    textAlign:"center",
+    textAlign: "center",
   },
   buttonContainer: {
     minWidth: "100%",
-    paddingBottom:30,
+    paddingBottom: 30,
   },
   backbutton: {
     margin: 10,

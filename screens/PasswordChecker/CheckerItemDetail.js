@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View } from "react-native";
 import CheckerDetail from "../../components/PasswordChecker/CheckerDetail";
 import CheckerForm from "../../components/PasswordChecker/CheckerForm";
+import CusButton from "../../components/CusButton";
+import Colors from "../../constants/Colors";
 
 function CheckerItemDetail() {
   return (
@@ -10,9 +12,11 @@ function CheckerItemDetail() {
         duplicate={true}
         compromised={true}
         good={true}></CheckerDetail>
-      <View>
+      <View style={styles.formcontainer}>
         <CheckerForm website="youtube"></CheckerForm>
       </View>
+      <CusButton>Change password on website</CusButton>
+      <CusButton bgc="transparent" borcolor="transparent"  pressedbgc={Colors.gray200} color={Colors.green500}>Edit Account</CusButton>
     </View>
   );
 }
@@ -24,4 +28,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "white",
   },
+  formcontainer:{
+    marginBottom:20,
+  }
 });

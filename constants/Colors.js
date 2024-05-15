@@ -10,6 +10,7 @@ export default Colors = {
   gray100:'#fafafa',
   gray200:'#d2d2d1',
   gray300:'#666666',
+  gray400:"#999999",
   graycontent:'#f6f6f6',
   graye0:'#e0e0e0',
   gray62:'#626262',
