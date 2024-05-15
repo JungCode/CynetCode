@@ -6,6 +6,8 @@ import { AuthContext } from "../../store/auth-context";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import LoadingOverlay from "../../components/LoadingOverlay";
 import { ItemsContext } from "../../store/items-context";
+import { ToastAndroid } from "react-native";
+
 function WebsiteAddingScreen() {
   const route = useRoute();
   const [webURL, setWebURL] = useState(route.params ? route.params.webURL : "");
@@ -56,14 +58,15 @@ function WebsiteAddingScreen() {
       favorite: false,
     };
     if (route.params) {
-      itemsCtx.updateItem(route.params.id,item);
-      setIsStoring(false);
+      itemsCtx.updateItem(route.params.id, item, "webItems");
       navigation.navigate("drawerScreen");
+      ToastAndroid.show("Edited item successfull!", ToastAndroid.SHORT);
     } else {
-      itemsCtx.storeItem(item);
-      setIsStoring(false);
+      itemsCtx.storeItem(item, "web");
       navigation.navigate("drawerScreen");
+      ToastAndroid.show("Added item successfull!", ToastAndroid.SHORT);
     }
+    setIsStoring(false);
   }
   if (isStoring) {
     return <LoadingOverlay message="Adding ..." />;

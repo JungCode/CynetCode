@@ -47,7 +47,7 @@ function DrawerContentCustom(props) {
         />
         <DrawerItemCustom
           name="File"
-          labelName="Documents"
+          labelName="Files"
           iconName="document-outline"
           onActive={PressHandler}
           ItemIsActive={ItemIsActive}

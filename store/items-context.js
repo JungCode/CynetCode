@@ -1,59 +1,95 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import {
-  fetchFavoriteItems,
-  fetchItems,
+  fetchFavoriteAllItems,
+  fetchAllItems,
+  fetchNotes,
   fetchQuantity,
-  webDeleteItem,
+  fetchAccounts,
+  fetchFiles,
+} from "../util/https-fetch";
+import {
+  fileStoreItem,
+  noteStoreItem,
   webStoreItem,
-  webUpdateItem,
-} from "../util/http";
+} from "../util/https-store";
+import { updateItemDB } from "../util/https-update";
+import { deleteItemDB } from "../util/https-delete";
 
 export const ItemsContext = createContext({
   quantityItems: [],
   items: [],
+  refreshFavorite: "",
+  refreshQuantity: "",
   countingQuantity: async function () {},
   fetchItemsCtx: async function () {},
   fetchFavoriteItemsCtx: async function () {},
   refresh: "",
   storeItem: () => {},
   updateItem: () => {},
+  updateFavoriteItem: () => {},
   deleteItem: () => {},
+  fetchNotesCtx: () => {},
 });
 function ItemsContextProvider({ children }) {
   const [quantityItems, setQuantityItems] = useState([]);
-  const [refresh, setRefresh] = useState();
   async function countingQuantity(userId) {
     const data = await fetchQuantity(userId);
     return data;
   }
 
-  async function fetchItemsCtx(userId) {
-    const data = await fetchItems(userId);
-    setRefresh(userId);
+  async function fetchItemsCtx(userId, type) {
+    let data = [];
+    switch (type) {
+      case "accounts":
+        data = await fetchAccounts(userId);
+        break;
+      case "allItems":
+        data = await fetchAllItems(userId);
+        break;
+      case "favorites":
+        data = await fetchFavoriteAllItems(userId);
+        break;
+      case "notes":
+        data = await fetchNotes(userId);
+        break;
+      case "files":
+        data = await fetchFiles(userId);
+        break;
+    }
     return data;
   }
 
   async function fetchFavoriteItemsCtx(userId) {
-    const data = await fetchFavoriteItems(userId);
-    setRefresh(userId);
+    const data = await fetchFavoriteAllItems(userId);
     return data;
   }
 
-  async function storeItem(newItem) {
-    await webStoreItem(newItem);
-    setRefresh(newItem);
+  async function storeItem(newItem, type) {
+    switch (type) {
+      case "note":
+        await noteStoreItem(newItem);
+        break;
+      case "web":
+        await webStoreItem(newItem);
+        break;
+      case "file":
+        await fileStoreItem(newItem);
+    }
   }
-  async function updateItem(itemId, updatedItem) {
-    await webUpdateItem(itemId, updatedItem);
-    setRefresh(itemId);
+  async function updateItem(itemId, updatedItem, type) {
+    await updateItemDB(itemId, updatedItem, type);
   }
-  async function deleteItem(itemId) {
-    await webDeleteItem(itemId);
-    setRefresh(itemId);
+  async function deleteItem(itemId, type) {
+    await deleteItemDB(itemId, type);
   }
-  useEffect(() => {
-    setRefresh("userId");
-  }, []);
+  async function updateFavoriteItem(itemId, updatedItem, type) {
+    if (updatedItem.noteTitle !== undefined) {
+      await updateItemDB(itemId, updatedItem, type);
+    }
+    if (updatedItem.webURL !== undefined) {
+      await updateItemDB(itemId, updatedItem, type);
+    }
+  }
   const value = {
     quantityItems: quantityItems,
     items: [],
@@ -61,9 +97,9 @@ function ItemsContextProvider({ children }) {
     fetchItemsCtx: fetchItemsCtx,
     storeItem: storeItem,
     updateItem: updateItem,
-    refresh: refresh,
     fetchFavoriteItemsCtx: fetchFavoriteItemsCtx,
     deleteItem: deleteItem,
+    updateFavoriteItem: updateFavoriteItem,
   };
   return (
     <ItemsContext.Provider value={value}>{children}</ItemsContext.Provider>

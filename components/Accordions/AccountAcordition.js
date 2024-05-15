@@ -23,12 +23,11 @@ import Colors from "../../constants/Colors";
 import CusButton from "../CusButton";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
-function ItemAcordition({
+function AccountAcordition({
+  openInBrowser,
   value,
-  edititem,
-  deleteitem,
   handlePresentModal,
-  handleDismissModal,
+  setIsFetchedItems,
 }) {
   const navigation = useNavigation();
   //dropdown js
@@ -47,7 +46,6 @@ function ItemAcordition({
       Extrapolate.CLAMP
     ),
   }));
-
   const checkFaviconExistence = async (url) => {
     try {
       const response = await fetch("http://" + url + "/favicon.ico");
@@ -85,7 +83,14 @@ function ItemAcordition({
           </View>
         </View>
         <Pressable
-          onPress={handlePresentModal.bind(this, { ...value, imgURL: fecthedImg })}
+          onPress={handlePresentModal.bind(
+            this,
+            {
+              ...value,
+              imgURL: fecthedImg,
+            },
+            setIsFetchedItems
+          )}
         >
           <Icon source="dots-vertical" size={25}></Icon>
         </Pressable>
@@ -127,16 +132,17 @@ function ItemAcordition({
                 </Pressable>
               </View>
             </View>
-            <CusButton onPress={edititem}> Edit </CusButton>
-            <CusButton onPress={deleteitem}> Delete </CusButton>
           </View>
+          <CusButton onPress={openInBrowser.bind(this, value.webURL)}>
+            Open in browser
+          </CusButton>
         </Animated.View>
       </Animated.View>
     </View>
   );
 }
 
-export default ItemAcordition;
+export default AccountAcordition;
 const styles = StyleSheet.create({
   container: {
     // backgroundColor: "#E3EDFB",

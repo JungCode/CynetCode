@@ -1,51 +1,181 @@
-import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
-import MyFab from "../../components/MyFab";
-import { useContext, useEffect, useState } from "react";
+import {
+  FlatList,
+  Linking,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../../store/auth-context";
 import LoadingOverlay from "../../components/LoadingOverlay";
-import ItemAcordition from "../../components/Accordions/ItemAcordition";
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+} from "@gorhom/bottom-sheet";
+import ItemBottomSheetContent from "../../components/BottomSheet/ItemBottomSheetContent";
 import { ItemsContext } from "../../store/items-context";
-function FavoriteScreen({ onPress }) {
-  const [fetchedFavoritesItems, setFetchedFavoritesItems] = useState([]);
+import NoteAcordition from "../../components/Accordions/NoteAcordition";
+import AccountAcordition from "../../components/Accordions/AccountAcordition";
+import { off, onValue, ref } from "firebase/database";
+import { db } from "../../util/https-fetch";
+import FileAcordition from "../../components/Accordions/FileAcordition";
+
+function FavoriteScreen() {
+  const [fetchedAccounts, setFetchedAccounts] = useState([]);
+  const [fetchedNotes, setFetchedNotes] = useState([]);
+  const [fetchedFiles, setFetchedFiles] = useState([]);
+  const [isBottomDisplay, setBottomDisplay] = useState(false);
   const [isFetchedItems, setIsFetchedItems] = useState(false);
   const authCtx = useContext(AuthContext);
   const itemsCtx = useContext(ItemsContext);
+  const [itemButtonSheetContent, setItemButtonSheetContent] = useState("");
   useEffect(() => {
     setIsFetchedItems(true);
-    async function getItems() {
-      const data = await itemsCtx.fetchFavoriteItemsCtx(authCtx.userId);
-      setFetchedFavoritesItems(data);
+    const accountsRef = ref(db, "webItems");
+    // Lắng nghe sự thay đổi trong Realtime Database
+    const onValueChangeAccounts = (snapshot) => {
+      const dataArray = [];
+      snapshot.forEach((childSnapshot) => {
+        dataArray.push({ id: childSnapshot.key, ...childSnapshot.val() });
+      });
+      const filteredItems = dataArray.filter(
+        (item) => item.userId === authCtx.userId && item.favorite
+      );
+      setFetchedAccounts(filteredItems);
+    };
+    onValue(accountsRef, onValueChangeAccounts);
+
+    // Ngắt kết nối listener khi component unmount
+    return () => {
+      off(accountsRef, onValueChangeAccounts);
+    };
+  }, []);
+  useEffect(() => {
+    const notesRef = ref(db, "NoteItems");
+
+    const onValueChangeNotes = (snapshot) => {
+      const dataArray = [];
+      snapshot.forEach((childSnapshot) => {
+        dataArray.push({ id: childSnapshot.key, ...childSnapshot.val() });
+      });
+      const filteredItems = dataArray.filter(
+        (item) => item.userId === authCtx.userId && item.favorite
+      );
+      setFetchedNotes(filteredItems);
+    };
+
+    onValue(notesRef, onValueChangeNotes);
+    // Ngắt kết nối listener khi component unmount
+    return () => {
+      off(notesRef, onValueChangeNotes);
+    };
+  }, []);
+  useEffect(() => {
+    const filesRef = ref(db, "FileItems");
+
+    const onValueChangeNotes = (snapshot) => {
+      const dataArray = [];
+      snapshot.forEach((childSnapshot) => {
+        dataArray.push({ id: childSnapshot.key, ...childSnapshot.val() });
+      });
+      const filteredItems = dataArray.filter(
+        (item) => item.userId === authCtx.userId && item.favorite
+      );
+      setFetchedFiles(filteredItems);
       setIsFetchedItems(false);
-    }
-    getItems();
-  }, [itemsCtx.refresh]);
+    };
+
+    onValue(filesRef, onValueChangeNotes);
+    // Ngắt kết nối listener khi component unmount
+    return () => {
+      off(filesRef, onValueChangeNotes);
+    };
+  }, []);
+  // bottomsheet js
+  const bottomSheetModalRef = useRef(null);
+  const spanPoints = ["48%"];
+  function handlePresentModal(item) {
+    setItemButtonSheetContent(item);
+    bottomSheetModalRef.current?.present();
+  }
+  function handleDismissModal() {
+    bottomSheetModalRef.current?.dismiss();
+  }
+  function openInBrowserHandler(webURL) {
+    Linking.openURL("https://" + webURL);
+  }
   if (isFetchedItems) {
     return <LoadingOverlay message="Loading..." />;
   }
-  if (!fetchedFavoritesItems) {
+  if (
+    fetchedFiles.length == 0 &&
+    fetchedAccounts.length == 0 &&
+    fetchedNotes.length == 0 &&
+    isFetchedItems == false
+  ) {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Your security store is empty</Text>
         <ScrollView></ScrollView>
-        <MyFab onPress={onPress} />
       </View>
     );
   }
+
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={fetchedFavoritesItems}
-        renderItem={({ item }) => (
-          <ItemAcordition value={item}>{item.webName}</ItemAcordition>
-        )}
-        keyExtractor={(item) => item.id}
-      />
-      <MyFab onPress={onPress} />
-    </View>
+    <BottomSheetModalProvider>
+      <Pressable onPress={handleDismissModal} style={styles.container}>
+        {/* Overlay */}
+        {isBottomDisplay && <View style={styles.overlay} />}
+        <FlatList
+          data={[...fetchedAccounts, ...fetchedNotes, ...fetchedFiles]}
+          renderItem={({ item }) =>
+            item.webURL !== undefined ? (
+              <AccountAcordition
+                handlePresentModal={handlePresentModal}
+                openInBrowser={openInBrowserHandler}
+                // handleDismissModal={handleDismissModal}
+                value={item}
+              >
+                {item.webName}
+              </AccountAcordition>
+            ) : item.noteTitle !== undefined ? (
+              <NoteAcordition
+                handlePresentModal={handlePresentModal}
+                value={item}
+              >
+                {item.webName}
+              </NoteAcordition>
+            ) : item.fileName !== undefined ? (
+              <FileAcordition
+                handlePresentModal={handlePresentModal}
+                imageName={item.fileName}
+                value={item}
+              ></FileAcordition>
+            ) : null
+          }
+          keyExtractor={(item) => item.id}
+        />
+      </Pressable>
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        index={0}
+        snapPoints={spanPoints}
+        onDismiss={handleDismissModal}
+        // onChange={handleSheetChanges}
+      >
+        <ItemBottomSheetContent
+          handleDismissModal={handleDismissModal}
+          item={itemButtonSheetContent}
+        ></ItemBottomSheetContent>
+      </BottomSheetModal>
+    </BottomSheetModalProvider>
   );
 }
 
 export default FavoriteScreen;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

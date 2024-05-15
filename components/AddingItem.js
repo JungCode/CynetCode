@@ -5,7 +5,11 @@ import { useNavigation } from "@react-navigation/native";
 function AddingItem({ name, iconName }) {
   const navigation = useNavigation();
   function PressHandler() {
-    return navigation.navigate("websiteAddingScreen");
+    if (name == "Acount") {
+      return navigation.navigate("websiteAddingScreen");
+    } else if (name == "Notes") {
+      return navigation.navigate("noteAddingScreen");
+    }
   }
 
   return (
