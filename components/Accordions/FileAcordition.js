@@ -38,6 +38,7 @@ function FileAcordition({
   const [imageURL, setImageURL] = useState(
     "https://img.freepik.com/free-vector/loading-circles-blue-gradient_78370-2646.jpg?size=338&ext=jpg&ga=GA1.1.553209589.1715472000&semt=sph"
   );
+  console.log(value);
   const heightValue = useSharedValue(0);
   const open = useSharedValue(false);
   const progress = useDerivedValue(() =>
@@ -87,7 +88,8 @@ function FileAcordition({
             heightValue.value = withTiming(0);
           }
           open.value = !open.value;
-        }}>
+        }}
+      >
         <View style={styles.maintitle}>
           <Chevron progress={progress}></Chevron>
           <View style={styles.imgStyle}>
@@ -106,7 +108,8 @@ function FileAcordition({
               imgURL: fecthedImg,
             },
             setIsFetchedItems
-          )}>
+          )}
+        >
           <Icon source="dots-vertical" size={25}></Icon>
         </Pressable>
       </Pressable>
@@ -206,11 +209,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "auto",
   },
-  imageContainer:{
-    flexDirection:"row",
-    alignItems:"center",
-    justifyContent:"center",
-    marginBottom:10,
+  imageContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 10,
   },
   imgStyle: {
     marginLeft: 5,
