@@ -1,22 +1,21 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { Icon } from "react-native-paper";
+import { Icon} from "react-native-paper";
 import Colors from "../../constants/Colors";
 
 function CheckerCategrory({ icon, color, num, strengh, onPress, ver }) {
   return (
     <Pressable
+      style={styles.container}
       onPress={onPress}
       android_ripple={{ color: "rgba(0, 0, 0, 0.2)" }}>
-      <View style={styles.container}>
-        <View style={styles.subcontainer}>
-          <Icon source={icon} color={color} size={40}></Icon>
-          <View style={styles.textContainer}>
-            <Text style={styles.text}>{num} password</Text>
-            <Text style={styles.sub}>{strengh}</Text>
-          </View>
+      <View style={styles.subcontainer}>
+        <Icon source={icon} color={color} size={40}></Icon>
+        <View style={styles.textContainer}>
+          <Text style={styles.text}>{num} password</Text>
+          <Text style={styles.sub}>{strengh}</Text>
         </View>
-        <Icon size={24} source="chevron-right"></Icon>
       </View>
+      <Icon size={24} source="chevron-right"></Icon>
     </Pressable>
   );
 }

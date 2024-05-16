@@ -72,8 +72,7 @@ function AccountAcordition({
             heightValue.value = withTiming(0);
           }
           open.value = !open.value;
-        }}
-      >
+        }}>
         <View style={styles.maintitle}>
           <Chevron progress={progress}></Chevron>
           <Image source={{ uri: fecthedImg }} style={styles.imgStyle} />
@@ -90,8 +89,7 @@ function AccountAcordition({
               imgURL: fecthedImg,
             },
             setIsFetchedItems
-          )}
-        >
+          )}>
           <Icon source="dots-vertical" size={25}></Icon>
         </Pressable>
       </Pressable>
@@ -108,8 +106,7 @@ function AccountAcordition({
                   <Icon
                     style={styles.iconstyle}
                     source="content-copy"
-                    size={25}
-                  ></Icon>
+                    size={25}></Icon>
                 </Pressable>
               </View>
             </View>
@@ -121,21 +118,19 @@ function AccountAcordition({
                 <TextInput
                   value={value.password}
                   secureTextEntry
-                  style={styles.subtext}
-                ></TextInput>
+                  style={styles.subtext}></TextInput>
                 <Pressable>
                   <Icon
                     style={styles.iconstyle}
                     source="content-copy"
-                    size={25}
-                  ></Icon>
+                    size={25}></Icon>
                 </Pressable>
               </View>
             </View>
+            <CusButton onPress={openInBrowser.bind(this, value.webURL)}>
+              Open in browser
+            </CusButton>
           </View>
-          <CusButton onPress={openInBrowser.bind(this, value.webURL)}>
-            Open in browser
-          </CusButton>
         </Animated.View>
       </Animated.View>
     </View>
@@ -215,7 +210,7 @@ const styles = StyleSheet.create({
   },
   imgStyle: {
     marginHorizontal: 10,
-    width: 28,
-    height: 28,
+    width: 35,
+    height: 35,
   },
 });
