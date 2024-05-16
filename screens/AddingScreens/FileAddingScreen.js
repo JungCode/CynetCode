@@ -7,7 +7,6 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import LoadingOverlay from "../../components/LoadingOverlay";
 import { ItemsContext } from "../../store/items-context";
 import { storeFileDB } from "../../util/https-store";
-import Pdf from 'react-native-pdf';
 
 function FileAddingScreen() {
   const route = useRoute();
