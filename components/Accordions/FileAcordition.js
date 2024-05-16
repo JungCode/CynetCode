@@ -38,7 +38,7 @@ function FileAcordition({
   const [imageURL, setImageURL] = useState(
     "https://img.freepik.com/free-vector/loading-circles-blue-gradient_78370-2646.jpg?size=338&ext=jpg&ga=GA1.1.553209589.1715472000&semt=sph"
   );
-  console.log(value);
+  console.log(value.fileType);
   const heightValue = useSharedValue(0);
   const open = useSharedValue(false);
   const progress = useDerivedValue(() =>
@@ -88,12 +88,17 @@ function FileAcordition({
             heightValue.value = withTiming(0);
           }
           open.value = !open.value;
-        }}
-      >
+        }}>
         <View style={styles.maintitle}>
           <Chevron progress={progress}></Chevron>
           <View style={styles.imgStyle}>
-            <Icon source="file-image-outline" size={35}></Icon>
+            {value.fileType === "photo" ? (
+              <Icon source="file-image-outline" size={35}></Icon>
+            ) : value.fileType === "pdf" ? (
+              <Icon source="file-pdf-box" size={35}></Icon>
+            ) : value.fileType === "word" ? (
+              <Icon source="file-word-box" size={35}></Icon>
+            ) : null}
           </View>
           {/* <Image source={{ uri: fecthedImg }} style={styles.imgStyle} /> */}
           <View style={styles.textTitleContainer}>
@@ -108,8 +113,7 @@ function FileAcordition({
               imgURL: fecthedImg,
             },
             setIsFetchedItems
-          )}
-        >
+          )}>
           <Icon source="dots-vertical" size={25}></Icon>
         </Pressable>
       </Pressable>
@@ -123,7 +127,13 @@ function FileAcordition({
               <View style={styles.copywrap}></View>
             </View>
             <View style={styles.imageContainer}>
-              <Image source={{ uri: imageURL }} style={styles.image} />
+              {value.fileType === "photo" ? (
+                <Image source={{ uri: imageURL }} style={styles.image} />
+              ) : value.fileType === "pdf" ? (
+                <Icon source="file-pdf-box" size={35}></Icon>
+              ) : value.fileType === "word" ? (
+                <Icon source="file-word-box" size={35}></Icon>
+              ) : null}
             </View>
             <FlatButton onPress={() => {}}>Open</FlatButton>
           </View>
