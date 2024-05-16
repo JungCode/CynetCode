@@ -17,6 +17,8 @@ import SettingScreen from "./DrawerScreens/SettingScreen";
 import Logout from "./DrawerScreens/LogOut";
 import ItemsContextProvider, { ItemsContext } from "../store/items-context";
 import { AuthContext } from "../store/auth-context";
+import { off, onValue, ref } from "firebase/database";
+import { db } from "../util/https-fetch";
 
 const Drawer = createDrawerNavigator();
 
@@ -24,15 +26,89 @@ function DrawerScreen() {
   const itemsCtx = useContext(ItemsContext);
   const authCtx = useContext(AuthContext);
 
-  const [fetchedQuantity, setFetchedQuantity] = useState([]);
-
+  const [fetchedAccountsQuantity, setAccountsQuantity] = useState();
+  const [fetchedNotesQuantity, setNotesQuantity] = useState();
+  const [fetchedFilesQuantity, setFilesQuantity] = useState();
+  const [fetchedFvtAccountsQuantity, setFvtAccountsQuantity] = useState();
+  const [fetchedFvtNotesQuantity, setFvtNotesQuantity] = useState();
+  const [fetchedFvtFilesQuantity, setFvtFilesQuantity] = useState();
+  const [fetchedFavoritesQuantity, setFavoritesQuantity] = useState(0);
   useEffect(() => {
-    async function getItems() {
-      const data = await itemsCtx.countingQuantity(authCtx.userId);
-      setFetchedQuantity(data);
-    }
-    getItems();
-  }, [itemsCtx.refreshFavorite, itemsCtx.refresh]);
+    const accountsRef = ref(db, "webItems");
+    // Lắng nghe sự thay đổi trong Realtime Database
+    const onValueChangeAccounts = (snapshot) => {
+      const dataArray = [];
+      snapshot.forEach((childSnapshot) => {
+        dataArray.push({ id: childSnapshot.key, ...childSnapshot.val() });
+      });
+      let count = 0;
+      let fvtCount = 0;
+      dataArray.forEach((item) => {
+        if (item.userId == authCtx.userId) {
+          count++;
+          if (item.favorite) fvtCount++;
+        }
+      });
+      setFvtAccountsQuantity(fvtCount);
+      setAccountsQuantity(count);
+    };
+    onValue(accountsRef, onValueChangeAccounts);
+    return () => {
+      off(accountsRef, onValueChangeAccounts);
+    };
+  }, []);
+  useEffect(() => {
+    const notesRef = ref(db, "NoteItems");
+
+    const onValueChangeNotes = (snapshot) => {
+      const dataArray = [];
+      snapshot.forEach((childSnapshot) => {
+        dataArray.push({ id: childSnapshot.key, ...childSnapshot.val() });
+      });
+      let count = 0;
+      let fvtCount = 0;
+      dataArray.forEach((item) => {
+        if (item.userId == authCtx.userId) {
+          count++;
+          if (item.favorite) fvtCount++;
+        }
+      });
+      setFvtNotesQuantity(fvtCount);
+      setNotesQuantity(count);
+    };
+
+    onValue(notesRef, onValueChangeNotes);
+    // Ngắt kết nối listener khi component unmount
+    return () => {
+      off(notesRef, onValueChangeNotes);
+    };
+  }, []);
+  useEffect(() => {
+    const filesRef = ref(db, "FileItems");
+
+    const onValueChangeNotes = (snapshot) => {
+      const dataArray = [];
+      snapshot.forEach((childSnapshot) => {
+        dataArray.push({ id: childSnapshot.key, ...childSnapshot.val() });
+      });
+      let count = 0;
+      let fvtCount = 0;
+      dataArray.forEach((item) => {
+        if (item.userId == authCtx.userId) {
+          count++;
+          if (item.favorite) fvtCount++;
+        }
+      });
+      setFvtFilesQuantity(fvtCount);
+      setFilesQuantity(count);
+    };
+
+    onValue(filesRef, onValueChangeNotes);
+    // Ngắt kết nối listener khi component unmount
+    return () => {
+      off(filesRef, onValueChangeNotes);
+    };
+  }, []);
   return (
     <Drawer.Navigator
       screenOptions={{
@@ -55,8 +131,26 @@ function DrawerScreen() {
         drawerActiveTintColor: "black",
       }}
       drawerContent={(props) => (
-        <DrawerContentCustom {...props} itemsQuantity={fetchedQuantity} />
-      )}>
+        <DrawerContentCustom
+          {...props}
+          itemsQuantity={{
+            AllItems:
+              fetchedAccountsQuantity +
+              fetchedFilesQuantity +
+              fetchedNotesQuantity,
+            Favorites:
+              fetchedFvtAccountsQuantity +
+              fetchedFvtNotesQuantity +
+              fetchedFvtFilesQuantity,
+            Account: fetchedAccountsQuantity,
+            CreaditCard: 0,
+            Files: fetchedFilesQuantity,
+            Addresses: 0,
+            Notes: fetchedNotesQuantity,
+          }}
+        />
+      )}
+    >
       <Drawer.Screen
         name="AllItem"
         component={AllItemScreen}

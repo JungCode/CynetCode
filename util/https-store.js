@@ -9,7 +9,6 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 export async function fileStoreItem(selectedFile) {
-  console.log(selectedFile);
   const response = await fetch(selectedFile.assets[0].uri);
   const blob = await response.blob();
   const fileName = "file_" + Math.random().toString(36).substring(7);

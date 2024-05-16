@@ -15,8 +15,6 @@ import AuthContextProvider, { AuthContext } from "./store/auth-context";
 import { useContext } from "react";
 import HeaderCloseButton from "./components/Navigation/HeaderCloseButton";
 import ItemsContextProvider from "./store/items-context";
-import { useFonts, Inter_900Black } from '@expo-google-fonts/inter';
-import AppLoading from "expo-app-loading";
 import NoteAddingScreen from "./screens/AddingScreens/NoteAddingScreen";
 import FileAddingScreen from "./screens/AddingScreens/FileAddingScreen";
 import CheckerListScreen from "./screens/PasswordChecker/CheckerListScreen";
