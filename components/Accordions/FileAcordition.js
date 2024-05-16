@@ -35,7 +35,9 @@ function FileAcordition({
 }) {
   //dropdown js
   const listRef = useAnimatedRef();
-  const [imageURL,setImageURL] = useState("https://img.freepik.com/free-vector/loading-circles-blue-gradient_78370-2646.jpg?size=338&ext=jpg&ga=GA1.1.553209589.1715472000&semt=sph");
+  const [imageURL, setImageURL] = useState(
+    "https://img.freepik.com/free-vector/loading-circles-blue-gradient_78370-2646.jpg?size=338&ext=jpg&ga=GA1.1.553209589.1715472000&semt=sph"
+  );
   const heightValue = useSharedValue(0);
   const open = useSharedValue(false);
   const progress = useDerivedValue(() =>
@@ -55,7 +57,7 @@ function FileAcordition({
         firebase.initializeApp(firebaseConfig);
       }
       const storageRef = firebase.storage().ref();
-  
+
       try {
         // Lấy đường dẫn của ảnh trong Firebase Storage
         const imageUrl = await storageRef
@@ -85,11 +87,13 @@ function FileAcordition({
             heightValue.value = withTiming(0);
           }
           open.value = !open.value;
-        }}
-      >
+        }}>
         <View style={styles.maintitle}>
           <Chevron progress={progress}></Chevron>
-          <Image source={{ uri: fecthedImg }} style={styles.imgStyle} />
+          <View style={styles.imgStyle}>
+            <Icon source="file-image-outline" size={35}></Icon>
+          </View>
+          {/* <Image source={{ uri: fecthedImg }} style={styles.imgStyle} /> */}
           <View style={styles.textTitleContainer}>
             <Text style={styles.textTitle}>{value.fileTitle}</Text>
           </View>
@@ -102,8 +106,7 @@ function FileAcordition({
               imgURL: fecthedImg,
             },
             setIsFetchedItems
-          )}
-        >
+          )}>
           <Icon source="dots-vertical" size={25}></Icon>
         </Pressable>
       </Pressable>
@@ -116,9 +119,11 @@ function FileAcordition({
               </View>
               <View style={styles.copywrap}></View>
             </View>
+            <View style={styles.imageContainer}>
+              <Image source={{ uri: imageURL }} style={styles.image} />
+            </View>
+            <FlatButton onPress={() => {}}>Open</FlatButton>
           </View>
-          <Image source={{ uri: imageURL}} style={styles.image} />
-          <FlatButton onPress={() => {}}>Open</FlatButton>
         </Animated.View>
       </Animated.View>
     </View>
@@ -201,9 +206,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "auto",
   },
+  imageContainer:{
+    flexDirection:"row",
+    alignItems:"center",
+    justifyContent:"center",
+    marginBottom:10,
+  },
   imgStyle: {
-    marginHorizontal: 10,
-    width: 28,
-    height: 28,
+    marginLeft: 5,
   },
 });

@@ -57,11 +57,16 @@ function NoteAcordition({ value, handlePresentModal, setIsFetchedItems }) {
             heightValue.value = withTiming(0);
           }
           open.value = !open.value;
-        }}
-      >
+        }}>
         <View style={styles.maintitle}>
           <Chevron progress={progress}></Chevron>
-          <Image source={{ uri: fecthedImg }} style={styles.imgStyle} />
+          <View style={styles.imgStyle}>
+            <Icon
+              source="notebook-outline"
+              size={35}
+              style={styles.imgStyle}></Icon>
+          </View>
+          {/* <Image source={{ uri: fecthedImg }} style={styles.imgStyle} /> */}
           <View style={styles.textTitleContainer}>
             <Text style={styles.textTitle}>{value.noteTitle}</Text>
           </View>
@@ -74,8 +79,7 @@ function NoteAcordition({ value, handlePresentModal, setIsFetchedItems }) {
               imgURL: fecthedImg,
             },
             setIsFetchedItems
-          )}
-        >
+          )}>
           <Icon source="dots-vertical" size={25}></Icon>
         </Pressable>
       </Pressable>
@@ -88,8 +92,8 @@ function NoteAcordition({ value, handlePresentModal, setIsFetchedItems }) {
               </View>
               <View style={styles.copywrap}></View>
             </View>
+            <FlatButton onPress={() => {}}>Open</FlatButton>
           </View>
-          <FlatButton onPress={() => {}}>Open</FlatButton>
         </Animated.View>
       </Animated.View>
     </View>
@@ -134,6 +138,7 @@ const styles = StyleSheet.create({
     top: 0,
     borderRadius: 10,
     overflow: "hidden",
+    height: "auto",
   },
   content: {
     padding: 20,
@@ -155,6 +160,7 @@ const styles = StyleSheet.create({
   },
   itemcontainer: {
     marginBottom: 10,
+    marginHorizontal: 20,
   },
   copywrap: {
     flexDirection: "row",
@@ -170,8 +176,6 @@ const styles = StyleSheet.create({
     width: "auto",
   },
   imgStyle: {
-    marginHorizontal: 10,
-    width: 28,
-    height: 28,
+    marginLeft: 5,
   },
 });

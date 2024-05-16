@@ -6,17 +6,16 @@ function CheckerListItem({ icon, color, webname, account, onPress }) {
   return (
     <Pressable
       onPress={onPress}
+      style={styles.container}
       android_ripple={{ color: "rgba(0, 0, 0, 0.2)" }}>
-      <View style={styles.container}>
-        <View style={styles.subcontainer}>
-          <Icon source={icon} color={color} size={35}></Icon>
-          <View style={styles.textContainer}>
-            <Text style={styles.text}>{webname}</Text>
-            <Text style={styles.sub}>{account}</Text>
-          </View>
+      <View style={styles.subcontainer}>
+        <Icon source={icon} color={color} size={35}></Icon>
+        <View style={styles.textContainer}>
+          <Text style={styles.text}>{webname}</Text>
+          <Text style={styles.sub}>{account}</Text>
         </View>
-        <Icon size={24} source="chevron-right"></Icon>
       </View>
+      <Icon size={24} source="chevron-right"></Icon>
     </Pressable>
   );
 }
@@ -25,6 +24,7 @@ export default CheckerListItem;
 const styles = StyleSheet.create({
   container: {
     padding: 10,
+    marginTop:10,
     marginBottom: 20,
     flexDirection: "row",
     width: "100%",
