@@ -2,7 +2,6 @@ import {
   Button,
   Image,
   StyleSheet,
-  Text,
   ToastAndroid,
   View,
 } from "react-native";
