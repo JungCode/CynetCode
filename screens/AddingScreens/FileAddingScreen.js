@@ -1,10 +1,4 @@
-import {
-  Button,
-  Image,
-  StyleSheet,
-  ToastAndroid,
-  View,
-} from "react-native";
+import { Button, Image, StyleSheet, ToastAndroid, View } from "react-native";
 import { TextInput } from "react-native-paper";
 import Colors from "../../constants/Colors";
 import { useContext, useState } from "react";
@@ -13,9 +7,19 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import LoadingOverlay from "../../components/LoadingOverlay";
 import { ItemsContext } from "../../store/items-context";
 import { storeFileDB } from "../../util/https-store";
+import Pdf from 'react-native-pdf';
 
 function FileAddingScreen() {
   const route = useRoute();
+  let fileType;
+  if (route.params.assets[0].mimeType.startsWith("image/")) {
+    fileType = "photo";
+  } else if (route.params.assets[0].mimeType === "application/pdf") {
+    fileType = "pdf";
+  } else {
+    fileType = "word";
+  }
+  console.log(fileType);
   const [fileTitle, setFileTitle] = useState(
     route.params ? route.params.fileTitle : ""
   );

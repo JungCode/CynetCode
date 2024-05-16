@@ -84,7 +84,7 @@ import {
       if (!file.canceled) {
         navigation.navigate("fileAddingScreen", file);
       }
-      console.log(file.assets[0]);
+      // console.log(file.assets[0]);
     }
     if (isFetchedItems) {
       return <LoadingOverlay message="Loading..." />;
