@@ -49,6 +49,7 @@ function FileAddingScreen() {
       fileDescription: fileDescription,
       fileTitle: fileTitle,
       fileName: "",
+      fileType: fileType,
       userId: authCtx.userId,
     };
     setIsStoring(true);
