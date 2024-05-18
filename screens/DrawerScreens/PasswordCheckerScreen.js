@@ -2,12 +2,63 @@ import { StyleSheet, Text, View } from "react-native";
 import CheckerCategrory from "../../components/PasswordChecker/CheckerCategory";
 import Colors from "../../constants/Colors";
 import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { onValue, ref } from "firebase/database";
 import { db } from "../../util/https-fetch";
+import { AuthContext } from "../../store/auth-context";
 
 function PasswordCheckerScreen() {
-  const [fetchedAccounts,setFetchedAccounts] = useState();
+  const [fetchedWeakAccounts, setFetchedWeakAccounts] = useState([]);
+  const [fetchedDuplicateAccounts, setFetchedDuplicateAccounts] = useState([]);
+  const [fetchedStrongAccounts, setFetchedStrongAccounts] = useState([]);
+  const [fetchedCompromisedAccounts, setFetchedCompromisedAccounts] = useState(
+    []
+  );
+  const [fetchedAccountsQuantity, setFetchedAccountsQuantity] = useState(0);
+  const authCtx = useContext(AuthContext);
+  const navigation = useNavigation();
+  function isWeakPassword(password) {
+    const minLength = 8;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    if (password.length < minLength) {
+      return true; // Mật khẩu yếu vì quá ngắn
+    }
+    if (!hasUpperCase) {
+      return true; // Mật khẩu yếu vì thiếu chữ hoa
+    }
+    if (!hasLowerCase) {
+      return true; // Mật khẩu yếu vì thiếu chữ thường
+    }
+    if (!hasNumber) {
+      return true; // Mật khẩu yếu vì thiếu số
+    }
+    if (!hasSpecialChar) {
+      return true; // Mật khẩu yếu vì thiếu ký tự đặc biệt
+    }
+    return false; // Mật khẩu không yếu
+  }
+  function isDuplicatePassword(password, knownPasswords) {
+    let count = 0;
+    knownPasswords.forEach((element) => {
+      if (element === password) count++;
+    });
+    if (count == 2) return true;
+    return false;
+  }
+  function navigateChecker(category) {
+    console.log(category);
+    navigation.navigate("CheckerileListScreen");
+  }
+  function checkingForStrongAccount(userName, userNames) {
+    return !userNames.includes(userName);
+  }
+  function checkingForCompromisedAccount(password) {
+    return password.includes("123");
+  }
   useEffect(() => {
     const accountsRef = ref(db, "webItems");
     // Lắng nghe sự thay đổi trong Realtime Database
@@ -16,57 +67,80 @@ function PasswordCheckerScreen() {
       snapshot.forEach((childSnapshot) => {
         dataArray.push({ id: childSnapshot.key, ...childSnapshot.val() });
       });
-      const filteredItems = dataArray.filter(
-        (item) => item.userId === authCtx.userId
+      const filteredAccounts = dataArray.filter((item) => {
+        return item.userId === authCtx.userId;
+      });
+      const filteredWeakAccounts = filteredAccounts.filter((item) => {
+        return isWeakPassword(item.password);
+      });
+      const filteredDuplicateAccounts = filteredAccounts.filter((item) => {
+        return isDuplicatePassword(
+          item.password,
+          filteredAccounts.map((account) => account.password)
+        );
+      });
+      const filterStrongAccounts = filteredAccounts.filter(
+        (item) =>
+          checkingForStrongAccount(
+            item.userName,
+            filteredWeakAccounts.map((account) => account.userName)
+          ) &&
+          checkingForStrongAccount(
+            item.userName,
+            filteredDuplicateAccounts.map((account) => account.userName)
+          )
       );
-      setFetchedAccounts(filteredItems);
+      const filteredCompromisedAccounts = filteredAccounts.filter((item) =>
+        checkingForCompromisedAccount(item.password)
+      );
+      setFetchedCompromisedAccounts(filteredCompromisedAccounts);
+      setFetchedStrongAccounts(filterStrongAccounts);
+      setFetchedWeakAccounts(filteredWeakAccounts);
+      setFetchedDuplicateAccounts(filteredDuplicateAccounts);
+      setFetchedAccountsQuantity(filteredAccounts.length);
     };
     onValue(accountsRef, onValueChangeAccounts);
 
     // Ngắt kết nối listener khi component unmount
     return () => {
-      off(accountsRef, onValueChangeAccounts);
+      // off(accountsRef, onValueChangeAccounts);
     };
   }, []);
-  const navigation = useNavigation();
-
-  function navigateChecker() {
-    console.log(fetchedAccounts);
-    navigation.navigate("CheckerileListScreen");
-  }
   return (
     <>
       <View style={styles.container}>
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>You have 2 passwords</Text>
+          <Text style={styles.title}>
+            You have {fetchedAccountsQuantity} passwords
+          </Text>
           <Text style={styles.sub}>
             Some of your passwords need your attention.
           </Text>
         </View>
         <CheckerCategrory
-          onPress={navigateChecker}
+          onPress={navigateChecker.bind(this,"dmm")}
           icon="lock-open-variant"
           color={Colors.red100}
-          num={10}
+          num={fetchedCompromisedAccounts.length}
           strengh="Compromised"
         ></CheckerCategrory>
         <CheckerCategrory
           icon="alert-outline"
           color={Colors.red100}
-          num={10}
-          strengh="Compromised"
+          num={fetchedWeakAccounts.length}
+          strengh="Weak"
         ></CheckerCategrory>
         <CheckerCategrory
           icon="check-circle-outline"
           color={Colors.green500}
-          num={10}
-          strengh="Compromised"
+          num={fetchedStrongAccounts.length}
+          strengh="Strong"
         ></CheckerCategrory>
         <CheckerCategrory
           icon="checkbox-multiple-blank-outline"
           color={Colors.yellow100}
-          num={10}
-          strengh="Compromised"
+          num={fetchedDuplicateAccounts.length}
+          strengh="Duplicate"
         ></CheckerCategrory>
       </View>
     </>
