@@ -1,22 +1,44 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Linking, StyleSheet, Text, View } from "react-native";
 import CheckerDetail from "../../components/PasswordChecker/CheckerDetail";
 import CheckerForm from "../../components/PasswordChecker/CheckerForm";
 import CusButton from "../../components/CusButton";
 import Colors from "../../constants/Colors";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 function CheckerItemDetail() {
+  const route = useRoute();
+  const navigation = useNavigation();
+  function onPressEdit() {
+    navigation.navigate("websiteAddingScreen", route.params.item);
+  }
+  function onPressWeb(webURL) {
+    Linking.openURL("https://" + webURL);
+  }
   return (
     <View style={styles.container}>
       <CheckerDetail
-        weak={true}
-        duplicate={true}
-        compromised={true}
-        good={true}></CheckerDetail>
+        weak={route.params.weak}
+        duplicate={route.params.duplicate}
+        compromised={route.params.compromised}
+        good={route.params.strong}
+      ></CheckerDetail>
       <View style={styles.formcontainer}>
-        <CheckerForm website="youtube"></CheckerForm>
+        <CheckerForm
+          app={route.params.item.webName}
+          userName={route.params.item.userName}
+          password={route.params.item.password}
+        ></CheckerForm>
       </View>
-      <CusButton>Change password on website</CusButton>
-      <CusButton bgc="transparent" borcolor="transparent"  pressedbgc={Colors.gray200} color={Colors.green500}>Edit Account</CusButton>
+      <CusButton onPress={onPressWeb.bind(this,route.params.item.webURL)}>Change password on website</CusButton>
+      <CusButton
+        onPress={onPressEdit}
+        bgc="transparent"
+        borcolor="transparent"
+        pressedbgc={Colors.gray200}
+        color={Colors.green500}
+      >
+        Edit Account
+      </CusButton>
     </View>
   );
 }
@@ -28,7 +50,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "white",
   },
-  formcontainer:{
-    marginBottom:20,
-  }
+  formcontainer: {
+    marginBottom: 20,
+  },
 });

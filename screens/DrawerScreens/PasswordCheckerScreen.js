@@ -50,8 +50,42 @@ function PasswordCheckerScreen() {
     return false;
   }
   function navigateChecker(category) {
-    console.log(category);
-    navigation.navigate("CheckerileListScreen");
+    if (category == "Compromised") {
+      navigation.navigate("CheckerileListScreen", {
+        compromised: fetchedCompromisedAccounts,
+        weak: fetchedWeakAccounts,
+        duplicate: fetchedDuplicateAccounts,
+        strong: fetchedStrongAccounts,
+        state: "Compromised",
+      });
+    }
+    if (category == "Weak") {
+      navigation.navigate("CheckerileListScreen", {
+        compromised: fetchedCompromisedAccounts,
+        weak: fetchedWeakAccounts,
+        duplicate: fetchedDuplicateAccounts,
+        strong: fetchedStrongAccounts,
+        state: "Weak",
+      });
+    }
+    if (category == "Strong") {
+      navigation.navigate("CheckerileListScreen", {
+        compromised: fetchedCompromisedAccounts,
+        weak: fetchedWeakAccounts,
+        duplicate: fetchedDuplicateAccounts,
+        strong: fetchedStrongAccounts,
+        state: "Strong",
+      });
+    }
+    if (category == "Duplicate") {
+      navigation.navigate("CheckerileListScreen", {
+        compromised: fetchedCompromisedAccounts,
+        weak: fetchedWeakAccounts,
+        duplicate: fetchedDuplicateAccounts,
+        strong: fetchedStrongAccounts,
+        state: "Duplicate",
+      });
+    }
   }
   function checkingForStrongAccount(userName, userNames) {
     return !userNames.includes(userName);
@@ -118,25 +152,28 @@ function PasswordCheckerScreen() {
           </Text>
         </View>
         <CheckerCategrory
-          onPress={navigateChecker.bind(this,"dmm")}
+          onPress={navigateChecker.bind(this, "Compromised")}
           icon="lock-open-variant"
           color={Colors.red100}
           num={fetchedCompromisedAccounts.length}
           strengh="Compromised"
         ></CheckerCategrory>
         <CheckerCategrory
+          onPress={navigateChecker.bind(this, "Weak")}
           icon="alert-outline"
           color={Colors.red100}
           num={fetchedWeakAccounts.length}
           strengh="Weak"
         ></CheckerCategrory>
         <CheckerCategrory
+          onPress={navigateChecker.bind(this, "Strong")}
           icon="check-circle-outline"
           color={Colors.green500}
           num={fetchedStrongAccounts.length}
           strengh="Strong"
         ></CheckerCategrory>
         <CheckerCategrory
+          onPress={navigateChecker.bind(this, "Duplicate")}
           icon="checkbox-multiple-blank-outline"
           color={Colors.yellow100}
           num={fetchedDuplicateAccounts.length}

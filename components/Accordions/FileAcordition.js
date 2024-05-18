@@ -38,7 +38,6 @@ function FileAcordition({
   const [imageURL, setImageURL] = useState(
     "https://img.freepik.com/free-vector/loading-circles-blue-gradient_78370-2646.jpg?size=338&ext=jpg&ga=GA1.1.553209589.1715472000&semt=sph"
   );
-  console.log(value);
   const heightValue = useSharedValue(0);
   const open = useSharedValue(false);
   const progress = useDerivedValue(() =>
