@@ -163,6 +163,7 @@ function AllItemScreen() {
                 handlePresentModal={handlePresentModal}
                 value={item}
                 imageName={item.fileName}
+                
               ></FileAcordition>
             ) : null
           }
