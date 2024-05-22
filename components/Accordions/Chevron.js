@@ -2,7 +2,7 @@ import { View } from "react-native";
 import { Icon } from "react-native-paper";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
-function Chevron({ progress }) {
+function Chevron({ progress,style }) {
   const iconStyle = useAnimatedStyle(() => ({
     transform: [{ rotate: `${progress.value * -180}deg` }],
   }));

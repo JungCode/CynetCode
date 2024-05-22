@@ -1,24 +1,25 @@
 import { Button, StyleSheet, Text, View } from "react-native";
 import AddingItem from "../../components/AddingItem";
+import AddingItemAcordition from "../../components/AddingItemAcordition";
 
 function AddingOptionsModal({ navigation }) {
   return (
     <View style={styles.container}>
-      <AddingItem
-        name="Acount"
-        iconName="person-circle-outline"
-        navigationName="websiteAddingScreen"
-      />
-      <AddingItem name="Bank Account" iconName="card-outline" />
-      <AddingItem name="Picture" iconName="person-circle-outline" />
-      <AddingItem name="Documents" iconName="document-outline" />
-      <AddingItem name="Address" iconName="home-outline" />
-      <AddingItem
-        name="Notes"
-        iconName="reader-outline"
-        navigationName="noteAddingScreen"
-      />
-      <AddingItem name="Folder" iconName="person-circle-outline" />
+      <AddingItemAcordition name="Acount" icon="account-circle-outline">
+        <AddingItem name="Website" iconName="web"></AddingItem>
+        <AddingItem
+          name="Application"
+          iconName="view-grid-outline"></AddingItem>
+        <AddingItem name="Other" iconName="view-grid-plus-outline"></AddingItem>
+      </AddingItemAcordition>
+      <AddingItem name="Bank Account" iconName="credit-card-outline" />
+      <AddingItemAcordition name="File" icon="file-outline">
+        <AddingItem name="Camera" iconName="camera-outline"></AddingItem>
+        <AddingItem name="Gallery" iconName="file-image"></AddingItem>
+      </AddingItemAcordition>
+      <AddingItem name="Address" iconName="town-hall" />
+      <AddingItem name="Notes" iconName="notebook-outline" navigationName="" />
+      <AddingItem name="Folder" iconName="folder-outline" />
     </View>
   );
 }

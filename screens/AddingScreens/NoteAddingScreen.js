@@ -6,6 +6,7 @@ import { AuthContext } from "../../store/auth-context";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import LoadingOverlay from "../../components/LoadingOverlay";
 import { ItemsContext } from "../../store/items-context";
+import CusButton from "../../components/CusButton";
 function NoteAddingScreen() {
   const route = useRoute();
   const [noteTitle, setNoteTitle] = useState(
@@ -72,7 +73,7 @@ function NoteAddingScreen() {
         label="Note"
         style={[styles.inputStyle, styles.paragraphStyle]}
       />
-      <Button onPress={submitHandler} title="Save" />
+      <CusButton onPress={submitHandler}> Save</CusButton>
     </View>
   );
 }
@@ -89,5 +90,7 @@ const styles = StyleSheet.create({
   },
   paragraphStyle: {
     height: 200,
+    justifyContent: "flex-start",
+    textAlignVertical: 'top', 
   },
 });

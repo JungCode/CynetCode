@@ -138,6 +138,7 @@ function AllItemScreen() {
       <Pressable onPress={handleDismissModal} style={styles.container}>
         {/* Overlay */}
         {isBottomDisplay && <View style={styles.overlay} />}
+        
         <FlatList
           data={[...fetchedAccounts, ...fetchedNotes, ...fetchedFiles]}
           renderItem={({ item }) =>

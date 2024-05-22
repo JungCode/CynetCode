@@ -1,5 +1,6 @@
 import {
   Image,
+  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -26,7 +27,8 @@ import { useEffect, useState } from "react";
 import firebase from "firebase/compat/app";
 import "firebase/compat/storage";
 import { firebaseConfig } from "../../util/https-fetch";
-
+import * as OpenAnything from "react-native-openanything";
+import * as IntentLauncher from "expo-intent-launcher";
 function FileAcordition({
   value,
   handlePresentModal,
@@ -38,7 +40,6 @@ function FileAcordition({
   const [imageURL, setImageURL] = useState(
     "https://img.freepik.com/free-vector/loading-circles-blue-gradient_78370-2646.jpg?size=338&ext=jpg&ga=GA1.1.553209589.1715472000&semt=sph"
   );
-  console.log(value);
   const heightValue = useSharedValue(0);
   const open = useSharedValue(false);
   const progress = useDerivedValue(() =>
@@ -88,12 +89,17 @@ function FileAcordition({
             heightValue.value = withTiming(0);
           }
           open.value = !open.value;
-        }}
-      >
+        }}>
         <View style={styles.maintitle}>
           <Chevron progress={progress}></Chevron>
           <View style={styles.imgStyle}>
-            <Icon source="file-image-outline" size={35}></Icon>
+            {value.fileType === "photo" ? (
+              <Icon source="file-image-outline" size={35}></Icon>
+            ) : value.fileType === "pdf" ? (
+              <Icon source="file-pdf-box" size={35}></Icon>
+            ) : value.fileType === "word" ? (
+              <Icon source="file-word-box" size={35}></Icon>
+            ) : null}
           </View>
           {/* <Image source={{ uri: fecthedImg }} style={styles.imgStyle} /> */}
           <View style={styles.textTitleContainer}>
@@ -108,8 +114,7 @@ function FileAcordition({
               imgURL: fecthedImg,
             },
             setIsFetchedItems
-          )}
-        >
+          )}>
           <Icon source="dots-vertical" size={25}></Icon>
         </Pressable>
       </Pressable>
@@ -123,9 +128,63 @@ function FileAcordition({
               <View style={styles.copywrap}></View>
             </View>
             <View style={styles.imageContainer}>
-              <Image source={{ uri: imageURL }} style={styles.image} />
+              {value.fileType === "photo" ? (
+                <Image source={{ uri: imageURL }} style={styles.image} />
+              ) : value.fileType === "pdf" ? (
+                <Icon source="file-pdf-box" size={35} onPress={() => {}}></Icon>
+              ) : value.fileType === "word" ? (
+                <Icon source="file-word-box" size={35}></Icon>
+              ) : null}
             </View>
-            <FlatButton onPress={() => {}}>Open</FlatButton>
+            <FlatButton
+              onPress={() => {
+                if (value.fileType === "pdf") {
+                  if (Platform.OS === "ios") {
+                    WebBrowser.dismissBrowser();
+                    WebBrowser.openBrowserAsync(imageURL);
+                  } else {
+                    IntentLauncher.startActivityAsync(
+                      "android.intent.action.VIEW",
+                      {
+                        type: "application/pdf",
+                        data: imageURL,
+                      }
+                    );
+                  }
+                }
+                if (value.fileType === "photo") {
+                  OpenAnything.Open(imageURL);
+                  if (Platform.OS === "ios") {
+                    WebBrowser.dismissBrowser();
+                    WebBrowser.openBrowserAsync(imageURL);
+                  } else {
+                    IntentLauncher.startActivityAsync(
+                      "android.intent.action.VIEW",
+                      {
+                        type: "image/*",
+                        data: imageURL,
+                      }
+                    );
+                  }
+                }
+                if (value.fileType === "word") {
+                  console.log(imageURL);
+                  if (Platform.OS === "ios") {
+                    WebBrowser.dismissBrowser();
+                    WebBrowser.openBrowserAsync(imageURL);
+                  } else {
+                    IntentLauncher.startActivityAsync(
+                      "android.intent.action.VIEW",
+                      {
+                        type: "aapplication/msword",
+                        data: imageURL,
+                      }
+                    );
+                  }
+                }
+              }}>
+              Open
+            </FlatButton>
           </View>
         </Animated.View>
       </Animated.View>
