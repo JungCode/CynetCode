@@ -4,7 +4,7 @@ import { Icon, IconButton } from "react-native-paper";
 import Colors from "../../constants/Colors";
 import CusButton from "../CusButton";
 
-function CheckerForm({ website }) {
+function CheckerForm({ app, userName, password }) {
   const [passwordSecure, setPasswordSecure] = useState(true);
   function handleSecure(password) {
     const hiddenPassword = password.replace(/./g, "•");
@@ -18,14 +18,14 @@ function CheckerForm({ website }) {
       <View>
         <Text style={styles.title}>Website</Text>
         <View style={styles.textwrap}>
-          <Text style={styles.content}>{website}</Text>
+          <Text style={styles.content}>{app}</Text>
           <Icon source="content-copy" size={30} color={Colors.gray400}></Icon>
         </View>
       </View>
       <View>
         <Text style={styles.title}>Account</Text>
         <View style={styles.textwrap}>
-          <Text style={styles.content}>{website}</Text>
+          <Text style={styles.content}>{userName}</Text>
           <Icon source="content-copy" size={30} color={Colors.gray400}></Icon>
         </View>
       </View>
@@ -33,7 +33,7 @@ function CheckerForm({ website }) {
         <Text style={styles.title}>Password</Text>
         <View style={styles.textwrap}>
           <Text style={styles.content}>
-            {passwordSecure ? handleSecure(website) : website}
+            {passwordSecure ? handleSecure(password) : password}
           </Text>
           <View style={styles.iconwrap}>
             <Pressable onPress={togglePasswordVisibility}>
