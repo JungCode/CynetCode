@@ -17,8 +17,8 @@ function AddingOptionsModal({ navigation }) {
         <AddingItem name="Camera" iconName="camera-outline"></AddingItem>
         <AddingItem name="Gallery" iconName="file-image"></AddingItem>
       </AddingItemAcordition>
-      <AddingItem name="Address" iconName="town-hall" />
-      <AddingItem name="Notes" iconName="notebook-outline" navigationName="" />
+      <AddingItem name="Address" iconName="town-hall" navigationName="addressAddingScreen"/>
+      <AddingItem name="Notes" iconName="notebook-outline" navigationName="noteAddingScreen" />
       <AddingItem name="Folder" iconName="folder-outline" />
     </View>
   );

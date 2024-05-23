@@ -58,6 +58,7 @@ function AddingItemAcordition({ icon, name,children }) {
           open.value = !open.value;
         }}>
         <View style={styles.maintitle}>
+        
           <View style={styles.chevron}>
             <Chevron progress={progress}></Chevron>
           </View>

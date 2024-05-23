@@ -19,6 +19,7 @@ import NoteAddingScreen from "./screens/AddingScreens/NoteAddingScreen";
 import FileAddingScreen from "./screens/AddingScreens/FileAddingScreen";
 import CheckerListScreen from "./screens/PasswordChecker/CheckerListScreen";
 import CheckerItemDetail from "./screens/PasswordChecker/CheckerItemDetail";
+import AddressAddingScreen from "./screens/AddingScreens/AddressAddingScreen";
 const Stack = createNativeStackNavigator();
 
 function SignupStack() {
@@ -150,6 +151,18 @@ function ModalScreen() {
           component={FileAddingScreen}
           options={{
             headerTitle: "File",
+            animation: "slide_from_right",
+            headerStyle: {
+              alignItems: "center",
+            },
+            headerLeft: (props) => <HeaderCloseButton />,
+          }}
+        />
+        <Stack.Screen
+          name="addressAddingScreen"
+          component={AddressAddingScreen}
+          options={{
+            headerTitle: "Address",
             animation: "slide_from_right",
             headerStyle: {
               alignItems: "center",
