@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SafeAreaView, StyleSheet } from "react-native";
+import { SafeAreaView, StyleSheet, View } from "react-native";
 import { SegmentedButtons } from "react-native-paper";
 import Colors from "../../constants/Colors";
 import AllAccount from "../../components/Accountlist/AllAccount";
@@ -30,10 +30,22 @@ function AccountScreen() {
           { value: "other", label: "Other" },
         ]}
       />
-      {value === "all" ? <AllAccount /> : null}
+      <View style={value === "all" ? styles.cover : styles.hidden}>
+        <AllAccount/>
+      </View>
+      <View style={value === "website" ? styles.cover : styles.hidden}>
+        <WebsiteAccount/>
+      </View>
+      <View style={value === "app" ? styles.cover : styles.hidden}>
+        <AppAccount />
+      </View>
+      <View style={value === "other" ? styles.cover : styles.hidden}>
+        <OtherAccount />
+      </View>
+      {/* {value === "all" ? <AllAccount /> : null}
       {value === "website" ? <WebsiteAccount /> : null}
       {value === "app" ? <AppAccount /> : null}
-      {value === "other" ? <OtherAccount /> : null}
+      {value === "other" ? <OtherAccount /> : null} */}
     </SafeAreaView>
   );
 }
@@ -47,5 +59,13 @@ const styles = StyleSheet.create({
   },
   segcontainer: {
     fontWeight: "400",
+    width: "100%",
+  },
+  cover: {
+    flex: 1,
+    width: "100%",
+  },
+  hidden: {
+    display: "none",
   },
 });

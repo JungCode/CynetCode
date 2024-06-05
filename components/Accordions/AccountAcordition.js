@@ -23,6 +23,7 @@ import Colors from "../../constants/Colors";
 import CusButton from "../CusButton";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
+import TwoFADisplay from "../TwoFADisplay";
 function AccountAcordition({
   openInBrowser,
   value,
@@ -155,6 +156,7 @@ function AccountAcordition({
                 </Pressable>
               </View>
             </View>
+            <TwoFADisplay></TwoFADisplay>
             {value.webURL ? (
               <CusButton onPress={openInBrowser.bind(this, value.webURL)}>
                 Open in browser
