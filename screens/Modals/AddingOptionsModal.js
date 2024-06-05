@@ -6,10 +6,10 @@ function AddingOptionsModal({ navigation }) {
   return (
     <View style={styles.container}>
       <AddingItemAcordition name="Acount" icon="account-circle-outline">
-        <AddingItem name="Website" iconName="web"></AddingItem>
+        <AddingItem name="Website" iconName="web" navigationName="websiteAddingScreen"></AddingItem>
         <AddingItem
           name="Application"
-          iconName="view-grid-outline"></AddingItem>
+          iconName="view-grid-outline" navigationName="appAddingScreen"></AddingItem>
         <AddingItem name="Other" iconName="view-grid-plus-outline"></AddingItem>
       </AddingItemAcordition>
       <AddingItem name="Bank Account" iconName="credit-card-outline" />

@@ -6,6 +6,7 @@ import { useContext, useEffect, useState } from "react";
 import { onValue, ref } from "firebase/database";
 import { db } from "../../util/https-fetch";
 import { AuthContext } from "../../store/auth-context";
+import { Buffer } from 'buffer';
 
 function PasswordCheckerScreen() {
   const [fetchedWeakAccounts, setFetchedWeakAccounts] = useState([]);
@@ -99,8 +100,13 @@ function PasswordCheckerScreen() {
     const onValueChangeAccounts = (snapshot) => {
       const dataArray = [];
       snapshot.forEach((childSnapshot) => {
-        dataArray.push({ id: childSnapshot.key, ...childSnapshot.val() });
+        const decodedPasswordBuffer = Buffer.from(childSnapshot.val().password, 'base64');
+        // Convert Buffer back to string
+        const decodedPassword = decodedPasswordBuffer.toString('utf-8');
+
+        dataArray.push({ id: childSnapshot.key, ...childSnapshot.val(),password: decodedPassword });
       });
+      console.log(dataArray);
       const filteredAccounts = dataArray.filter((item) => {
         return item.userId === authCtx.userId;
       });

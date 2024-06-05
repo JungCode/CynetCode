@@ -54,9 +54,15 @@ function AccountAcordition({
       setFetchedImg("https://cdn-icons-png.flaticon.com/512/72/72626.png");
     }
   };
-  checkFaviconExistence(value.webURL);
-  if (!fecthedImg)
-    setFetchedImg("https://cdn-icons-png.flaticon.com/512/72/72626.png");
+  let IMGAPP;
+  if (value.webName != undefined) {
+    checkFaviconExistence(value.webURL);
+    if (!fecthedImg)
+      setFetchedImg("https://cdn-icons-png.flaticon.com/512/72/72626.png");
+  } else if (value.appName != undefined) {
+    IMGAPP =
+      "https://cdn.icon-icons.com/icons2/2483/PNG/512/application_icon_149973.png";
+  }
   return (
     <View style={styles.container}>
       <Pressable
@@ -72,13 +78,27 @@ function AccountAcordition({
             heightValue.value = withTiming(0);
           }
           open.value = !open.value;
-        }}>
+        }}
+      >
         <View style={styles.maintitle}>
           <Chevron progress={progress}></Chevron>
-          <Image source={{ uri: fecthedImg }} style={styles.imgStyle} />
+          <Image
+            source={{
+              uri: value.appName ? IMGAPP : value.webName ? fecthedImg : null,
+            }}
+            style={styles.imgStyle}
+          />
           <View style={styles.textTitleContainer}>
-            <Text style={styles.textTitle}>{value.webName}</Text>
-            <Text style={styles.suburl}>{value.webURL}</Text>
+            <Text style={styles.textTitle}>
+              {value.appName
+                ? value.appName
+                : value.webName
+                ? value.webName
+                : null}
+            </Text>
+            {value.webURL != undefined ? (
+              <Text style={styles.suburl}>{value.webURL}</Text>
+            ) : null}
           </View>
         </View>
         <Pressable
@@ -86,10 +106,15 @@ function AccountAcordition({
             this,
             {
               ...value,
-              imgURL: fecthedImg,
+              imgURL: value.appName
+                ? IMGAPP
+                : value.webName
+                ? fecthedImg
+                : null,
             },
             setIsFetchedItems
-          )}>
+          )}
+        >
           <Icon source="dots-vertical" size={25}></Icon>
         </Pressable>
       </Pressable>
@@ -106,7 +131,8 @@ function AccountAcordition({
                   <Icon
                     style={styles.iconstyle}
                     source="content-copy"
-                    size={25}></Icon>
+                    size={25}
+                  ></Icon>
                 </Pressable>
               </View>
             </View>
@@ -118,18 +144,22 @@ function AccountAcordition({
                 <TextInput
                   value={value.password}
                   secureTextEntry
-                  style={styles.subtext}></TextInput>
+                  style={styles.subtext}
+                ></TextInput>
                 <Pressable>
                   <Icon
                     style={styles.iconstyle}
                     source="content-copy"
-                    size={25}></Icon>
+                    size={25}
+                  ></Icon>
                 </Pressable>
               </View>
             </View>
-            <CusButton onPress={openInBrowser.bind(this, value.webURL)}>
-              Open in browser
-            </CusButton>
+            {value.webURL ? (
+              <CusButton onPress={openInBrowser.bind(this, value.webURL)}>
+                Open in browser
+              </CusButton>
+            ) : null}
           </View>
         </Animated.View>
       </Animated.View>

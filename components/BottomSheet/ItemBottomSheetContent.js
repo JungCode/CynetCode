@@ -5,7 +5,8 @@ import { useNavigation } from "@react-navigation/native";
 import { useContext, useEffect, useState } from "react";
 import { ItemsContext } from "../../store/items-context";
 import { ToastAndroid } from "react-native";
-
+import { Buffer } from "buffer";
+import CryptoJS from "crypto-js";
 function ItemBottomSheetContent({
   item,
   setIsFetchedItems,
@@ -15,12 +16,32 @@ function ItemBottomSheetContent({
   const itemDB = { ...item };
   const itemsCtx = useContext(ItemsContext);
   const [toggleButton, setToggleButton] = useState(item.favorite);
+  const name = item.appName
+    ? item.appName
+    : item.webName
+    ? item.webName
+    : item.noteTitle
+    ? item.noteTitle
+    : null;
+  const secondName = item.appName
+    ? "Application"
+    : item.webName
+    ? item.webURL
+    : item.noteTitle
+    ? "Note"
+    : null;
   function deleteHandler() {
     if (item.noteTitle !== undefined) {
       itemsCtx.deleteItem(item.id, "NoteItems");
     }
     if (item.webURL !== undefined) {
       itemsCtx.deleteItem(item.id, "webItems");
+    }
+    if (itemDB.appName !== undefined) {
+      itemsCtx.deleteItem(item.id, "appItems");
+    }
+    if (itemDB.fileName !== undefined) {
+      itemsCtx.deleteItem(item.id, "FileItems");
     }
     ToastAndroid.show("Deleted item!", ToastAndroid.SHORT);
     handleDismissModal();
@@ -32,6 +53,9 @@ function ItemBottomSheetContent({
     if (item.webURL !== undefined) {
       navigation.navigate("websiteAddingScreen", item);
     }
+    if (item.appName !== undefined) {
+      navigation.navigate("appAddingScreen", item);
+    }
     handleDismissModal();
   }
   function favoriteHandler() {
@@ -41,10 +65,22 @@ function ItemBottomSheetContent({
       itemsCtx.updateFavoriteItem(itemDB.id, itemDB, "NoteItems");
     }
     if (itemDB.webURL !== undefined) {
+      const passwordBuffer = Buffer.from(itemDB.password, "utf-8");
+
+      // Encode password buffer to base64
+      const encodedPassword = passwordBuffer.toString("base64");
+      itemDB.password = encodedPassword;
       itemsCtx.updateFavoriteItem(itemDB.id, itemDB, "webItems");
     }
-    if (itemDB.imgURL !== undefined) {
+    if (itemDB.fileName !== undefined) {
       itemsCtx.updateFavoriteItem(itemDB.id, itemDB, "FileItems");
+    }
+    if (itemDB.appName !== undefined) {
+      const passwordBuffer = Buffer.from(itemDB.password, "utf-8");
+      const encodedPassword = passwordBuffer.toString("base64");
+      // Encode password buffer to base64
+      itemDB.password = encodedPassword;
+      itemsCtx.updateFavoriteItem(itemDB.id, itemDB, "appItems");
     }
 
     handleDismissModal();
@@ -62,8 +98,8 @@ function ItemBottomSheetContent({
           <Image source={{ uri: item.imgURL }} style={styles.imgStyle} />
         </View>
         <View style={styles.textTitleContainer}>
-          <Text style={styles.textTitle}>{item.webName}</Text>
-          <Text style={styles.suburl}>{item.webURL}</Text>
+          <Text style={styles.textTitle}>{name}</Text>
+          <Text style={styles.suburl}>{secondName}</Text>
         </View>
       </View>
       <Divider></Divider>
