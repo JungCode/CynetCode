@@ -12,7 +12,7 @@ import ItemBottomSheetContent from "../../components/BottomSheet/ItemBottomSheet
 
 import { off, onValue, ref } from "firebase/database";
 import { db } from "../../util/https-fetch";
-import { Buffer } from "buffer";
+import CryptoJS from "react-native-crypto-js";
 
 function AllAccount() {
   const [fetchedAccounts, setFetchedAccounts] = useState([]);
@@ -28,17 +28,15 @@ function AllAccount() {
     const onValueChangeAccounts = (snapshot) => {
       const dataArray = [];
       snapshot.forEach((childSnapshot) => {
-        const decodedPasswordBuffer = Buffer.from(
+        let bytes = CryptoJS.AES.decrypt(
           childSnapshot.val().password,
-          "base64"
+          authCtx.userId
         );
-        // Convert Buffer back to string
-        const decodedPassword = decodedPasswordBuffer.toString("utf-8");
-
+        let originalText = bytes.toString(CryptoJS.enc.Utf8);
         dataArray.push({
           id: childSnapshot.key,
           ...childSnapshot.val(),
-          password: decodedPassword,
+          password: originalText,
         });
       });
       const filteredItems = dataArray.filter(
@@ -60,17 +58,15 @@ function AllAccount() {
     const onValueChangeApps = (snapshot) => {
       const dataArray = [];
       snapshot.forEach((childSnapshot) => {
-        const decodedPasswordBuffer = Buffer.from(
+        let bytes = CryptoJS.AES.decrypt(
           childSnapshot.val().password,
-          "base64"
+          authCtx.userId
         );
-        // Convert Buffer back to string
-        const decodedPassword = decodedPasswordBuffer.toString("utf-8");
-
+        let originalText = bytes.toString(CryptoJS.enc.Utf8);
         dataArray.push({
           id: childSnapshot.key,
           ...childSnapshot.val(),
-          password: decodedPassword,
+          password: originalText,
         });
       });
       const filteredItems = dataArray.filter(

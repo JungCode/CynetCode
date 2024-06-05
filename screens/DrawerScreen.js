@@ -27,9 +27,11 @@ function DrawerScreen() {
   const authCtx = useContext(AuthContext);
 
   const [fetchedAccountsQuantity, setAccountsQuantity] = useState();
+  const [fetchedAppsQuantity, setAppsQuantity] = useState();
   const [fetchedNotesQuantity, setNotesQuantity] = useState();
   const [fetchedFilesQuantity, setFilesQuantity] = useState();
   const [fetchedFvtAccountsQuantity, setFvtAccountsQuantity] = useState();
+  const [fetchedFvtAppsQuantity, setFvtAppsQuantity] = useState();
   const [fetchedFvtNotesQuantity, setFvtNotesQuantity] = useState();
   const [fetchedFvtFilesQuantity, setFvtFilesQuantity] = useState();
   const [fetchedFavoritesQuantity, setFavoritesQuantity] = useState(0);
@@ -51,6 +53,30 @@ function DrawerScreen() {
       });
       setFvtAccountsQuantity(fvtCount);
       setAccountsQuantity(count);
+    };
+    onValue(accountsRef, onValueChangeAccounts);
+    return () => {
+      off(accountsRef, onValueChangeAccounts);
+    };
+  }, []);
+  useEffect(() => {
+    const accountsRef = ref(db, "appItems");
+    // Lắng nghe sự thay đổi trong Realtime Database
+    const onValueChangeAccounts = (snapshot) => {
+      const dataArray = [];
+      snapshot.forEach((childSnapshot) => {
+        dataArray.push({ id: childSnapshot.key, ...childSnapshot.val() });
+      });
+      let count = 0;
+      let fvtCount = 0;
+      dataArray.forEach((item) => {
+        if (item.userId == authCtx.userId) {
+          count++;
+          if (item.favorite) fvtCount++;
+        }
+      });
+      setFvtAppsQuantity(fvtCount);
+      setAppsQuantity(count);
     };
     onValue(accountsRef, onValueChangeAccounts);
     return () => {
@@ -136,10 +162,12 @@ function DrawerScreen() {
           itemsQuantity={{
             AllItems:
               fetchedAccountsQuantity +
+              fetchedAppsQuantity +
               fetchedFilesQuantity +
               fetchedNotesQuantity,
             Favorites:
               fetchedFvtAccountsQuantity +
+              fetchedFvtAppsQuantity +
               fetchedFvtNotesQuantity +
               fetchedFvtFilesQuantity,
             Account: fetchedAccountsQuantity,

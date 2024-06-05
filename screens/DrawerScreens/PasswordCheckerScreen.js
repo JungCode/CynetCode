@@ -6,7 +6,8 @@ import { useContext, useEffect, useState } from "react";
 import { onValue, ref } from "firebase/database";
 import { db } from "../../util/https-fetch";
 import { AuthContext } from "../../store/auth-context";
-import { Buffer } from 'buffer';
+import { Buffer } from "buffer";
+import CryptoJS from "react-native-crypto-js";
 
 function PasswordCheckerScreen() {
   const [fetchedWeakAccounts, setFetchedWeakAccounts] = useState([]);
@@ -100,13 +101,18 @@ function PasswordCheckerScreen() {
     const onValueChangeAccounts = (snapshot) => {
       const dataArray = [];
       snapshot.forEach((childSnapshot) => {
-        const decodedPasswordBuffer = Buffer.from(childSnapshot.val().password, 'base64');
-        // Convert Buffer back to string
-        const decodedPassword = decodedPasswordBuffer.toString('utf-8');
-
-        dataArray.push({ id: childSnapshot.key, ...childSnapshot.val(),password: decodedPassword });
+        let bytes = CryptoJS.AES.decrypt(
+          childSnapshot.val().password,
+          authCtx.userId
+        );
+        let originalText = bytes.toString(CryptoJS.enc.Utf8);
+        dataArray.push({
+          id: childSnapshot.key,
+          ...childSnapshot.val(),
+          password: originalText,
+        });
       });
-      console.log(dataArray);
+      // console.log(dataArray);
       const filteredAccounts = dataArray.filter((item) => {
         return item.userId === authCtx.userId;
       });

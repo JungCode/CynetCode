@@ -7,7 +7,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import LoadingOverlay from "../../components/LoadingOverlay";
 import { ItemsContext } from "../../store/items-context";
 import { ToastAndroid } from "react-native";
-import { Buffer } from 'buffer';
+import CryptoJS from "react-native-crypto-js";
 
 function WebsiteAddingScreen() {
   const route = useRoute();
@@ -49,17 +49,16 @@ function WebsiteAddingScreen() {
   }
   function submitHandler() {
     setIsStoring(true);
-    // Convert password to a Buffer
-    const passwordBuffer = Buffer.from(password, "utf-8");
-
-    // Encode password buffer to base64
-    const encodedPassword = passwordBuffer.toString("base64");
+    let ciphertext = CryptoJS.AES.encrypt(
+      password,
+      authCtx.userId
+    ).toString();
 
     const item = {
       webURL: webURL,
       webName: webName,
       userName: userName,
-      password: encodedPassword,
+      password: ciphertext,
       description: description,
       userId: authCtx.userId,
       favorite: false,
@@ -69,7 +68,7 @@ function WebsiteAddingScreen() {
       navigation.navigate("drawerScreen");
       ToastAndroid.show("Edited item successfull!", ToastAndroid.SHORT);
     } else {
-      itemsCtx.storeItem(item, "web");
+      // itemsCtx.storeItem(item, "web");
       navigation.navigate("drawerScreen");
       ToastAndroid.show("Added item successfull!", ToastAndroid.SHORT);
     }

@@ -5,8 +5,8 @@ import { useNavigation } from "@react-navigation/native";
 import { useContext, useEffect, useState } from "react";
 import { ItemsContext } from "../../store/items-context";
 import { ToastAndroid } from "react-native";
-import { Buffer } from "buffer";
-import CryptoJS from "crypto-js";
+import CryptoJS from "react-native-crypto-js";
+import { AuthContext } from "../../store/auth-context";
 function ItemBottomSheetContent({
   item,
   setIsFetchedItems,
@@ -15,6 +15,7 @@ function ItemBottomSheetContent({
   const navigation = useNavigation();
   const itemDB = { ...item };
   const itemsCtx = useContext(ItemsContext);
+  const authCtx = useContext(AuthContext);
   const [toggleButton, setToggleButton] = useState(item.favorite);
   const name = item.appName
     ? item.appName
@@ -65,21 +66,22 @@ function ItemBottomSheetContent({
       itemsCtx.updateFavoriteItem(itemDB.id, itemDB, "NoteItems");
     }
     if (itemDB.webURL !== undefined) {
-      const passwordBuffer = Buffer.from(itemDB.password, "utf-8");
-
-      // Encode password buffer to base64
-      const encodedPassword = passwordBuffer.toString("base64");
-      itemDB.password = encodedPassword;
+      let ciphertext = CryptoJS.AES.encrypt(
+        itemDB.password,
+        authCtx.userId
+      ).toString();
+      itemDB.password = ciphertext;
       itemsCtx.updateFavoriteItem(itemDB.id, itemDB, "webItems");
     }
     if (itemDB.fileName !== undefined) {
       itemsCtx.updateFavoriteItem(itemDB.id, itemDB, "FileItems");
     }
     if (itemDB.appName !== undefined) {
-      const passwordBuffer = Buffer.from(itemDB.password, "utf-8");
-      const encodedPassword = passwordBuffer.toString("base64");
-      // Encode password buffer to base64
-      itemDB.password = encodedPassword;
+      let ciphertext = CryptoJS.AES.encrypt(
+        itemDB.password,
+        authCtx.userId
+      ).toString();
+      itemDB.password = ciphertext;
       itemsCtx.updateFavoriteItem(itemDB.id, itemDB, "appItems");
     }
 
