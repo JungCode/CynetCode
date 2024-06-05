@@ -34,6 +34,9 @@ async function storeItem(mode, item) {
 export function webStoreItem(item) {
   return storeItem("webItems", item);
 }
+export function appStoreItem(item) {
+  return storeItem("appItems", item);
+}
 export function noteStoreItem(noteItem) {
   return storeItem("NoteItems", noteItem);
 }

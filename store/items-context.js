@@ -11,6 +11,7 @@ import {
   fileStoreItem,
   noteStoreItem,
   webStoreItem,
+  appStoreItem,
 } from "../util/https-store";
 import { updateItemDB } from "../util/https-update";
 import { deleteItemDB } from "../util/https-delete";
@@ -72,6 +73,9 @@ function ItemsContextProvider({ children }) {
       case "web":
         await webStoreItem(newItem);
         break;
+      case "app":
+        await appStoreItem(newItem);
+        break;
       case "file":
         await fileStoreItem(newItem);
     }
@@ -87,6 +91,12 @@ function ItemsContextProvider({ children }) {
       await updateItemDB(itemId, updatedItem, type);
     }
     if (updatedItem.webURL !== undefined) {
+      await updateItemDB(itemId, updatedItem, type);
+    }
+    if (updatedItem.fileName !== undefined) {
+      await updateItemDB(itemId, updatedItem, type);
+    }
+    if (updatedItem.appName !== undefined) {
       await updateItemDB(itemId, updatedItem, type);
     }
   }

@@ -21,16 +21,19 @@ import AccountAcordition from "../../components/Accordions/AccountAcordition";
 import { off, onValue, ref } from "firebase/database";
 import { db } from "../../util/https-fetch";
 import FileAcordition from "../../components/Accordions/FileAcordition";
+import { Buffer } from "buffer";
 
 function FavoriteScreen() {
   const [fetchedAccounts, setFetchedAccounts] = useState([]);
   const [fetchedNotes, setFetchedNotes] = useState([]);
   const [fetchedFiles, setFetchedFiles] = useState([]);
+  const [fetchedApps, setFetchedApps] = useState([]);
   const [isBottomDisplay, setBottomDisplay] = useState(false);
   const [isFetchedItems, setIsFetchedItems] = useState(false);
   const authCtx = useContext(AuthContext);
   const itemsCtx = useContext(ItemsContext);
   const [itemButtonSheetContent, setItemButtonSheetContent] = useState("");
+
   useEffect(() => {
     setIsFetchedItems(true);
     const accountsRef = ref(db, "webItems");
@@ -38,7 +41,17 @@ function FavoriteScreen() {
     const onValueChangeAccounts = (snapshot) => {
       const dataArray = [];
       snapshot.forEach((childSnapshot) => {
-        dataArray.push({ id: childSnapshot.key, ...childSnapshot.val() });
+        const decodedPasswordBuffer = Buffer.from(
+          childSnapshot.val().password,
+          "base64"
+        );
+        // Convert Buffer back to string
+        const decodedPassword = decodedPasswordBuffer.toString("utf-8");
+        dataArray.push({
+          id: childSnapshot.key,
+          ...childSnapshot.val(),
+          password: decodedPassword,
+        });
       });
       const filteredItems = dataArray.filter(
         (item) => item.userId === authCtx.userId && item.favorite
@@ -52,6 +65,36 @@ function FavoriteScreen() {
       off(accountsRef, onValueChangeAccounts);
     };
   }, []);
+  useEffect(() => {
+    const accountsRef = ref(db, "appItems");
+    // Lắng nghe sự thay đổi trong Realtime Database
+    const onValueChangeApps = (snapshot) => {
+      const dataArray = [];
+      snapshot.forEach((childSnapshot) => {
+        const decodedPasswordBuffer = Buffer.from(
+          childSnapshot.val().password,
+          "base64"
+        );
+        // Convert Buffer back to string
+        const decodedPassword = decodedPasswordBuffer.toString("utf-8");
+        dataArray.push({
+          id: childSnapshot.key,
+          ...childSnapshot.val(),
+          password: decodedPassword,
+        });
+      });
+      const filteredItems = dataArray.filter(
+        (item) => item.userId === authCtx.userId && item.favorite
+      );
+      setFetchedApps(filteredItems);
+    };
+    onValue(accountsRef, onValueChangeApps);
+    // Ngắt kết nối listener khi component unmount
+    return () => {
+      off(accountsRef, onValueChangeApps);
+    };
+  }, []);
+
   useEffect(() => {
     const notesRef = ref(db, "NoteItems");
 
@@ -129,7 +172,12 @@ function FavoriteScreen() {
         {/* Overlay */}
         {isBottomDisplay && <View style={styles.overlay} />}
         <FlatList
-          data={[...fetchedAccounts, ...fetchedNotes, ...fetchedFiles]}
+          data={[
+            ...fetchedAccounts,
+            ...fetchedApps,
+            ...fetchedNotes,
+            ...fetchedFiles,
+          ]}
           renderItem={({ item }) =>
             item.webURL !== undefined ? (
               <AccountAcordition
@@ -139,6 +187,15 @@ function FavoriteScreen() {
                 value={item}
               >
                 {item.webName}
+              </AccountAcordition>
+            ) : item.appName !== undefined ? (
+              <AccountAcordition
+                handlePresentModal={handlePresentModal}
+                openInBrowser={openInBrowserHandler}
+                handleDismissModal={handleDismissModal}
+                value={item}
+              >
+                {item.appName}
               </AccountAcordition>
             ) : item.noteTitle !== undefined ? (
               <NoteAcordition

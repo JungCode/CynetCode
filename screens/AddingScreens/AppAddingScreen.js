@@ -1,19 +1,18 @@
 import { Button, StyleSheet, Text, View } from "react-native";
 import { TextInput } from "react-native-paper";
 import Colors from "../../constants/Colors";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../store/auth-context";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import LoadingOverlay from "../../components/LoadingOverlay";
 import { ItemsContext } from "../../store/items-context";
 import { ToastAndroid } from "react-native";
-import { Buffer } from 'buffer';
+import { Buffer } from "buffer";
 
-function WebsiteAddingScreen() {
+function AppAddingScreen() {
   const route = useRoute();
-  const [webURL, setWebURL] = useState(route.params ? route.params.webURL : "");
-  const [webName, setWebName] = useState(
-    route.params ? route.params.webName : ""
+  const [appName, setAppName] = useState(
+    route.params ? route.params.appName : ""
   );
   const [userName, setUserName] = useState(
     route.params ? route.params.userName : ""
@@ -30,11 +29,8 @@ function WebsiteAddingScreen() {
   const navigation = useNavigation();
   function updateInputValueHandler(inputType, enteredValue) {
     switch (inputType) {
-      case "webURL":
-        setWebURL(enteredValue);
-        break;
-      case "webName":
-        setWebName(enteredValue);
+      case "appName":
+        setAppName(enteredValue);
         break;
       case "userName":
         setUserName(enteredValue);
@@ -48,16 +44,14 @@ function WebsiteAddingScreen() {
     }
   }
   function submitHandler() {
-    setIsStoring(true);
     // Convert password to a Buffer
     const passwordBuffer = Buffer.from(password, "utf-8");
 
     // Encode password buffer to base64
     const encodedPassword = passwordBuffer.toString("base64");
-
+    setIsStoring(true);
     const item = {
-      webURL: webURL,
-      webName: webName,
+      appName: appName,
       userName: userName,
       password: encodedPassword,
       description: description,
@@ -65,11 +59,11 @@ function WebsiteAddingScreen() {
       favorite: false,
     };
     if (route.params) {
-      itemsCtx.updateItem(route.params.id, item, "webItems");
+      itemsCtx.updateItem(route.params.id, item, "appItems");
       navigation.navigate("drawerScreen");
       ToastAndroid.show("Edited item successfull!", ToastAndroid.SHORT);
     } else {
-      itemsCtx.storeItem(item, "web");
+      itemsCtx.storeItem(item, "app");
       navigation.navigate("drawerScreen");
       ToastAndroid.show("Added item successfull!", ToastAndroid.SHORT);
     }
@@ -82,28 +76,12 @@ function WebsiteAddingScreen() {
     <View style={styles.container}>
       <TextInput
         mode="outlined"
-        activeOutlineColor={Colors.green500}
-        label="Web URL"
-        style={styles.inputStyle}
-        value={webURL}
+        value={appName}
         onChangeText={(text) => {
-          updateInputValueHandler("webURL", text);
-        }}
-        onBlur={() => {
-          const name = webURL.split(".");
-          const capitalizedName =
-            name[0].charAt(0).toUpperCase() + name[0].slice(1);
-          updateInputValueHandler("webName", capitalizedName);
-        }}
-      />
-      <TextInput
-        mode="outlined"
-        value={webName}
-        onChangeText={(text) => {
-          updateInputValueHandler("webName", text);
+          updateInputValueHandler("appName", text);
         }}
         activeOutlineColor={Colors.green500}
-        label="Name"
+        label="App Name"
         style={styles.inputStyle}
       />
       <View style={styles.accountContainer}>
@@ -144,7 +122,7 @@ function WebsiteAddingScreen() {
     </View>
   );
 }
-export default WebsiteAddingScreen;
+export default AppAddingScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,

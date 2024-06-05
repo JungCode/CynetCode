@@ -20,6 +20,7 @@ import FileAddingScreen from "./screens/AddingScreens/FileAddingScreen";
 import CheckerListScreen from "./screens/PasswordChecker/CheckerListScreen";
 import CheckerItemDetail from "./screens/PasswordChecker/CheckerItemDetail";
 import AddressAddingScreen from "./screens/AddingScreens/AddressAddingScreen";
+import AppAddingScreen from "./screens/AddingScreens/AppAddingScreen";
 const Stack = createNativeStackNavigator();
 
 function SignupStack() {
@@ -96,8 +97,6 @@ function Navigation() {
 }
 // main App
 export default function App() {
-
-
   return (
     // <GestureHandlerRootView>
     <AuthContextProvider style={styles.container}>
@@ -127,6 +126,18 @@ function ModalScreen() {
           component={WebsiteAddingScreen}
           options={{
             headerTitle: "Website",
+            animation: "slide_from_right",
+            headerStyle: {
+              alignItems: "center",
+            },
+            headerLeft: (props) => <HeaderCloseButton />,
+          }}
+        />
+        <Stack.Screen
+          name="appAddingScreen"
+          component={AppAddingScreen}
+          options={{
+            headerTitle: "Application",
             animation: "slide_from_right",
             headerStyle: {
               alignItems: "center",
@@ -204,3 +215,4 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
 });
+
