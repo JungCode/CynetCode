@@ -83,12 +83,28 @@ function AccountAcordition({
       >
         <View style={styles.maintitle}>
           <Chevron progress={progress}></Chevron>
-          <Image
-            source={{
-              uri: value.appName ? IMGAPP : value.webName ? fecthedImg : null,
-            }}
-            style={styles.imgStyle}
-          />
+          {value.webName ? (
+            <View style={styles.imgStyle}>
+              <Image
+                source={{
+                  uri: value.appName
+                    ? IMGAPP
+                    : value.webName
+                    ? fecthedImg
+                    : null,
+                }}
+                style={styles.imgStyle}
+              />
+            </View>
+          ) : (
+            <View style={styles.imgStyle}>
+              <Icon
+                source="view-grid-outline"
+                size={35}
+                style={styles.imgStyle}
+              ></Icon>
+            </View>
+          )}
           <View style={styles.textTitleContainer}>
             <Text style={styles.textTitle}>
               {value.appName
@@ -99,7 +115,9 @@ function AccountAcordition({
             </Text>
             {value.webURL != undefined ? (
               <Text style={styles.suburl}>{value.webURL}</Text>
-            ) : null}
+            ) : (
+              <Text style={styles.suburl}>Application</Text>
+            )}
           </View>
         </View>
         <Pressable
@@ -107,11 +125,7 @@ function AccountAcordition({
             this,
             {
               ...value,
-              imgURL: value.appName
-                ? IMGAPP
-                : value.webName
-                ? fecthedImg
-                : null,
+              icon: value.appName ? "view-grid-outline" : fecthedImg,
             },
             setIsFetchedItems
           )}

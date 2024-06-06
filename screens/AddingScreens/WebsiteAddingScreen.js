@@ -24,6 +24,9 @@ function WebsiteAddingScreen() {
   const [description, setDescription] = useState(
     route.params ? route.params.description : ""
   );
+  const [towFactorKey, setTowFactorKey] = useState(
+    route.params ? route.params.description : ""
+  );
   const authCtx = useContext(AuthContext);
   const itemsCtx = useContext(ItemsContext);
   const [isStoring, setIsStoring] = useState(false);
@@ -45,21 +48,21 @@ function WebsiteAddingScreen() {
       case "description":
         setDescription(enteredValue);
         break;
+      case "towFactorKey":
+        setDescription(enteredValue);
+        break;
     }
   }
   function submitHandler() {
     setIsStoring(true);
-    let ciphertext = CryptoJS.AES.encrypt(
-      password,
-      authCtx.userId
-    ).toString();
-
+    let ciphertext = CryptoJS.AES.encrypt(password, authCtx.userId).toString();
     const item = {
       webURL: webURL,
       webName: webName,
       userName: userName,
       password: ciphertext,
       description: description,
+      towFactorKye: towFactorKey,
       userId: authCtx.userId,
       favorite: false,
     };
@@ -68,7 +71,7 @@ function WebsiteAddingScreen() {
       navigation.navigate("drawerScreen");
       ToastAndroid.show("Edited item successfull!", ToastAndroid.SHORT);
     } else {
-      // itemsCtx.storeItem(item, "web");
+      itemsCtx.storeItem(item, "web");
       navigation.navigate("drawerScreen");
       ToastAndroid.show("Added item successfull!", ToastAndroid.SHORT);
     }
@@ -138,6 +141,17 @@ function WebsiteAddingScreen() {
             updateInputValueHandler("description", text);
           }}
         />
+        <TextInput
+          mode="outlined"
+          activeOutlineColor={Colors.green500}
+          label="Two-factor key (optional)"
+          style={styles.inputStyle}
+          value={towFactorKey}
+          onChangeText={(text) => {
+            updateInputValueHandler("towFactorKey", text);
+          }}
+        />
+        <Button onPress={submitHandler} title="Scan two-factor key" />
         <Button onPress={submitHandler} title="Save" />
       </View>
     </View>

@@ -12,6 +12,7 @@ import {
   noteStoreItem,
   webStoreItem,
   appStoreItem,
+  addressStoreItem,
 } from "../util/https-store";
 import { updateItemDB } from "../util/https-update";
 import { deleteItemDB } from "../util/https-delete";
@@ -78,6 +79,10 @@ function ItemsContextProvider({ children }) {
         break;
       case "file":
         await fileStoreItem(newItem);
+        break;
+      case "address":
+        await addressStoreItem(newItem);
+        break;
     }
   }
   async function updateItem(itemId, updatedItem, type) {
@@ -88,6 +93,9 @@ function ItemsContextProvider({ children }) {
   }
   async function updateFavoriteItem(itemId, updatedItem, type) {
     if (updatedItem.noteTitle !== undefined) {
+      await updateItemDB(itemId, updatedItem, type);
+    }
+    if (updatedItem.addressName !== undefined) {
       await updateItemDB(itemId, updatedItem, type);
     }
     if (updatedItem.webURL !== undefined) {

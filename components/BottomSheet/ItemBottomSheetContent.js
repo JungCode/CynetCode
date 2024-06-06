@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-import { Divider } from "react-native-paper";
+import { Divider, Icon } from "react-native-paper";
 import ItemBS from "./ItemBS";
 import { useNavigation } from "@react-navigation/native";
 import { useContext, useEffect, useState } from "react";
@@ -10,6 +10,7 @@ import { AuthContext } from "../../store/auth-context";
 function ItemBottomSheetContent({
   item,
   setIsFetchedItems,
+  icon,
   handleDismissModal,
 }) {
   const navigation = useNavigation();
@@ -44,6 +45,9 @@ function ItemBottomSheetContent({
     if (itemDB.fileName !== undefined) {
       itemsCtx.deleteItem(item.id, "FileItems");
     }
+    if (itemDB.addressName !== undefined) {
+      itemsCtx.deleteItem(item.id, "addressItems");
+    }
     ToastAndroid.show("Deleted item!", ToastAndroid.SHORT);
     handleDismissModal();
   }
@@ -57,6 +61,9 @@ function ItemBottomSheetContent({
     if (item.appName !== undefined) {
       navigation.navigate("appAddingScreen", item);
     }
+    if (item.addressName !== undefined) {
+      navigation.navigate("addressAddingScreen", item);
+    }
     handleDismissModal();
   }
   function favoriteHandler() {
@@ -64,6 +71,9 @@ function ItemBottomSheetContent({
     itemDB.favorite = !itemDB.favorite;
     if (itemDB.noteTitle !== undefined) {
       itemsCtx.updateFavoriteItem(itemDB.id, itemDB, "NoteItems");
+    }
+    if (itemDB.addressName !== undefined) {
+      itemsCtx.updateFavoriteItem(itemDB.id, itemDB, "addressItems");
     }
     if (itemDB.webURL !== undefined) {
       let ciphertext = CryptoJS.AES.encrypt(
@@ -96,8 +106,17 @@ function ItemBottomSheetContent({
   return (
     <View>
       <View style={styles.titleView}>
-        <View>
-          <Image source={{ uri: item.imgURL }} style={styles.imgStyle} />
+        <View style={styles.imgStyle}>
+          {item.webURL ? (
+            <Image
+              source={{
+                uri: item.icon,
+              }}
+              style={styles.imgStyle}
+            />
+          ) : (
+            <Icon source={item.icon} size={35} style={styles.imgStyle}></Icon>
+          )}
         </View>
         <View style={styles.textTitleContainer}>
           <Text style={styles.textTitle}>{name}</Text>

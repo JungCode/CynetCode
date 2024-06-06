@@ -38,14 +38,6 @@ function DrawerContentCustom(props) {
           quantity={props.itemsQuantity.Account}
         />
         <DrawerItemCustom
-          name="Card"
-          labelName="Credit cards"
-          iconName="card-outline"
-          onActive={PressHandler}
-          ItemIsActive={ItemIsActive}
-          quantity={0}
-        />
-        <DrawerItemCustom
           name="Files"
           labelName="Files"
           iconName="document-outline"
@@ -59,7 +51,7 @@ function DrawerContentCustom(props) {
           iconName="home-outline"
           onActive={PressHandler}
           ItemIsActive={ItemIsActive}
-          quantity={0}
+          quantity={props.itemsQuantity.Addresses}
         />
         <DrawerItemCustom
           name="Note"

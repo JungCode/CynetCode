@@ -40,3 +40,6 @@ export function appStoreItem(item) {
 export function noteStoreItem(noteItem) {
   return storeItem("NoteItems", noteItem);
 }
+export function addressStoreItem(addressItem) {
+  return storeItem("addressItems", addressItem);
+}

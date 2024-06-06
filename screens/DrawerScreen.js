@@ -29,10 +29,12 @@ function DrawerScreen() {
   const [fetchedAccountsQuantity, setAccountsQuantity] = useState();
   const [fetchedAppsQuantity, setAppsQuantity] = useState();
   const [fetchedNotesQuantity, setNotesQuantity] = useState();
+  const [fetchedAddressesQuantity, setAddressesQuantity] = useState();
   const [fetchedFilesQuantity, setFilesQuantity] = useState();
   const [fetchedFvtAccountsQuantity, setFvtAccountsQuantity] = useState();
   const [fetchedFvtAppsQuantity, setFvtAppsQuantity] = useState();
   const [fetchedFvtNotesQuantity, setFvtNotesQuantity] = useState();
+  const [fetchedFvtAddressesQuantity, setFvtAddressesQuantity] = useState();
   const [fetchedFvtFilesQuantity, setFvtFilesQuantity] = useState();
   const [fetchedFavoritesQuantity, setFavoritesQuantity] = useState(0);
   useEffect(() => {
@@ -110,6 +112,32 @@ function DrawerScreen() {
     };
   }, []);
   useEffect(() => {
+    const addressesRef = ref(db, "addressItems");
+
+    const onValueChangeNotes = (snapshot) => {
+      const dataArray = [];
+      snapshot.forEach((childSnapshot) => {
+        dataArray.push({ id: childSnapshot.key, ...childSnapshot.val() });
+      });
+      let count = 0;
+      let fvtCount = 0;
+      dataArray.forEach((item) => {
+        if (item.userId == authCtx.userId) {
+          count++;
+          if (item.favorite) fvtCount++;
+        }
+      });
+      setFvtAddressesQuantity(fvtCount);
+      setAddressesQuantity(count);
+    };
+
+    onValue(addressesRef, onValueChangeNotes);
+    // Ngắt kết nối listener khi component unmount
+    return () => {
+      off(addressesRef, onValueChangeNotes);
+    };
+  }, []);
+  useEffect(() => {
     const filesRef = ref(db, "FileItems");
 
     const onValueChangeNotes = (snapshot) => {
@@ -164,16 +192,17 @@ function DrawerScreen() {
               fetchedAccountsQuantity +
               fetchedAppsQuantity +
               fetchedFilesQuantity +
-              fetchedNotesQuantity,
+              fetchedNotesQuantity +
+              fetchedAddressesQuantity,
             Favorites:
               fetchedFvtAccountsQuantity +
               fetchedFvtAppsQuantity +
               fetchedFvtNotesQuantity +
+              fetchedFvtAddressesQuantity +
               fetchedFvtFilesQuantity,
-            Account: fetchedAccountsQuantity,
-            CreaditCard: 0,
+            Account: fetchedAccountsQuantity + fetchedAppsQuantity,
             Files: fetchedFilesQuantity,
-            Addresses: 0,
+            Addresses: fetchedAddressesQuantity,
             Notes: fetchedNotesQuantity,
           }}
         />

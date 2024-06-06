@@ -23,7 +23,7 @@ import Colors from "../../constants/Colors";
 import FlatButton from "../../components/FlatButton";
 import CusButton from "../CusButton";
 import { useState } from "react";
-function NoteAcordition({ value, handlePresentModal, setIsFetchedItems }) {
+function AddressAcordition({ value, handlePresentModal, setIsFetchedItems }) {
   //dropdown js
   const listRef = useAnimatedRef();
   const heightValue = useSharedValue(0);
@@ -41,7 +41,7 @@ function NoteAcordition({ value, handlePresentModal, setIsFetchedItems }) {
   }));
 
   const fecthedImg =
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGSH2dDL8QKF7QBz0-BNnDwWubHZYIGobG4GOmZhzrog&s";
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTizhv-N62aQ8dhiNvEJuixDaLY5CkkusaIhw&s";
   return (
     <View style={styles.container}>
       <Pressable
@@ -57,19 +57,21 @@ function NoteAcordition({ value, handlePresentModal, setIsFetchedItems }) {
             heightValue.value = withTiming(0);
           }
           open.value = !open.value;
-        }}>
+        }}
+      >
         <View style={styles.maintitle}>
           <Chevron progress={progress}></Chevron>
           <View style={styles.imgStyle}>
             <Icon
-              source="notebook-outline"
+              source="home-outline"
               size={35}
-              style={styles.imgStyle}></Icon>
+              style={styles.imgStyle}
+            ></Icon>
           </View>
           {/* <Image source={{ uri: fecthedImg }} style={styles.imgStyle} /> */}
           <View style={styles.textTitleContainer}>
-            <Text style={styles.textTitle}>{value.noteTitle}</Text>
-            <Text style={styles.suburl}>Note</Text>
+            <Text style={styles.textTitle}>{value.addressName}</Text>
+            <Text style={styles.suburl}>Address</Text>
           </View>
         </View>
         <Pressable
@@ -77,10 +79,11 @@ function NoteAcordition({ value, handlePresentModal, setIsFetchedItems }) {
             this,
             {
               ...value,
-              icon: "notebook-outline",
+              icon: "home-outline",
             },
             setIsFetchedItems
-          )}>
+          )}
+        >
           <Icon source="dots-vertical" size={25}></Icon>
         </Pressable>
       </Pressable>
@@ -89,11 +92,49 @@ function NoteAcordition({ value, handlePresentModal, setIsFetchedItems }) {
           <View style={styles.content}>
             <View style={styles.itemcontainer}>
               <View>
-                <Text style={styles.subtitle}>{value.noteText}</Text>
+                <Text style={styles.subtitle}>Name</Text>
               </View>
-              <View style={styles.copywrap}></View>
+              <View style={styles.copywrap}>
+                <Text style={styles.subtext}>{value.addressName}</Text>
+                <Pressable>
+                  <Icon
+                    style={styles.iconstyle}
+                    source="content-copy"
+                    size={25}
+                  ></Icon>
+                </Pressable>
+              </View>
             </View>
-            <FlatButton onPress={() => {}}>Open</FlatButton>
+            <View style={styles.itemcontainer}>
+              <View>
+                <Text style={styles.subtitle}>Address</Text>
+              </View>
+              <View style={styles.copywrap}>
+                <Text style={styles.subtext}>{value.addressDetail}</Text>
+                <Pressable>
+                  <Icon
+                    style={styles.iconstyle}
+                    source="content-copy"
+                    size={25}
+                  ></Icon>
+                </Pressable>
+              </View>
+            </View>
+            <View style={styles.itemcontainer}>
+              <View>
+                <Text style={styles.subtitle}>Map link</Text>
+              </View>
+              <View style={styles.copywrap}>
+                <Text style={styles.subtext}>{value.mapLink}</Text>
+                <Pressable>
+                  <Icon
+                    style={styles.iconstyle}
+                    source="content-copy"
+                    size={25}
+                  ></Icon>
+                </Pressable>
+              </View>
+            </View>
           </View>
         </Animated.View>
       </Animated.View>
@@ -101,7 +142,7 @@ function NoteAcordition({ value, handlePresentModal, setIsFetchedItems }) {
   );
 }
 
-export default NoteAcordition;
+export default AddressAcordition;
 const styles = StyleSheet.create({
   container: {
     // backgroundColor: "#E3EDFB",

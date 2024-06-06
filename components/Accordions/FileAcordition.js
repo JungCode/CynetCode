@@ -89,7 +89,8 @@ function FileAcordition({
             heightValue.value = withTiming(0);
           }
           open.value = !open.value;
-        }}>
+        }}
+      >
         <View style={styles.maintitle}>
           <Chevron progress={progress}></Chevron>
           <View style={styles.imgStyle}>
@@ -104,6 +105,7 @@ function FileAcordition({
           {/* <Image source={{ uri: fecthedImg }} style={styles.imgStyle} /> */}
           <View style={styles.textTitleContainer}>
             <Text style={styles.textTitle}>{value.fileTitle}</Text>
+            <Text style={styles.suburl}>File</Text>
           </View>
         </View>
         <Pressable
@@ -111,10 +113,18 @@ function FileAcordition({
             this,
             {
               ...value,
-              imgURL: fecthedImg,
+              icon:
+                value.fileType === "photo"
+                  ? "file-image-outline"
+                  : value.fileType === "pdf"
+                  ? "file-pdf-box"
+                  : value.fileType === "word"
+                  ? "file-word-box"
+                  : null,
             },
             setIsFetchedItems
-          )}>
+          )}
+        >
           <Icon source="dots-vertical" size={25}></Icon>
         </Pressable>
       </Pressable>
@@ -182,7 +192,8 @@ function FileAcordition({
                     );
                   }
                 }
-              }}>
+              }}
+            >
               Open
             </FlatButton>
           </View>

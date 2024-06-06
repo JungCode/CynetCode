@@ -22,12 +22,14 @@ import { off, onValue, ref } from "firebase/database";
 import { db } from "../../util/https-fetch";
 import FileAcordition from "../../components/Accordions/FileAcordition";
 import CryptoJS from "react-native-crypto-js";
+import AddressAcordition from "../../components/Accordions/AddressAcordition";
 
 function FavoriteScreen() {
   const [fetchedAccounts, setFetchedAccounts] = useState([]);
   const [fetchedNotes, setFetchedNotes] = useState([]);
   const [fetchedFiles, setFetchedFiles] = useState([]);
   const [fetchedApps, setFetchedApps] = useState([]);
+  const [fetchedAddress, setFetchedAddress] = useState([]);
   const [isBottomDisplay, setBottomDisplay] = useState(false);
   const [isFetchedItems, setIsFetchedItems] = useState(false);
   const authCtx = useContext(AuthContext);
@@ -134,6 +136,28 @@ function FavoriteScreen() {
       off(filesRef, onValueChangeNotes);
     };
   }, []);
+  useEffect(() => {
+    setIsFetchedItems(true);
+    const accountsRef = ref(db, "addressItems");
+    // Lắng nghe sự thay đổi trong Realtime Database
+    const onValueChangeAddress = (snapshot) => {
+      const dataArray = [];
+      snapshot.forEach((childSnapshot) => {
+        dataArray.push({ id: childSnapshot.key, ...childSnapshot.val() });
+      });
+      const filteredItems = dataArray.filter(
+        (item) => item.userId === authCtx.userId && item.favorite
+      );
+      setFetchedAddress(filteredItems);
+      setIsFetchedItems(false);
+    };
+    onValue(accountsRef, onValueChangeAddress);
+
+    // Ngắt kết nối listener khi component unmount
+    return () => {
+      off(accountsRef, onValueChangeAddress);
+    };
+  }, []);
   // bottomsheet js
   const bottomSheetModalRef = useRef(null);
   const spanPoints = ["48%"];
@@ -175,6 +199,7 @@ function FavoriteScreen() {
             ...fetchedApps,
             ...fetchedNotes,
             ...fetchedFiles,
+            ...fetchedAddress,
           ]}
           renderItem={({ item }) =>
             item.webURL !== undefined ? (
@@ -208,6 +233,12 @@ function FavoriteScreen() {
                 imageName={item.fileName}
                 value={item}
               ></FileAcordition>
+            ) : item.addressName !== undefined ? (
+              <AddressAcordition
+                handlePresentModal={handlePresentModal}
+                value={item}
+                imageName={item.addressName}
+              ></AddressAcordition>
             ) : null
           }
           keyExtractor={(item) => item.id}

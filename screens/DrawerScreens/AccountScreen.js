@@ -27,14 +27,13 @@ function AccountScreen() {
             label: "Website",
           },
           { value: "app", label: "App" },
-          { value: "other", label: "Other" },
         ]}
       />
       <View style={value === "all" ? styles.cover : styles.hidden}>
-        <AllAccount/>
+        <AllAccount />
       </View>
       <View style={value === "website" ? styles.cover : styles.hidden}>
-        <WebsiteAccount/>
+        <WebsiteAccount />
       </View>
       <View style={value === "app" ? styles.cover : styles.hidden}>
         <AppAccount />

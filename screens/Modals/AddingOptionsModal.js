@@ -10,16 +10,13 @@ function AddingOptionsModal({ navigation }) {
         <AddingItem
           name="Application"
           iconName="view-grid-outline" navigationName="appAddingScreen"></AddingItem>
-        <AddingItem name="Other" iconName="view-grid-plus-outline"></AddingItem>
       </AddingItemAcordition>
-      <AddingItem name="Bank Account" iconName="credit-card-outline" />
       <AddingItemAcordition name="File" icon="file-outline">
         <AddingItem name="Camera" iconName="camera-outline"></AddingItem>
         <AddingItem name="Gallery" iconName="file-image"></AddingItem>
       </AddingItemAcordition>
       <AddingItem name="Address" iconName="town-hall" navigationName="addressAddingScreen"/>
       <AddingItem name="Notes" iconName="notebook-outline" navigationName="noteAddingScreen" />
-      <AddingItem name="Folder" iconName="folder-outline" />
     </View>
   );
 }

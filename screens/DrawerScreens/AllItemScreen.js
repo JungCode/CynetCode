@@ -24,12 +24,14 @@ import FileAcordition from "../../components/Accordions/FileAcordition";
 import { off, onValue, ref } from "firebase/database";
 import { db } from "../../util/https-fetch";
 import CryptoJS from "react-native-crypto-js";
+import AddressAcordition from "../../components/Accordions/AddressAcordition";
 
 function AllItemScreen() {
   const [fetchedAccounts, setFetchedAccounts] = useState([]);
   const [fetchedApps, setFetchedApps] = useState([]);
   const [fetchedNotes, setFetchedNotes] = useState([]);
   const [fetchedFiles, setFetchedFiles] = useState([]);
+  const [fetchedAddress, setFetchedAddress] = useState([]);
   const [isFetchedItems, setIsFetchedItems] = useState(false);
   const [isBottomDisplay, setBottomDisplay] = useState(false);
   const authCtx = useContext(AuthContext);
@@ -135,6 +137,28 @@ function AllItemScreen() {
       off(filesRef, onValueChangeNotes);
     };
   }, []);
+  useEffect(() => {
+    setIsFetchedItems(true);
+    const accountsRef = ref(db, "addressItems");
+    // Lắng nghe sự thay đổi trong Realtime Database
+    const onValueChangeAddress = (snapshot) => {
+      const dataArray = [];
+      snapshot.forEach((childSnapshot) => {
+        dataArray.push({ id: childSnapshot.key, ...childSnapshot.val() });
+      });
+      const filteredItems = dataArray.filter(
+        (item) => item.userId === authCtx.userId
+      );
+      setFetchedAddress(filteredItems);
+      setIsFetchedItems(false);
+    };
+    onValue(accountsRef, onValueChangeAddress);
+
+    // Ngắt kết nối listener khi component unmount
+    return () => {
+      off(accountsRef, onValueChangeAddress);
+    };
+  }, []);
   // useEffect(() => {
   //   async function getItems() {
   //     const data = await itemsCtx.fetchItemsCtx(authCtx.userId, "allItems");
@@ -186,6 +210,7 @@ function AllItemScreen() {
             ...fetchedApps,
             ...fetchedNotes,
             ...fetchedFiles,
+            ...fetchedAddress,
           ]}
           renderItem={({ item }) =>
             item.webURL !== undefined ? (
@@ -211,7 +236,7 @@ function AllItemScreen() {
                 handlePresentModal={handlePresentModal}
                 value={item}
               >
-                {item.webName}
+                {item.noteTitle}
               </NoteAcordition>
             ) : item.fileName !== undefined ? (
               <FileAcordition
@@ -219,6 +244,12 @@ function AllItemScreen() {
                 value={item}
                 imageName={item.fileName}
               ></FileAcordition>
+            ) : item.addressName !== undefined ? (
+              <AddressAcordition
+                handlePresentModal={handlePresentModal}
+                value={item}
+                imageName={item.addressName}
+              ></AddressAcordition>
             ) : null
           }
           keyExtractor={(item) => item.id}
