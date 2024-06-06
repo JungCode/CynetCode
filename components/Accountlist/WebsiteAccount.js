@@ -14,13 +14,12 @@ import { off, onValue, ref } from "firebase/database";
 import { db } from "../../util/https-fetch";
 import { Buffer } from 'buffer';
 
-function WebsiteAccount() {
+function WebsiteAccount({onEvent}) {
   const [fetchedAccounts, setFetchedAccounts] = useState([]);
 
   const [isFetchedItems, setIsFetchedItems] = useState(false);
-  const [isBottomDisplay, setBottomDisplay] = useState(false);
   const authCtx = useContext(AuthContext);
-  const [itemButtonSheetContent, setItemButtonSheetContent] = useState("");
+
   useEffect(() => {
     setIsFetchedItems(true);
     const accountsRef = ref(db, "webItems");
@@ -54,17 +53,11 @@ function WebsiteAccount() {
       off(accountsRef, onValueChangeAccounts);
     };
   }, []);
-  const bottomSheetModalRef = useRef(null);
-  const spanPoints = ["50%"];
+
   function handlePresentModal(item) {
-    setItemButtonSheetContent(item);
-    setBottomDisplay(true);
-    bottomSheetModalRef.current?.present();
+    onEvent(item);
   }
-  function handleDismissModal() {
-    setBottomDisplay(false);
-    bottomSheetModalRef.current?.dismiss();
-  }
+
   function openInBrowserHandler(webURL) {
     Linking.openURL("https://" + webURL);
   }
@@ -73,10 +66,7 @@ function WebsiteAccount() {
   }
   return (
     <BottomSheetModalProvider>
-      <Pressable onPress={handleDismissModal} style={styles.container}>
-        {/* Overlay */}
-        {isBottomDisplay && <View style={styles.overlay} />}
-
+      <Pressable  style={styles.container}>
         <FlatList
           data={fetchedAccounts}
           renderItem={({ item }) => (
@@ -93,18 +83,6 @@ function WebsiteAccount() {
         />
       </Pressable>
       <MyFab name={"websiteAddingScreen"} />
-      <BottomSheetModal
-        ref={bottomSheetModalRef}
-        index={0}
-        snapPoints={spanPoints}
-        onDismiss={handleDismissModal}
-        // onChange={handleSheetChanges}
-      >
-        <ItemBottomSheetContent
-          handleDismissModal={handleDismissModal}
-          item={itemButtonSheetContent}
-        ></ItemBottomSheetContent>
-      </BottomSheetModal>
     </BottomSheetModalProvider>
   );
 }

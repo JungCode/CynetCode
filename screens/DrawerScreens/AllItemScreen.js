@@ -24,6 +24,7 @@ import FileAcordition from "../../components/Accordions/FileAcordition";
 import { off, onValue, ref } from "firebase/database";
 import { db } from "../../util/https-fetch";
 import { Buffer } from "buffer";
+import BlurOverlay from "../../components/BlurOverlay";
 
 function AllItemScreen() {
   const [fetchedAccounts, setFetchedAccounts] = useState([]);
@@ -182,7 +183,7 @@ function AllItemScreen() {
     <BottomSheetModalProvider>
       <Pressable onPress={handleDismissModal} style={styles.container}>
         {/* Overlay */}
-        {isBottomDisplay && <View style={styles.overlay} />}
+        {isBottomDisplay && <BlurOverlay  />}
 
         <FlatList
           data={[
@@ -258,7 +259,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // Màu sắc và độ mờ của overlay
-    zIndex: 1, // Đảm bảo overlay ở trên cùng
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    zIndex: 1,
   },
 });

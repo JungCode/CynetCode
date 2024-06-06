@@ -8,6 +8,7 @@ import LoadingOverlay from "../../components/LoadingOverlay";
 import { ItemsContext } from "../../store/items-context";
 import { ToastAndroid } from "react-native";
 import { Buffer } from 'buffer';
+import CusButton from "../../components/CusButton";
 
 function WebsiteAddingScreen() {
   const route = useRoute();
@@ -139,7 +140,7 @@ function WebsiteAddingScreen() {
             updateInputValueHandler("description", text);
           }}
         />
-        <Button onPress={submitHandler} title="Save" />
+        <CusButton onPress={submitHandler}>Save</CusButton>
       </View>
     </View>
   );
