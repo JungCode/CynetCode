@@ -23,6 +23,7 @@ import { db } from "../../util/https-fetch";
 import FileAcordition from "../../components/Accordions/FileAcordition";
 import CryptoJS from "react-native-crypto-js";
 import AddressAcordition from "../../components/Accordions/AddressAcordition";
+import BlurOverlay from "../../components/BlurOverlay";
 
 function FavoriteScreen() {
   const [fetchedAccounts, setFetchedAccounts] = useState([]);
@@ -163,9 +164,11 @@ function FavoriteScreen() {
   const spanPoints = ["48%"];
   function handlePresentModal(item) {
     setItemButtonSheetContent(item);
+    setBottomDisplay(true);
     bottomSheetModalRef.current?.present();
   }
   function handleDismissModal() {
+    setBottomDisplay(false);
     bottomSheetModalRef.current?.dismiss();
   }
   function openInBrowserHandler(webURL) {
@@ -192,7 +195,7 @@ function FavoriteScreen() {
     <BottomSheetModalProvider>
       <Pressable onPress={handleDismissModal} style={styles.container}>
         {/* Overlay */}
-        {isBottomDisplay && <View style={styles.overlay} />}
+        {isBottomDisplay && <BlurOverlay/>}
         <FlatList
           data={[
             ...fetchedAccounts,
