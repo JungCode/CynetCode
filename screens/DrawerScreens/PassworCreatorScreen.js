@@ -17,8 +17,6 @@ import { Formik } from "formik";
 import CusButton from "../../components/CusButton";
 import Colors from "../../constants/Colors";
 import { passwordStrength } from "check-password-strength";
-import axios from "axios";
-
 const PasswordSchema = Yup.object().shape({
   passwordLength: Yup.number()
     .min(4, "Should be min of 4 characters")
@@ -38,30 +36,30 @@ export default function App() {
     generatePasswordString(8);
   }, []);
 
-  const generatePasswordString = async (passwordLength) => {
-    const options = {
-      method: "GET",
-      url: "https://password-generator24.p.rapidapi.com/Password_Generator",
-      params: {
-        length: passwordLength,
-        use_lower: lowerCase,
-        use_upper: upperCase,
-        use_digits: numbers,
-        use_symbols: symbols,
-      },
-      headers: {
-        "x-rapidapi-key": "61b5071775mshf6e5132f3dfba94p19493fjsn298368f62391",
-        "x-rapidapi-host": "password-generator24.p.rapidapi.com",
-      },
-    };
+  const generatePasswordString = (passwordLength) => {
+    let characterList = "";
 
-    try {
-      const response = await axios.request(options);
-      setPassword(response.data);
-      setIsPassGenerated(true);
-    } catch (error) {
-      console.error(error);
+    const upperCaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const lowerCaseChars = "abcdefghijklmnopqrstuvwxyz";
+    const digitChars = "0123456789";
+    const specialChars = "!@#$%^&*()_+";
+
+    if (upperCase) {
+      characterList += upperCaseChars;
     }
+    if (lowerCase) {
+      characterList += lowerCaseChars;
+    }
+    if (numbers) {
+      characterList += digitChars;
+    }
+    if (symbols) {
+      characterList += specialChars;
+    }
+    const passwordResult = createPassword(characterList, passwordLength);
+
+    setPassword(passwordResult);
+    setIsPassGenerated(true);
   };
 
   const createPassword = (characters, passwordLength) => {
@@ -90,7 +88,7 @@ export default function App() {
             <View style={styles.passwordContainer}>
               <View style={styles.password}>
                 <Text style={styles.passwordText} selectable={true}>
-                  {password.password}
+                  {password}
                 </Text>
               </View>
               <Text style={styles.passwordStrengh}>
@@ -110,8 +108,7 @@ export default function App() {
             onSubmit={(values) => {
               // console.log(values);
               generatePasswordString(+values.passwordLength);
-            }}
-          >
+            }}>
             {({
               values,
               errors,
@@ -181,8 +178,7 @@ export default function App() {
                   <TouchableOpacity
                     disabled={!isValid}
                     style={styles.primaryBtn}
-                    onPress={handleSubmit}
-                  >
+                    onPress={handleSubmit}>
                     <Text style={styles.primaryBtnTxt}>Generate Password</Text>
                   </TouchableOpacity>
                 </View>

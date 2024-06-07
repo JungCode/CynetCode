@@ -54,6 +54,7 @@ export default function ScanQRCodeScreen() {
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     const url = new URL(data);
+    console.log(data);
     route.params.twoFactorKey = url.searchParams.get("secret");
     console.log(route.params);
     if(route.params.webURL != undefined){
