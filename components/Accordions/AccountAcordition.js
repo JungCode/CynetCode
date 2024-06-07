@@ -35,8 +35,8 @@ function AccountAcordition({
   setIsFetchedItems,
 }) {
   //Clipboard
-  const copyToClipboard = async () => {
-    await Clipboard.setStringAsync("hello world");
+  const copyToClipboard = async (text) => {
+    await Clipboard.setStringAsync(text);
     ToastAndroid.show("Copied", ToastAndroid.SHORT);
   };
   //PasswordSercure

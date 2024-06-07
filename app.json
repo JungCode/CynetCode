@@ -46,6 +46,19 @@
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
           "recordAudioAndroid": true
         }
+      ],
+      [
+        "expo-dynamic-app-icon",
+        {
+          "red": {
+            "image": "./assets/icon.png",
+            "prerendered": true
+          },
+          "gray": {
+            "image": "./assets/icon.png",
+            "prerendered": true
+          }
+        }
       ]
     ]
   }

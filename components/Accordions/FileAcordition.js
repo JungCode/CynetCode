@@ -163,7 +163,6 @@ function FileAcordition({
                   }
                 }
                 if (value.fileType === "photo") {
-                  OpenAnything.Open(imageURL);
                   if (Platform.OS === "ios") {
                     WebBrowser.dismissBrowser();
                     WebBrowser.openBrowserAsync(imageURL);
@@ -206,8 +205,8 @@ function FileAcordition({
 export default FileAcordition;
 const styles = StyleSheet.create({
   image: {
-    height: 100,
-    width: 100,
+    height: 300,
+    width: 300,
   },
   container: {
     marginHorizontal: 10,

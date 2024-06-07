@@ -175,7 +175,7 @@ function WebsiteAddingScreen() {
             updateInputValueHandler("twoFactorKey", text);
           }}
         />
-        <Button onPress={navigateToScanner} title="Scan two-factor key" />
+        <CusButton onPress={navigateToScanner}>Scan two-factor key</CusButton>
         <CusButton onPress={submitHandler}>Save</CusButton>
       </View>
     </View>

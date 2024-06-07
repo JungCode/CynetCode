@@ -1,5 +1,5 @@
 import { Button, Image, StyleSheet, ToastAndroid, View } from "react-native";
-import { TextInput } from "react-native-paper";
+import { Icon, TextInput } from "react-native-paper";
 import Colors from "../../constants/Colors";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../store/auth-context";
@@ -10,6 +10,7 @@ import { storeFileDB } from "../../util/https-store";
 import firebase from "firebase/compat/app";
 import "firebase/compat/storage";
 import { firebaseConfig } from "../../util/https-fetch";
+import CusButton from "../../components/CusButton";
 function FileAddingScreen() {
   const route = useRoute();
   let fileType;
@@ -116,8 +117,16 @@ function FileAddingScreen() {
         label="Description"
         style={[styles.inputStyle, styles.paragraphStyle]}
       />
-      <Image source={{ uri: fileUri }} style={styles.image} />
-      <Button onPress={submitHandler} title="Save" />
+      <View style={styles.filecontainer}>
+        {fileType === "photo" && (
+          <Image source={{ uri: fileUri }} style={styles.image} />
+        )}
+        {fileType === "pdf" && (
+          <Icon source="file-pdf-box" size={35} onPress={() => {}}></Icon>
+        )}
+        {fileType === "word" && <Icon source="file-word-box" size={35}></Icon>}
+      </View>
+      <CusButton onPress={submitHandler}>Save</CusButton>
     </View>
   );
 }
@@ -128,6 +137,18 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 25,
   },
+  filecontainer: {
+    width: "100%",
+    height: "auto",
+    backgroundColor: Colors.gray200,
+    borderRadius: 10,
+    paddingVertical:10,
+    alignItems: "center",
+    justifyContent: "center",
+    overflow: "hidden",
+    objectFit: "cover",
+    marginBottom: 15,
+  },
   inputStyle: {
     backgroundColor: "white",
     marginBottom: 13,
@@ -136,7 +157,7 @@ const styles = StyleSheet.create({
     height: 100,
   },
   image: {
-    height: 100,
-    width: 100,
+    width: 300,
+    height: 300,
   },
 });

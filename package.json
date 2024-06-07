@@ -34,6 +34,7 @@
     "expo-clipboard": "^5.0.1",
     "expo-crypto": "~12.8.1",
     "expo-document-picker": "~11.10.1",
+    "expo-dynamic-app-icon": "^1.2.0",
     "expo-font": "~11.10.3",
     "expo-image-picker": "~14.7.1",
     "expo-intent-launcher": "^11.0.1",

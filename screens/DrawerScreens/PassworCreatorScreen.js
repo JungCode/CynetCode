@@ -85,23 +85,23 @@ export default function App() {
   return (
     <ScrollView keyboardShouldPersistTaps="handled">
       <SafeAreaView style={styles.appContainer}>
-        {isPassGenerated ? (
-          <View style={styles.container}>
-            <View style={styles.passwordContainer}>
-              <View style={styles.password}>
+        <View style={styles.container}>
+          <View style={styles.passwordContainer}>
+            <View style={styles.password}>
+              {isPassGenerated ? (
                 <Text style={styles.passwordText} selectable={true}>
                   {password.password}
                 </Text>
-              </View>
-              <Text style={styles.passwordStrengh}>
-                {passwordStrength(password).value}
-              </Text>
-              <View style={styles.buttonContainer}>
-                <CusButton>Coppy</CusButton>
-              </View>
+              ) : null}
+            </View>
+            <Text style={styles.passwordStrengh}>
+              {passwordStrength(password).value}
+            </Text>
+            <View style={styles.buttonContainer}>
+              <CusButton>Coppy</CusButton>
             </View>
           </View>
-        ) : null}
+        </View>
         <View style={styles.formContainer}>
           <Text style={styles.title}>Password Generator</Text>
           <Formik
@@ -110,8 +110,7 @@ export default function App() {
             onSubmit={(values) => {
               // console.log(values);
               generatePasswordString(+values.passwordLength);
-            }}
-          >
+            }}>
             {({
               values,
               errors,
@@ -181,8 +180,7 @@ export default function App() {
                   <TouchableOpacity
                     disabled={!isValid}
                     style={styles.primaryBtn}
-                    onPress={handleSubmit}
-                  >
+                    onPress={handleSubmit}>
                     <Text style={styles.primaryBtnTxt}>Generate Password</Text>
                   </TouchableOpacity>
                 </View>
@@ -202,7 +200,7 @@ const styles = StyleSheet.create({
   formContainer: {
     padding: 8,
     backgroundColor: Colors.white,
-    height: 600,
+    height: 700,
     borderTopColor: Colors.gray200,
     borderTopWidth: 1,
   },
@@ -248,15 +246,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   primaryBtn: {
-    width: 120,
-    padding: 10,
+    width: "100%",
+    padding: 15,
     borderRadius: 8,
-    marginHorizontal: 8,
+    marginHorizontal: 15,
     backgroundColor: Colors.green500,
   },
   primaryBtnTxt: {
     color: "#fff",
     textAlign: "center",
+    fontSize: 20,
     fontWeight: "700",
   },
   secondaryBtn: {
@@ -295,7 +294,8 @@ const styles = StyleSheet.create({
 
   ///////////////
   container: {
-    paddingTop: 40,
+    paddingTop: 20,
+    height: 220,
     paddingBottom: 10,
     paddingHorizontal: 10,
   },
@@ -304,6 +304,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   password: {
+    height: 100,
     flexDirection: "row",
     alignItems: "center",
   },
@@ -312,7 +313,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
   },
   passwordStrengh: {
-    padding: 10,
+    // padding: 10,
     color: Colors.green500,
     fontSize: 20,
   },
