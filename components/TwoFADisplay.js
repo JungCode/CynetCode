@@ -2,10 +2,14 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Icon } from "react-native-paper";
 import * as Progress from "react-native-progress";
 import Colors from "../constants/Colors";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getTOTPToken } from "../util/OTP";
 
-function TwoFADisplay() {
+function TwoFADisplay({ secretKey }) {
   const [passwordSecure, setPasswordSecure] = useState(true);
+  const [secret, setSecret] = useState(secretKey); // Example secret
+  const [token, setToken] = useState("");
+  const [remainingTime, setRemainingTime] = useState(30);
   function handleSecure(password) {
     const hiddenPassword = password.replace(/./g, "•");
     return hiddenPassword;
@@ -13,18 +17,42 @@ function TwoFADisplay() {
   function togglePasswordVisibility() {
     setPasswordSecure(!passwordSecure);
   }
+
+  useEffect(() => {
+    const updateToken = () => {
+      setToken(getTOTPToken(secret));
+      const currentTime = Math.floor(Date.now() / 1000);
+      setRemainingTime(30 - (currentTime % 30));
+    };
+
+    updateToken(); // Initial token generation
+
+    const countdownId = setInterval(() => {
+      setRemainingTime((time) => {
+        if (time == 0) {
+          updateToken();
+        }
+        return time > 0 ? time - 1 : 30;
+      });
+    }, 1000); // Update countdown every second
+
+    return () => {
+      clearInterval(countdownId);
+    };
+  }, [secret]);
   return (
     <View style={styles.container}>
       <View style={styles.itemcontainer}>
         <Text style={styles.subtitle}>OTPCode</Text>
         <View style={styles.passwraper}>
           <Text style={styles.subtext}>
-            {passwordSecure ? handleSecure("00022222") : "00022222"}
+            {passwordSecure ? handleSecure(token) : token}
           </Text>
           <Progress.Pie
-            progress={0.4}
+            progress={(30 - remainingTime) / 30}
             size={20}
-            color={Colors.green500}></Progress.Pie>
+            color={Colors.green500}
+          ></Progress.Pie>
         </View>
       </View>
       <View style={styles.iconwraper}>
@@ -32,9 +60,10 @@ function TwoFADisplay() {
           <Icon
             style={styles.iconstyle}
             source={passwordSecure ? "eye-outline" : "eye-off-outline"}
-            size={25}></Icon>
+            size={25}
+          ></Icon>
         </Pressable>
-        <Pressable style={{marginLeft:15,}}>
+        <Pressable style={{ marginLeft: 15 }}>
           <Icon style={styles.iconstyle} source="content-copy" size={25}></Icon>
         </Pressable>
       </View>

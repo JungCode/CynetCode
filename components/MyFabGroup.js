@@ -4,47 +4,45 @@ import { FAB, Portal, PaperProvider } from "react-native-paper";
 import Colors from "../constants/Colors";
 import * as ImagePicker from "expo-image-picker";
 
-const MyFabGroup = ({onPress}) => {
+const MyFabGroup = ({ onPress, onTakingPicture }) => {
   const [state, setState] = React.useState({ open: false });
 
   const onStateChange = ({ open }) => setState({ open });
 
   const { open } = state;
-  async function ImagePickerHandler() {
-
-  }
+  async function ImagePickerHandler() {}
   return (
-      <Portal  >
-        <FAB.Group
-          color="white"
-          fabStyle={{ backgroundColor: Colors.green600 }}
-          open={open}
-          visible
-          icon={open ? "image-filter-center-focus" : "plus"}
-          actions={[
-            {
-              icon: "camera",
-              label: "Camera",
-              style: { backgroundColor: Colors.green600 },
-              color: "white",
-              onPress: () => console.log("Pressed notifications"),
-            },
-            {
-              icon: "file-image-plus-outline",
-              style: { backgroundColor: Colors.green600 },
-              color: "white",
-              label: "Gallery",
-              onPress: onPress,
-            },
-          ]}
-          onStateChange={onStateChange}
-          onPress={() => {
-            if (open) {
-              // do something if the speed dial is open
-            }
-          }}
-        />
-      </Portal>
+    <Portal>
+      <FAB.Group
+        color="white"
+        fabStyle={{ backgroundColor: Colors.green600 }}
+        open={open}
+        visible
+        icon={open ? "image-filter-center-focus" : "plus"}
+        actions={[
+          {
+            icon: "camera",
+            label: "Camera",
+            style: { backgroundColor: Colors.green600 },
+            color: "white",
+            onPress: onTakingPicture,
+          },
+          {
+            icon: "file-image-plus-outline",
+            style: { backgroundColor: Colors.green600 },
+            color: "white",
+            label: "Gallery",
+            onPress: onPress,
+          },
+        ]}
+        onStateChange={onStateChange}
+        onPress={() => {
+          if (open) {
+            // do something if the speed dial is open
+          }
+        }}
+      />
+    </Portal>
   );
 };
 

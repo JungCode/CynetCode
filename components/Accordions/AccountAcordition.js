@@ -170,7 +170,9 @@ function AccountAcordition({
                 </Pressable>
               </View>
             </View>
-            <TwoFADisplay></TwoFADisplay>
+            {value.twoFactorKey != undefined ? (
+              <TwoFADisplay secretKey={value.twoFactorKey}></TwoFADisplay>
+            ) : null}
             {value.webURL ? (
               <CusButton onPress={openInBrowser.bind(this, value.webURL)}>
                 Open in browser

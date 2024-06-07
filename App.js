@@ -21,6 +21,8 @@ import CheckerListScreen from "./screens/PasswordChecker/CheckerListScreen";
 import CheckerItemDetail from "./screens/PasswordChecker/CheckerItemDetail";
 import AddressAddingScreen from "./screens/AddingScreens/AddressAddingScreen";
 import AppAddingScreen from "./screens/AddingScreens/AppAddingScreen";
+import ScanQRCodeScreen from "./screens/ScanQRCodeScreen";
+import TakingPicture from "./screens/TakingPicture";
 const Stack = createNativeStackNavigator();
 
 function SignupStack() {
@@ -203,6 +205,28 @@ function ModalScreen() {
             },
           }}
         />
+        <Stack.Screen
+          name="ScanQRCodeScreen"
+          component={ScanQRCodeScreen}
+          options={{
+            headerTitle: "Scanner",
+            animation: "slide_from_right",
+            headerStyle: {
+              alignItems: "center",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="takingPicture"
+          component={TakingPicture}
+          options={{
+            headerTitle: "TakingPicture",
+            animation: "slide_from_right",
+            headerStyle: {
+              alignItems: "center",
+            },
+          }}
+        />
       </Stack.Navigator>
       <StatusBar />
     </ItemsContextProvider>
@@ -215,4 +239,3 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
 });
-

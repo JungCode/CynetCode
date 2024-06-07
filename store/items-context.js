@@ -88,8 +88,8 @@ function ItemsContextProvider({ children }) {
   async function updateItem(itemId, updatedItem, type) {
     await updateItemDB(itemId, updatedItem, type);
   }
-  async function deleteItem(itemId, type) {
-    await deleteItemDB(itemId, type);
+  async function deleteItem(itemId, type, file) {
+    await deleteItemDB(itemId, type, file);
   }
   async function updateFavoriteItem(itemId, updatedItem, type) {
     if (updatedItem.noteTitle !== undefined) {
