@@ -1,5 +1,4 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import Colors from "../constants/Colors";
 import { useNavigation } from "@react-navigation/native";
 import { Icon } from "react-native-paper";
@@ -24,7 +23,6 @@ function AddingItem({ name, iconName, navigationName }) {
 export default AddingItem;
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: "transperent",
     paddingLeft: 45,
     height: 65,
     fontSize: 30,

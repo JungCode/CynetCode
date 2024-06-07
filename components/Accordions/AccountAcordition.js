@@ -1,9 +1,11 @@
 import {
+  Alert,
   Image,
   Pressable,
   StyleSheet,
   Text,
   TextInput,
+  ToastAndroid,
   View,
 } from "react-native";
 import Chevron from "./Chevron";
@@ -24,12 +26,29 @@ import CusButton from "../CusButton";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import TwoFADisplay from "../TwoFADisplay";
+import * as Clipboard from "expo-clipboard";
+
 function AccountAcordition({
   openInBrowser,
   value,
   handlePresentModal,
   setIsFetchedItems,
 }) {
+  //Clipboard
+  const copyToClipboard = async () => {
+    await Clipboard.setStringAsync("hello world");
+    ToastAndroid.show("Copied", ToastAndroid.SHORT);
+  };
+  //PasswordSercure
+  const [passwordSecure, setPasswordSecure] = useState(true);
+  function handleSecure(password) {
+    const hiddenPassword = password.replace(/./g, "•");
+    return hiddenPassword;
+  }
+  function togglePasswordVisibility() {
+    setPasswordSecure(!passwordSecure);
+  }
+
   const navigation = useNavigation();
   //dropdown js
   const listRef = useAnimatedRef();
@@ -79,8 +98,7 @@ function AccountAcordition({
             heightValue.value = withTiming(0);
           }
           open.value = !open.value;
-        }}
-      >
+        }}>
         <View style={styles.maintitle}>
           <Chevron progress={progress}></Chevron>
           {value.webName ? (
@@ -101,8 +119,7 @@ function AccountAcordition({
               <Icon
                 source="view-grid-outline"
                 size={35}
-                style={styles.imgStyle}
-              ></Icon>
+                style={styles.imgStyle}></Icon>
             </View>
           )}
           <View style={styles.textTitleContainer}>
@@ -128,8 +145,7 @@ function AccountAcordition({
               icon: value.appName ? "view-grid-outline" : fecthedImg,
             },
             setIsFetchedItems
-          )}
-        >
+          )}>
           <Icon source="dots-vertical" size={25}></Icon>
         </Pressable>
       </Pressable>
@@ -146,8 +162,7 @@ function AccountAcordition({
                   <Icon
                     style={styles.iconstyle}
                     source="content-copy"
-                    size={25}
-                  ></Icon>
+                    size={25}></Icon>
                 </Pressable>
               </View>
             </View>
@@ -157,17 +172,29 @@ function AccountAcordition({
               </View>
               <View style={styles.copywrap}>
                 <TextInput
-                  value={value.password}
-                  secureTextEntry
-                  style={styles.subtext}
-                ></TextInput>
-                <Pressable>
-                  <Icon
-                    style={styles.iconstyle}
-                    source="content-copy"
-                    size={25}
-                  ></Icon>
-                </Pressable>
+                  value={
+                    passwordSecure
+                      ? handleSecure(value.password)
+                      : value.password
+                  }
+                  // secureTextEntry
+                  style={styles.subtext}></TextInput>
+                <View style={styles.iconwraper}>
+                  <Pressable onPress={togglePasswordVisibility}>
+                    <Icon
+                      style={styles.iconstyle}
+                      source={
+                        passwordSecure ? "eye-outline" : "eye-off-outline"
+                      }
+                      size={25}></Icon>
+                  </Pressable>
+                  <Pressable  onPress={() => copyToClipboard(value.password)} style={{marginLeft:15,}}>
+                    <Icon
+                      style={styles.iconstyle}
+                      source="content-copy"
+                      size={25}></Icon>
+                  </Pressable>
+                </View>
               </View>
             </View>
             <TwoFADisplay></TwoFADisplay>
@@ -236,12 +263,13 @@ const styles = StyleSheet.create({
   subtext: {
     fontSize: 20,
     fontWeight: "bold",
-    width: "90%",
   },
   itemcontainer: {
+    width: "100%",
     marginBottom: 10,
   },
   copywrap: {
+    width: "100%",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -250,13 +278,13 @@ const styles = StyleSheet.create({
   iconstyle: {
     padding: 20,
   },
-  iconcontainer: {
-    flexDirection: "row",
-    width: "auto",
-  },
   imgStyle: {
     marginHorizontal: 10,
     width: 35,
     height: 35,
+  },
+  iconwraper: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
