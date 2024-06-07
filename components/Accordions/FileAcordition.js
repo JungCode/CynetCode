@@ -178,7 +178,6 @@ function FileAcordition({
                   }
                 }
                 if (value.fileType === "word") {
-                  console.log(imageURL);
                   if (Platform.OS === "ios") {
                     WebBrowser.dismissBrowser();
                     WebBrowser.openBrowserAsync(imageURL);
