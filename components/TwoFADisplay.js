@@ -41,33 +41,41 @@ function TwoFADisplay({ secretKey }) {
     };
   }, [secret]);
   return (
-    <View style={styles.container}>
-      <View style={styles.itemcontainer}>
-        <Text style={styles.subtitle}>OTPCode</Text>
-        <View style={styles.passwraper}>
-          <Text style={styles.subtext}>
-            {passwordSecure ? handleSecure(token) : token}
-          </Text>
-          <Progress.Pie
-            progress={(30 - remainingTime) / 30}
-            size={20}
-            color={Colors.green500}
-          ></Progress.Pie>
+    <>
+      {secretKey != "" ? (
+        <View style={styles.container}>
+          <View style={styles.itemcontainer}>
+            <Text style={styles.subtitle}>OTPCode</Text>
+            <View style={styles.passwraper}>
+              <Text style={styles.subtext}>
+                {passwordSecure ? handleSecure(token) : token}
+              </Text>
+              <Progress.Pie
+                progress={(30 - remainingTime) / 30}
+                size={20}
+                color={Colors.green500}
+              ></Progress.Pie>
+            </View>
+          </View>
+          <View style={styles.iconwraper}>
+            <Pressable onPress={togglePasswordVisibility}>
+              <Icon
+                style={styles.iconstyle}
+                source={passwordSecure ? "eye-outline" : "eye-off-outline"}
+                size={25}
+              ></Icon>
+            </Pressable>
+            <Pressable style={{ marginLeft: 15 }}>
+              <Icon
+                style={styles.iconstyle}
+                source="content-copy"
+                size={25}
+              ></Icon>
+            </Pressable>
+          </View>
         </View>
-      </View>
-      <View style={styles.iconwraper}>
-        <Pressable onPress={togglePasswordVisibility}>
-          <Icon
-            style={styles.iconstyle}
-            source={passwordSecure ? "eye-outline" : "eye-off-outline"}
-            size={25}
-          ></Icon>
-        </Pressable>
-        <Pressable style={{ marginLeft: 15 }}>
-          <Icon style={styles.iconstyle} source="content-copy" size={25}></Icon>
-        </Pressable>
-      </View>
-    </View>
+      ) : null}
+    </>
   );
 }
 

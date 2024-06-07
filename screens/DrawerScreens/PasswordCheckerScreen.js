@@ -112,6 +112,7 @@ function PasswordCheckerScreen() {
           password: originalText,
         });
       });
+      
       // console.log(dataArray);
       const filteredAccounts = dataArray.filter((item) => {
         return item.userId === authCtx.userId;

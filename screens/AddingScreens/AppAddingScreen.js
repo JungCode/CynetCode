@@ -53,7 +53,7 @@ function AppAddingScreen() {
         setDescription(enteredValue);
         break;
       case "twoFactorKey":
-        setDescription(enteredValue);
+        setTwoFactorKey(enteredValue);
         break;
     }
   }
@@ -83,7 +83,11 @@ function AppAddingScreen() {
       twoFactorKey: twoFactorKey,
       favorite: route.params ? route.params.favorite : false,
     };
-    if (route.params.id != undefined) {
+    if (route.params == undefined) {
+      itemsCtx.storeItem(item, "app");
+      navigation.navigate("drawerScreen");
+      ToastAndroid.show("Added item successfull!", ToastAndroid.SHORT);
+    } else if (route.params.id != undefined) {
       itemsCtx.updateItem(route.params.id, item, "appItems");
       navigation.navigate("drawerScreen");
       ToastAndroid.show("Edited item successfull!", ToastAndroid.SHORT);

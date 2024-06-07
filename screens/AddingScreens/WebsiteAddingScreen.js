@@ -43,8 +43,7 @@ function WebsiteAddingScreen() {
   }, [navigation, value]);
   function onChangeURL() {
     const name = webURL.split(".");
-    const capitalizedName =
-      name[0].charAt(0).toUpperCase() + name[0].slice(1);
+    const capitalizedName = name[0].charAt(0).toUpperCase() + name[0].slice(1);
     updateInputValueHandler("webName", capitalizedName);
   }
   function updateInputValueHandler(inputType, enteredValue) {
@@ -65,7 +64,7 @@ function WebsiteAddingScreen() {
         setDescription(enteredValue);
         break;
       case "twoFactorKey":
-        setDescription(enteredValue);
+        setTwoFactorKey(enteredValue);
         break;
     }
   }
@@ -95,7 +94,11 @@ function WebsiteAddingScreen() {
       userId: authCtx.userId,
       favorite: route.params ? route.params.favorite : false,
     };
-    if (route.params.id != undefined) {
+    if (route.params == undefined) {
+      itemsCtx.storeItem(item, "web");
+      navigation.navigate("drawerScreen");
+      ToastAndroid.show("Added item successfull!", ToastAndroid.SHORT);
+    } else if (route.params.id != undefined) {
       itemsCtx.updateItem(route.params.id, item, "webItems");
       navigation.navigate("drawerScreen");
       ToastAndroid.show("Edited item successfull!", ToastAndroid.SHORT);
