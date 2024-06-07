@@ -74,6 +74,7 @@ function CheckerListScreen() {
             icon={icon}
             color={color}
             webname={item.webName}
+            appname={item.appName}
             account={item.userName}
           ></CheckerListItem>
         )}

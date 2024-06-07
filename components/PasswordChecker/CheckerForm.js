@@ -4,7 +4,7 @@ import { Icon, IconButton } from "react-native-paper";
 import Colors from "../../constants/Colors";
 import CusButton from "../CusButton";
 
-function CheckerForm({ app, userName, password }) {
+function CheckerForm({ app, userName, password, type }) {
   const [passwordSecure, setPasswordSecure] = useState(true);
   function handleSecure(password) {
     const hiddenPassword = password.replace(/./g, "•");
@@ -16,7 +16,7 @@ function CheckerForm({ app, userName, password }) {
   return (
     <View>
       <View>
-        <Text style={styles.title}>Website</Text>
+        <Text style={styles.title}>{type}</Text>
         <View style={styles.textwrap}>
           <Text style={styles.content}>{app}</Text>
           <Icon source="content-copy" size={30} color={Colors.gray400}></Icon>
@@ -40,13 +40,15 @@ function CheckerForm({ app, userName, password }) {
               <Icon
                 source={passwordSecure ? "eye-outline" : "eye-off-outline"}
                 size={30}
-                color={Colors.gray400}></Icon>
+                color={Colors.gray400}
+              ></Icon>
             </Pressable>
-            <Pressable style={{marginLeft:15,}}>
+            <Pressable style={{ marginLeft: 15 }}>
               <Icon
                 source="content-copy"
                 size={30}
-                color={Colors.gray400}></Icon>
+                color={Colors.gray400}
+              ></Icon>
             </Pressable>
           </View>
         </View>
@@ -59,22 +61,22 @@ export default CheckerForm;
 const styles = StyleSheet.create({
   title: {
     fontSize: 18,
-    fontWeight: '400',
-    marginBottom:10,
-    marginTop:10,
+    fontWeight: "400",
+    marginBottom: 10,
+    marginTop: 10,
   },
   textwrap: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems:"center",
-    paddingLeft:10,
+    alignItems: "center",
+    paddingLeft: 10,
   },
   iconwrap: {
     flexDirection: "row",
   },
   content: {
     fontSize: 25,
-    fontWeight:"300",
+    fontWeight: "300",
     fontStyle: "italic",
   },
 });

@@ -95,16 +95,15 @@ function PasswordCheckerScreen() {
   function checkingForCompromisedAccount(password) {
     return password.includes("123");
   }
+
   useEffect(() => {
     const accountsRef = ref(db, "webItems");
-    // Lắng nghe sự thay đổi trong Realtime Database
-    const onValueChangeAccounts = (snapshot) => {
+    const appsRef = ref(db, "appItems");
+
+    const processSnapshot = (snapshot, userId) => {
       const dataArray = [];
       snapshot.forEach((childSnapshot) => {
-        let bytes = CryptoJS.AES.decrypt(
-          childSnapshot.val().password,
-          authCtx.userId
-        );
+        let bytes = CryptoJS.AES.decrypt(childSnapshot.val().password, userId);
         let originalText = bytes.toString(CryptoJS.enc.Utf8);
         dataArray.push({
           id: childSnapshot.key,
@@ -112,10 +111,17 @@ function PasswordCheckerScreen() {
           password: originalText,
         });
       });
-      
-      // console.log(dataArray);
+      return dataArray;
+    };
+
+    const onValueChange = (webSnapshot, appSnapshot) => {
+      const userId = authCtx.userId;
+      const webData = processSnapshot(webSnapshot, userId);
+      const appData = processSnapshot(appSnapshot, userId);
+      const dataArray = [...webData, ...appData];
+
       const filteredAccounts = dataArray.filter((item) => {
-        return item.userId === authCtx.userId;
+        return item.userId === userId;
       });
       const filteredWeakAccounts = filteredAccounts.filter((item) => {
         return isWeakPassword(item.password);
@@ -146,13 +152,36 @@ function PasswordCheckerScreen() {
       setFetchedDuplicateAccounts(filteredDuplicateAccounts);
       setFetchedAccountsQuantity(filteredAccounts.length);
     };
-    onValue(accountsRef, onValueChangeAccounts);
 
-    // Ngắt kết nối listener khi component unmount
-    return () => {
-      // off(accountsRef, onValueChangeAccounts);
+    const fetchAndCombineData = () => {
+      let webSnapshot = null;
+      let appSnapshot = null;
+
+      const checkAndProcessSnapshots = () => {
+        if (webSnapshot && appSnapshot) {
+          onValueChange(webSnapshot, appSnapshot);
+        }
+      };
+
+      onValue(accountsRef, (snapshot) => {
+        webSnapshot = snapshot;
+        checkAndProcessSnapshots();
+      });
+
+      onValue(appsRef, (snapshot) => {
+        appSnapshot = snapshot;
+        checkAndProcessSnapshots();
+      });
     };
-  }, []);
+
+    fetchAndCombineData();
+
+    return () => {
+      // Properly clean up listeners when component unmounts
+      off(accountsRef);
+      off(appsRef);
+    };
+  }, [authCtx.userId]);
   return (
     <>
       <View style={styles.container}>

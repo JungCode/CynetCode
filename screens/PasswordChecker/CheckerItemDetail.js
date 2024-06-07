@@ -24,12 +24,21 @@ function CheckerItemDetail() {
       ></CheckerDetail>
       <View style={styles.formcontainer}>
         <CheckerForm
-          app={route.params.item.webName}
+          app={
+            route.params.item.webName != undefined
+              ? route.params.item.webName
+              : route.params.item.appName
+          }
+          type={
+            route.params.item.webName != undefined ? "Website" : "Application"
+          }
           userName={route.params.item.userName}
           password={route.params.item.password}
         ></CheckerForm>
       </View>
-      <CusButton onPress={onPressWeb.bind(this,route.params.item.webURL)}>Change password on website</CusButton>
+      <CusButton onPress={onPressWeb.bind(this, route.params.item.webURL)}>
+        Change password on website
+      </CusButton>
       <CusButton
         onPress={onPressEdit}
         bgc="transparent"
