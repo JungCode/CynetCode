@@ -2,17 +2,37 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import Colors from "../constants/Colors";
 import { useNavigation } from "@react-navigation/native";
 import { Icon } from "react-native-paper";
+import * as DocumentPicker from "expo-document-picker"; // Import DocumentPicker from Expo
 function AddingItem({ name, iconName, navigationName }) {
   const navigation = useNavigation();
   function PressHandler() {
-    return navigation.navigate(navigationName);
+    if (navigationName === "filePicker") {
+      FilePickerHandler();
+    } else {
+      return navigation.navigate(navigationName);
+    }
   }
+  async function FilePickerHandler() {
+    const file = await DocumentPicker.getDocumentAsync({
+      type: [
+        "image/*",
+        "application/pdf",
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      ],
+    });
 
+    if (!file.canceled) {
+      navigation.navigate("fileAddingScreen", file);
+    }
+    // console.log(file.assets[0]);
+  }
   return (
     <Pressable
       onPress={PressHandler}
       style={styles.container}
-      android_ripple={{ color: Colors.gray200 }}>
+      android_ripple={{ color: Colors.gray200 }}
+    >
       <View style={styles.icon}>
         <Icon source={iconName} color="black" size={30} />
       </View>

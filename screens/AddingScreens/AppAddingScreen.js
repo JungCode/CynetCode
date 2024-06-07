@@ -23,10 +23,21 @@ function AppAddingScreen() {
   const [description, setDescription] = useState(
     route.params ? route.params.description : ""
   );
+  const [twoFactorKey, setTwoFactorKey] = useState("");
+
   const authCtx = useContext(AuthContext);
   const itemsCtx = useContext(ItemsContext);
   const [isStoring, setIsStoring] = useState(false);
   const navigation = useNavigation();
+  const value = route;
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      if (value.params != undefined) {
+        setTwoFactorKey(value.params.twoFactorKey);
+      }
+    });
+    return unsubscribe;
+  }, [navigation, value]);
   function updateInputValueHandler(inputType, enteredValue) {
     switch (inputType) {
       case "appName":
@@ -41,7 +52,24 @@ function AppAddingScreen() {
       case "description":
         setDescription(enteredValue);
         break;
+      case "twoFactorKey":
+        setDescription(enteredValue);
+        break;
     }
+  }
+  function navigateToScanner() {
+    let ciphertext = CryptoJS.AES.encrypt(password, authCtx.userId).toString();
+    const item = {
+      appName: appName,
+      userName: userName,
+      password: password,
+      description: description,
+      userId: authCtx.userId,
+      twoFactorKey: twoFactorKey,
+      favorite: route.params ? route.params.favorite : false,
+    };
+
+    navigation.navigate("ScanQRCodeScreen", item);
   }
   function submitHandler() {
     let ciphertext = CryptoJS.AES.encrypt(password, authCtx.userId).toString();
@@ -52,9 +80,10 @@ function AppAddingScreen() {
       password: ciphertext,
       description: description,
       userId: authCtx.userId,
-      favorite: false,
+      twoFactorKey: twoFactorKey,
+      favorite: route.params ? route.params.favorite : false,
     };
-    if (route.params) {
+    if (route.params.id != undefined) {
       itemsCtx.updateItem(route.params.id, item, "appItems");
       navigation.navigate("drawerScreen");
       ToastAndroid.show("Edited item successfull!", ToastAndroid.SHORT);
@@ -113,6 +142,17 @@ function AppAddingScreen() {
             updateInputValueHandler("description", text);
           }}
         />
+        <TextInput
+          mode="outlined"
+          activeOutlineColor={Colors.green500}
+          label="Two-factor key (optional)"
+          style={styles.inputStyle}
+          value={twoFactorKey}
+          onChangeText={(text) => {
+            updateInputValueHandler("twoFactorKey", text);
+          }}
+        />
+        <Button onPress={navigateToScanner} title="Scan two-factor key" />
         <Button onPress={submitHandler} title="Save" />
       </View>
     </View>

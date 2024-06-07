@@ -38,6 +38,7 @@
     "expo-image-picker": "~14.7.1",
     "expo-intent-launcher": "^11.0.1",
     "expo-location": "^17.0.1",
+    "expo-media-library": "^16.0.3",
     "expo-random": "^14.0.1",
     "expo-secure-store": "~12.8.1",
     "expo-status-bar": "~1.11.1",

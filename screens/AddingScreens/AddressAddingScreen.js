@@ -50,7 +50,7 @@ function AddressAddingScreen() {
       addressDetail: addressDetail,
       mapLink: maplink,
       userId: authCtx.userId,
-      favorite: false,
+      favorite: route.params ? route.params.favorite : false,
     };
     if (route.params) {
       itemsCtx.updateItem(route.params.id, addressItem, "addressItems");

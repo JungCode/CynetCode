@@ -1,19 +1,23 @@
 import { Button, Image, StyleSheet, ToastAndroid, View } from "react-native";
 import { TextInput } from "react-native-paper";
 import Colors from "../../constants/Colors";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../store/auth-context";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import LoadingOverlay from "../../components/LoadingOverlay";
 import { ItemsContext } from "../../store/items-context";
 import { storeFileDB } from "../../util/https-store";
-
+import firebase from "firebase/compat/app";
+import "firebase/compat/storage";
+import { firebaseConfig } from "../../util/https-fetch";
 function FileAddingScreen() {
   const route = useRoute();
   let fileType;
-  if (route.params.assets[0].mimeType.startsWith("image/")) {
+  if (route.params.mimeType == undefined) {
     fileType = "photo";
-  } else if (route.params.assets[0].mimeType === "application/pdf") {
+  } else if (route.params.mimeType.startsWith("image/")) {
+    fileType = "photo";
+  } else if (route.params.mimeType === "application/pdf") {
     fileType = "pdf";
   } else {
     fileType = "word";
@@ -25,7 +29,7 @@ function FileAddingScreen() {
   const [fileDescription, setFileDescription] = useState(
     route.params ? route.params.fileDescription : ""
   );
-  const [fileUri, setfileUri] = useState(route.params.assets[0].uri);
+  const [fileUri, setfileUri] = useState(route.params.uri);
   const authCtx = useContext(AuthContext);
   const itemsCtx = useContext(ItemsContext);
   const [isStoring, setIsStoring] = useState(false);
@@ -54,8 +58,8 @@ function FileAddingScreen() {
     };
     setIsStoring(true);
     if (route.params.fileTitle !== undefined) {
-      // itemsCtx.updateItem(route.params.id, item, "NoteItems");
-      // navigation.navigate("drawerScreen");
+      itemsCtx.updateItem(route.params.id, item, "FileItems");
+      navigation.navigate("drawerScreen");
       ToastAndroid.show("Edited item successfull!", ToastAndroid.SHORT);
     } else {
       storeFileDB(route.params, item);
@@ -64,6 +68,29 @@ function FileAddingScreen() {
     }
     setIsStoring(false);
   }
+
+  useEffect(() => {
+    async function getFile() {
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+      }
+      const storageRef = firebase.storage().ref();
+
+      try {
+        // Lấy đường dẫn của ảnh trong Firebase Storage
+        const imageUrl = await storageRef
+          .child("files/" + route.params.fileName)
+          .getDownloadURL();
+        setfileUri(imageUrl);
+      } catch (error) {
+        console.error("Error displaying image:", error);
+      }
+    }
+    if (route.params.fileTitle != undefined) {
+      getFile();
+    }
+  }, []);
+
   if (isStoring) {
     return <LoadingOverlay message="Adding ..." />;
   }

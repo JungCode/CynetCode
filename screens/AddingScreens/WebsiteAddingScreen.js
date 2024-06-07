@@ -1,13 +1,13 @@
 import { Button, StyleSheet, Text, View } from "react-native";
 import { TextInput } from "react-native-paper";
 import Colors from "../../constants/Colors";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../store/auth-context";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import LoadingOverlay from "../../components/LoadingOverlay";
 import { ItemsContext } from "../../store/items-context";
 import { ToastAndroid } from "react-native";
-import { Buffer } from 'buffer';
+import { Buffer } from "buffer";
 import CusButton from "../../components/CusButton";
 import CryptoJS from "react-native-crypto-js";
 
@@ -26,13 +26,27 @@ function WebsiteAddingScreen() {
   const [description, setDescription] = useState(
     route.params ? route.params.description : ""
   );
-  const [towFactorKey, setTowFactorKey] = useState(
-    route.params ? route.params.description : ""
-  );
+  const [twoFactorKey, setTwoFactorKey] = useState("");
   const authCtx = useContext(AuthContext);
   const itemsCtx = useContext(ItemsContext);
   const [isStoring, setIsStoring] = useState(false);
   const navigation = useNavigation();
+  const value = route;
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      if (value.params != undefined) {
+        setTwoFactorKey(value.params.twoFactorKey);
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation, value]);
+  function onChangeURL() {
+    const name = webURL.split(".");
+    const capitalizedName =
+      name[0].charAt(0).toUpperCase() + name[0].slice(1);
+    updateInputValueHandler("webName", capitalizedName);
+  }
   function updateInputValueHandler(inputType, enteredValue) {
     switch (inputType) {
       case "webURL":
@@ -50,10 +64,23 @@ function WebsiteAddingScreen() {
       case "description":
         setDescription(enteredValue);
         break;
-      case "towFactorKey":
+      case "twoFactorKey":
         setDescription(enteredValue);
         break;
     }
+  }
+  function navigateToScanner() {
+    const item = {
+      webURL: webURL,
+      webName: webName,
+      userName: userName,
+      password: password,
+      description: description,
+      userId: authCtx.userId,
+      twoFactorKey: twoFactorKey,
+      favorite: route.params ? route.params.favorite : false,
+    };
+    navigation.navigate("ScanQRCodeScreen", item);
   }
   function submitHandler() {
     setIsStoring(true);
@@ -64,11 +91,11 @@ function WebsiteAddingScreen() {
       userName: userName,
       password: ciphertext,
       description: description,
-      towFactorKye: towFactorKey,
+      twoFactorKey: twoFactorKey,
       userId: authCtx.userId,
-      favorite: false,
+      favorite: route.params ? route.params.favorite : false,
     };
-    if (route.params) {
+    if (route.params.id != undefined) {
       itemsCtx.updateItem(route.params.id, item, "webItems");
       navigation.navigate("drawerScreen");
       ToastAndroid.show("Edited item successfull!", ToastAndroid.SHORT);
@@ -93,12 +120,7 @@ function WebsiteAddingScreen() {
         onChangeText={(text) => {
           updateInputValueHandler("webURL", text);
         }}
-        onBlur={() => {
-          const name = webURL.split(".");
-          const capitalizedName =
-            name[0].charAt(0).toUpperCase() + name[0].slice(1);
-          updateInputValueHandler("webName", capitalizedName);
-        }}
+        onBlur={onChangeURL}
       />
       <TextInput
         mode="outlined"
@@ -148,12 +170,12 @@ function WebsiteAddingScreen() {
           activeOutlineColor={Colors.green500}
           label="Two-factor key (optional)"
           style={styles.inputStyle}
-          value={towFactorKey}
+          value={twoFactorKey}
           onChangeText={(text) => {
-            updateInputValueHandler("towFactorKey", text);
+            updateInputValueHandler("twoFactorKey", text);
           }}
         />
-        <Button onPress={submitHandler} title="Scan two-factor key" />
+        <Button onPress={navigateToScanner} title="Scan two-factor key" />
         <CusButton onPress={submitHandler}>Save</CusButton>
       </View>
     </View>

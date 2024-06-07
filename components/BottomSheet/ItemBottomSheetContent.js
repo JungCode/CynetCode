@@ -34,19 +34,19 @@ function ItemBottomSheetContent({
     : null;
   function deleteHandler() {
     if (item.noteTitle !== undefined) {
-      itemsCtx.deleteItem(item.id, "NoteItems");
+      itemsCtx.deleteItem(item.id, "NoteItems",null);
     }
     if (item.webURL !== undefined) {
-      itemsCtx.deleteItem(item.id, "webItems");
+      itemsCtx.deleteItem(item.id, "webItems",null);
     }
     if (itemDB.appName !== undefined) {
-      itemsCtx.deleteItem(item.id, "appItems");
+      itemsCtx.deleteItem(item.id, "appItems",null);
     }
     if (itemDB.fileName !== undefined) {
-      itemsCtx.deleteItem(item.id, "FileItems");
+      itemsCtx.deleteItem(item.id, "FileItems",itemDB.fileName);
     }
     if (itemDB.addressName !== undefined) {
-      itemsCtx.deleteItem(item.id, "addressItems");
+      itemsCtx.deleteItem(item.id, "addressItems",null);
     }
     ToastAndroid.show("Deleted item!", ToastAndroid.SHORT);
     handleDismissModal();
@@ -63,6 +63,9 @@ function ItemBottomSheetContent({
     }
     if (item.addressName !== undefined) {
       navigation.navigate("addressAddingScreen", item);
+    }
+    if (item.fileName !== undefined) {
+      navigation.navigate("fileAddingScreen", item);
     }
     handleDismissModal();
   }
