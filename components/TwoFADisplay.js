@@ -21,7 +21,8 @@ function TwoFADisplay({ secretKey }) {
   useEffect(() => {
     const updateToken = () => {
       setToken(getTOTPToken(secret));
-      const currentTime = Math.floor(Date.now() / 1000);
+      const currentTime = Math.floor(Date.now() / 1000)+5;
+      console.log(30 - (currentTime % 30));
       setRemainingTime(30 - (currentTime % 30));
     };
 
