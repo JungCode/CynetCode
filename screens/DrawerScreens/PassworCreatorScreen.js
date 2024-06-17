@@ -5,13 +5,14 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-
+import * as Clipboard from "expo-clipboard";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import CusButton from "../../components/CusButton";
@@ -31,6 +32,11 @@ export default function App() {
   const [upperCase, setupperCase] = useState(false);
   const [numbers, setNumbers] = useState(false);
   const [symbols, setSymbols] = useState(false);
+
+  const copyToClipboard = async () => {
+    await Clipboard.setStringAsync(password);
+    ToastAndroid.show("Copied", ToastAndroid.SHORT);
+  };
 
   useEffect(() => {
     generatePasswordString(8);
@@ -96,7 +102,7 @@ export default function App() {
               {passwordStrength(password).value}
             </Text>
             <View style={styles.buttonContainer}>
-              <CusButton>Coppy</CusButton>
+              <CusButton onPress={copyToClipboard}>Coppy</CusButton>
             </View>
           </View>
         </View>

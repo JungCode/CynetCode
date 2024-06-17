@@ -62,14 +62,14 @@ function TwoFADisplay({ secretKey }) {
               <Icon
                 style={styles.iconstyle}
                 source={passwordSecure ? "eye-outline" : "eye-off-outline"}
-                size={25}
+                size={30}
               ></Icon>
             </Pressable>
             <Pressable style={{ marginLeft: 15 }}>
               <Icon
                 style={styles.iconstyle}
                 source="content-copy"
-                size={25}
+                size={30}
               ></Icon>
             </Pressable>
           </View>
