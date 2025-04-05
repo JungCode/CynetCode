@@ -30,9 +30,7 @@ CynetCode is a password management application developed using **React Native**.
 
 3. Run the app:
     ```bash
-    react-native run-android
-    # or
-    react-native run-ios
+    npm start
     ```
 
 ## Contributing
